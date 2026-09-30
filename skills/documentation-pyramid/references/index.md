@@ -6,6 +6,8 @@ Documentation for the developers and agents of this system. It is not end-user d
 
 Choose at least one section from each level L1 to L3 for the task at hand, more if more are relevant. L4 is optional, depending on the task. Each layer stands alone. The tables below list the sections of each file.
 
+- **Glossary.** Should probably be read by all agents.
+
 - **L1 Vision.** Why this exists and who it is for. Read first for any product decision.
 - **L2 Architecture.** Stack, subsystems, data flow. Read before implementation work.
 - **L3 Modules.** How each part works, with gotchas. Read when working in that module.
@@ -20,6 +22,7 @@ Choose at least one section from each level L1 to L3 for the task at hand, more 
 | `L2-architecture.md` | {one line} |
 | `L3-modules/index.md` | {one line} |
 | `L4-operations/index.md` | {one line} |
+| `Glossary.md` | Domain language glossary (only if the team uses the glossary) |
 | `adr/` | Decision records (only if the team uses ADRs) |
 | `house-style.md` | How docs are written here |
 
@@ -48,7 +51,7 @@ Choose at least one section from each level L1 to L3 for the task at hand, more 
 
 - Update the docs your change makes stale, {timing}.
 - A section stays inline until it passes about 100 lines. Then fork it to its own file, leave a summary and a link, and update this index.
-- If a pointer, section name or line number here is wrong, fix it as part of your current work.
 - One fact has one home. Link to it instead of restating it.
 - Derived files such as `llms.txt` are views of these docs, never the source.
 - Follow `house-style.md`.
+- After you're done, make sure that all pointers, section namens and line numbers here are correct, otherwise fix it as part of your current work.

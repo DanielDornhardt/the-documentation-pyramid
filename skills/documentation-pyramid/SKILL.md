@@ -1,20 +1,25 @@
 ---
 name: documentation-pyramid
-description: Set up a layered documentation pyramid (L1 vision, L2 architecture, L3 modules, L4 operations, plus ADRs) for a software project, for its developers and agents, and hook it into the project's existing workflow. Use when the user wants to start, adopt or set up structured project docs.
+description: Set up a layered documentation pyramid (L1 vision, L2 architecture, L3 modules, L4 operations, plus optional ADRs & a Domain Language Glossary) for a software project, for its developers and agents, and hook it into the project's existing workflow. Use when the user wants to start, adopt or set up structured project docs.
 disable-model-invocation: true
 ---
 
-# Documentation pyramid
+# Documentation Pyramid
 
 Layered project documentation for the developers and agents of a system. Each layer is a complete picture at one zoom level, and an index routes readers to the right depth. This is not end-user documentation; a separate pyramid serves that.
 
-| Layer | Read it to learn |
-|---|---|
-| L1 Vision | why the project exists and who it is for |
+The entire system can also be viewed like wavelet-compressed documentation: Every additional layer adds more detail to a specific part of the system.
+
+L1 is the topmost layer, where the project is seen as one thing; and L2 and L3 each go into additional details on specific parts of the system.
+
+| Layer           | Read it to learn                              |
+| --------------- | --------------------------------------------- |
+| L1 Vision       | why the project exists and who it is for      |
 | L2 Architecture | how it is built: stack, subsystems, data flow |
-| L3 Modules | how one part works, and its gotchas |
-| L4 Operations | how to run, test, branch, deploy and debug |
-| ADRs | why a decision went one way |
+| L3 Modules      | how one part works, and its gotchas           |
+| L4 Operations   | how to run, test, branch, deploy and debug    |
+| ADRs            | why a decision went one way                   |
+| Glossary        | glossary of project domain language terms     |
 
 ## Principles
 
@@ -31,18 +36,19 @@ Never overwrite an existing file. Ask before editing one. Write real content, no
 
 ### 1. Look around
 
-Before asking anything, check what exists: docs folders, README and CONTRIBUTING, instruction files (`AGENTS.md`, `CLAUDE.md`, editor rules), and signs of a planning workflow or PR template. Summarise what you found in a few lines.
+Before asking anything, check what exists: docs folders, README and CONTRIBUTING, instruction files (`AGENTS.md`, `CLAUDE.md`, editor rules), and signs of a planning workflow or PR template. Also check which workflow or planning skills you have available yourself, and whether the repo uses one. Summarise what you found in a few lines.
 
 ### 2. Ask, one group at a time
 
 Confirm each group before moving on. Skip what the repo already answers.
 
 1. **Location.** Where should the docs live? Suggest `docs/`, or an existing folder if one fits. If `docs/` already exists and is a published site or generated content (a site generator config, a deploy workflow, generated files), suggest a separate folder such as `dev-docs/` or `docs/dev/`, and say why.
-2. **Process.** How does work get planned and finished here? Mostly single sessions, or a planned flow such as stories, specs or tickets? Which files define it?
-3. **Timing.** When are docs updated? Recommend: in the same change as the code. Alternatives: a separate commit in the same pull request, or later.
+2. **Process.** Only if you found signs of a planned flow (stories, specs, tickets), or you have a workflow skill of your own that fits: confirm it with the user, then read that skill or the files that define it to find where "read first" and "done" belong in its flow. Otherwise assume single sessions.
+3. **Timing.** When are docs updated? Recommend: in the same change as the code. Explain that code should be a first class citizen of the software developed and part of the DOD. Alternatives: a separate commit in the same pull request, or later.
 4. **ADRs.** Does the team want decision records? If yes, move over the ones it already has, and add a `.gitkeep` if the folder starts empty. If no, skip `adr/`.
-5. **The project.** Vision, architecture, three to five main modules, how to run and test. Ask only what you cannot read from the code.
-6. **Style.** Use the default in `references/house-style.md`, or point to a guide the team already has.
+5. **Glossary.** Does the team want a glossary to define terms of shared meaning for this project? Highly recommended.
+6. **The project.** Vision, architecture, three to five main modules, how to run and test. Ask only what you cannot read from the code.
+7. **Style.** Use the default in `references/house-style.md`, or point to a guide the team already has.
 
 ### 3. Scaffold
 
@@ -52,6 +58,7 @@ Create the structure below with the templates in `references/`, filled with the 
 <docs-dir>/
   index.md              routing table and the rules of the pyramid
   house-style.md        how docs are written here
+  Glossary.md           domain language glossary - if selected.
   L1-vision.md
   L2-architecture.md
   L3-modules/index.md
@@ -77,6 +84,6 @@ For the first two, move the content into the right layer and polish it. Then sea
 
 ## References
 
-- `references/index.md`, `l1-vision.md`, `l2-architecture.md`, `l3-modules.md`, `l4-operations.md`, `adr.md`: templates.
+- `references/index.md`, `l1-vision.md`, `l2-architecture.md`, `l3-modules.md`, `l4-operations.md`, `Glossary.md`: templates.
 - `references/house-style.md`: the default writing rules.
 - `references/integration.md`: how to find the project's process and where to hook in.

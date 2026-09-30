@@ -8,6 +8,7 @@ Look for, and ask about:
 
 - Instruction files: `AGENTS.md`, `CLAUDE.md`, editor or tool rules.
 - Planning or spec workflows: story or spec folders, workflow tooling, ticket conventions.
+- Workflow or planning skills you have available yourself. If one fits the project, read it to find where its "read first" and "done" steps are, and hook in there.
 - Where done is defined: a PR template, a definition of done, a review checklist, CONTRIBUTING.
 
 Then ask: how does work get planned and finished here? Decide the placement together with the user. Explain your reasoning briefly.
