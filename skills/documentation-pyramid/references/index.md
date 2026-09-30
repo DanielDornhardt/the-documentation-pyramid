@@ -54,4 +54,4 @@ Choose at least one section from each level L1 to L3 for the task at hand, more 
 - One fact has one home. Link to it instead of restating it.
 - Derived files such as `llms.txt` are views of these docs, never the source.
 - Follow `house-style.md`.
-- After you're done, make sure that all pointers, section namens and line numbers here are correct, otherwise fix it as part of your current work.
+- After you're done, make sure that all pointers, section names and line numbers here are correct, otherwise fix it as part of your current work. To list a file's sections with their line numbers: `grep -n '^## ' <file>`.
