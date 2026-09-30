@@ -1,0 +1,8 @@
+{
+  "name": "documentation-pyramid",
+  "description": "Layered project documentation for humans and agents: set it up, keep it current, keep it small.",
+  "author": {
+    "name": "Daniel Dornhardt"
+  },
+  "skills": "./skills/"
+}
