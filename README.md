@@ -191,7 +191,7 @@ Otherwise, if imports don't work, i'd put it something like this, rather to the 
 Load @docs/index.md !
 ```
 
-4. Devise a strategy on how to make sure that the docs get READ before an actual IMPLEMENTATION OR CODE SCANNING / PLANNING / ARCHITECTURAL ANALYSIS:
+#### 2. Devise a strategy on how to make sure that the docs get READ before an actual IMPLEMENTATION OR CODE SCANNING / PLANNING / ARCHITECTURAL ANALYSIS:
 
 - If there are workflows on HOW stories / plans are prepped / written BEFORE implementation - the prepping agent(s) should, as PART OF THE STORY WRITING WORKFLOW, scan the documentation pyramid and follow the following system:
 
@@ -203,7 +203,7 @@ Load @docs/index.md !
 
 See where these commands should be anchored around your system and add them where you think they have the most leverage.
 
-5. Devise a strategy on WHEN and HOW TO UPDATE the docs after each implemented change.
+#### 3. Devise a strategy on WHEN and HOW TO UPDATE the docs after each implemented change.
 
 Does the currently established workflow have a good attachment point for this?
 
@@ -223,14 +223,14 @@ Otherwise: perhaps as a new extra step between implementation and review / final
 - choose your OWN FAVORITE / the one you think might be best
 - suggest that to your human, if applicable.
 
-6. Any strays?
+#### 4. Any strays?
 
 - Workflow documentation / process documentation: does anything ELSE have to be updated to mention the pyramid documentation process? 
 - PR templates - should they include checkboxes for "Documentation Pyramid updated" or "I reviewed the Documentation Pyramid" or something like that?
 
 - Review scripts / agents - should they check the changes to the documentation pyramid perhaps? Have any changes which should become part of the pyramid been missed? Or does the pyramid need some maintenance perhaps?
 
-7. Documentation transfer
+4. Documentation transfer
 
 OK! WHERE ARE WE AT!
 
@@ -267,7 +267,7 @@ The nice thing is - once you have it - you know the saying - a place for everyth
 I'd recommend doing a research round and putting this into a temporary file - and talking this through with your friendly operator, if applicable, before you go in and start renovating the place :) 
 
 
-8. Decide on the implementation plan
+5. Decide on the implementation plan
 
 Make a plan, think this through. Then, present this to the reviewer - if a human is in the loop - or otherwise, if you have an explicit go signal - GO! :)
 
@@ -282,7 +282,7 @@ OPTIONAL / PRO TIP II:
 If there ISN'T a good architecture & other documentation anywhere - perhaps a next round after consolidation could run an architect through the system to CREATE the missing docs - and discuss them with the user - perhaps he'll be surprised on what's in there, or how it's implemented! Good stuff!
 
 
-9. Implement!
+6. Implement!
 
 Just follow the plan you just did.
 
