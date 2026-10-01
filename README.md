@@ -154,25 +154,27 @@ We propose the `<project root>/docs/` folder as the canonical home for documenta
 
 2. Once that is DONE, check out the files in the `/references` folder of this repo. Each one of this is a template and can be used to set up the documentation pyramid. I recommend copying those and adapting them for the project.
  
-This is the pyramid itself:
+This is the pyramid itself. Each template in `references/` lands in your docs directory like this:
 
-    index.md                - the central dispatch - both instructions & index of the documentation pyramid
-    l1-vision.md            - L1 document template
-    l2-architecture.md      - L2 document template
-    l3-modules.md           - L3 document template
-    l4-operations.md        - L4... you got the point :) 
+    references/index.md             ->  <docs>/index.md                   - the central dispatch - both instructions & index of the documentation pyramid
+    references/l1-vision.md         ->  <docs>/L1-vision.md               - L1 document
+    references/l2-architecture.md   ->  <docs>/L2-architecture.md         - L2 document
+    references/l3-modules.md        ->  <docs>/L3-modules/index.md        - L3 documents: sections stay in this file until they grow, then fork into <docs>/L3-modules/<name>.md
+    references/l4-operations.md     ->  <docs>/L4-operations/index.md     - L4... you got the point :) Same fork rule.
 
 
 Optional:
 
-    Glossary.md             - OPTIONAL: a DDD - style ubiquitous language glossary. Recommended: ADD if your team / agents don't have one yet.
-    house-style.md          - OPTIONAL: smol instructions on how to keep the docs tidy & how to write. Use if you don't have a better tech-writer skill or instructions available already.
-    adr/                    - OPTIONAL: use if you or the user wants to use adrs and don't have a good place for them too. Otherwise: you can also just reference the ADRs in the index.md and point the agents there, there.
+    references/Glossary.md          ->  <docs>/Glossary.md                - OPTIONAL: a DDD - style ubiquitous language glossary. Recommended: ADD if your team / agents don't have one yet.
+    references/house-style.md       ->  <docs>/house-style.md             - OPTIONAL: smol instructions on how to keep the docs tidy & how to write. Use if you don't have a better tech-writer skill or instructions available already.
+    (no template)                   ->  <docs>/adr/                       - OPTIONAL: use if you or the user wants to use adrs and don't have a good place for them too. Otherwise: you can also just reference the ADRs in the index.md and point the agents there, there.
+
+L3 and L4 get a folder from the start, so a section that grows past about 100 lines can fork into its own file without moving anything else. The index.md template lists them as `L3-modules/index.md` and `L4-operations/index.md`.
 
 
 3. Find the best ways to integrate the pyramid for this team.
 
-#### 1. Make the pyramids' index.md file known to the agents.
+#### 3.1 Make the pyramids' index.md file known to the agents.
 
 I recommend putting it into your projects AGENTS.md / CLAUDE.md / WHATEVER.md file you use.
 
@@ -191,7 +193,7 @@ Otherwise, if imports don't work, i'd put it something like this, rather to the 
 Load @docs/index.md !
 ```
 
-#### 2. Devise a strategy on how to make sure that the docs get READ before an actual IMPLEMENTATION OR CODE SCANNING / PLANNING / ARCHITECTURAL ANALYSIS:
+#### 3.2 Devise a strategy on how to make sure that the docs get READ before an actual IMPLEMENTATION OR CODE SCANNING / PLANNING / ARCHITECTURAL ANALYSIS:
 
 - If there are workflows on HOW stories / plans are prepped / written BEFORE implementation - the prepping agent(s) should, as PART OF THE STORY WRITING WORKFLOW, scan the documentation pyramid and follow the following system:
 
@@ -203,7 +205,7 @@ Load @docs/index.md !
 
 See where these commands should be anchored around your system and add them where you think they have the most leverage.
 
-#### 3. Devise a strategy on WHEN and HOW TO UPDATE the docs after each implemented change.
+#### 3.3 Devise a strategy on WHEN and HOW TO UPDATE the docs after each implemented change.
 
 Does the currently established workflow have a good attachment point for this?
 
@@ -223,7 +225,7 @@ Otherwise: perhaps as a new extra step between implementation and review / final
 - choose your OWN FAVORITE / the one you think might be best
 - suggest that to your human, if applicable.
 
-#### 4. Any strays?
+#### 3.4 Any strays?
 
 - Workflow documentation / process documentation: does anything ELSE have to be updated to mention the pyramid documentation process? 
 - PR templates - should they include checkboxes for "Documentation Pyramid updated" or "I reviewed the Documentation Pyramid" or something like that?
