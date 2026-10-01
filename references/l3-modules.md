@@ -10,6 +10,8 @@
 
 **How it works.** {The key mechanics: data flow, main functions, lifecycle. Code-level detail belongs here.}
 
+{VISUALIZATION - Diagrams are HIGHLY WELCOME if applicable & useful.}
+
 **Key files.**
 
 | File | Role |
@@ -17,3 +19,4 @@
 | `{path}` | {what it does} |
 
 **Gotchas.** {Non-obvious things that will bite someone. The most valuable part of L3.}
+

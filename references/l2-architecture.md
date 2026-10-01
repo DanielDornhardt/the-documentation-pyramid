@@ -16,15 +16,15 @@
 
 ## Subsystems
 
-{The three to seven major parts. For each: what it does in one sentence, where the code lives, the entry points.}
+{The three to seven major parts. For each: what it does in one sentence, where the code lives, the entry points. START with a diagram if it makes sense! }
 
 ## Data flow
 
-{How data moves from its source to the user. A short text diagram or numbered list.}
+{How data moves from its source to the user. A short text diagram or numbered list.  START with a diagram if it makes sense! }
 
 ## Data model
 
-{The few entities someone needs on day one and how they relate. Not a full schema.}
+{The few entities someone needs on day one and how they relate. Not a full schema.  START with a diagram if it makes sense! }
 
 ## Key decisions
 

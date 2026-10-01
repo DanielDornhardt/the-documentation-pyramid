@@ -1,10 +1,22 @@
 # {Project name} documentation
 
-Documentation for the developers and agents of this system. It is not end-user documentation. It changes with the code: {timing, for example "in the same change as the code, as part of done"}.
+Documentation for the developers and agents of this system.
+
+It is not end-user documentation.
+
+It stays in sync with the code and it's maintenance is part of the development process and the DOD (Definition Of Done).
 
 ## How to read it
 
-Choose at least one section from each level L1 to L3 for the task at hand, more if more are relevant. L4 is optional, depending on the task. Each layer stands alone. The tables below list the sections of each file.
+For agents: 
+
+How to navigate + use the documentation pyramid:
+
+IMPORTANT: Choose at least one section from each level L1 to L3 to read for the task at hand, more if more are relevant. L4 is optional, depending on the task. Each layer stands alone. The tables below list the sections of each file.
+
+If you are preparing an implementation story / planning an implementation for other agents:
+
+-> Then prepare a list of documents for each of the implementation teams' agents to read before starting the documentation by the same method as above.
 
 - **Glossary.** Should probably be read by all agents.
 
@@ -49,9 +61,9 @@ Choose at least one section from each level L1 to L3 for the task at hand, more 
 
 ## Keeping it current
 
-- Update the docs your change makes stale, {timing}.
+- Update the docs your change makes stale
 - A section stays inline until it passes about 100 lines. Then fork it to its own file, leave a summary and a link, and update this index.
 - One fact has one home. Link to it instead of restating it.
-- Derived files such as `llms.txt` are views of these docs, never the source.
-- Follow `house-style.md`.
+- Derived files such as `llms.txt` shouldn't be consolidated into these docs but left in place.
+- Follow `house-style.md`. {<- if applicable / wanted, otherwise remove line}
 - After you're done, make sure that all pointers, section names and line numbers here are correct, otherwise fix it as part of your current work. To list a file's sections with their line numbers: `grep -n '^## ' <file>`.
