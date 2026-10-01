@@ -113,7 +113,7 @@ Think about things like: Working with git and the upstream repository; Running t
 
 The documentation pyramid works best if it's integrated into your existing agentic workflow. This means if you're using a framework or have a skill that helps you extend, adapt, or find the right locations to integrate this with your workflows, I'd recommend running that first, and then pointing it to this repository in order to install and integrate the documentation pyramid.
 
-Point your agent of choice here, to [this repositorys' URL](https://github.com/DanielDornhardt/the-documentation-pyramid) and let it _rip_ - or, if you have a helpful workflow-aware agent or skill helping you out, launch it like this:
+Point your agent of choice here, to [this repository's URL](https://github.com/DanielDornhardt/the-documentation-pyramid) and let it _rip_ - or, if you have a helpful workflow-aware agent or skill helping you out, launch it like this:
 
 
 ### Example prompts:
@@ -148,7 +148,7 @@ This is what you should do. Look through this, investigate how'd be the best way
 
 1. Create a new directory alongside the code where the documentation will be stored going forward.
 
-- This is gonna be technical and development documentation. Basicaly everything an engineering team would need.
+- This is gonna be technical and development documentation. Basically everything an engineering team would need.
 
 We propose the `<project root>/docs/` folder as the canonical home for documentation. But of course - if there are already other docs there OR your framework would do something funky if it'd encounter the new folder there - then move it to an appropriate place, perhaps at a different layer of the directory tree, or name it differently - eg. `<project root>/dev-docs/` perhaps?
 

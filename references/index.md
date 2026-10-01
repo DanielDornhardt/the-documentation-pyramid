@@ -4,7 +4,7 @@ Documentation for the developers and agents of this system.
 
 It is not end-user documentation.
 
-It stays in sync with the code and it's maintenance is part of the development process and the DOD (Definition Of Done).
+It stays in sync with the code and its maintenance is part of the development process and the DOD (Definition Of Done).
 
 ## How to read it
 
