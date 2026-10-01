@@ -28,41 +28,43 @@ If you are preparing an implementation story / planning an implementation for ot
 
 ## Routing
 
-| File | Contents |
-|---|---|
-| `L1-vision.md` | {one line} |
-| `L2-architecture.md` | {one line} |
-| `L3-modules/index.md` | {one line} |
-| `L4-operations/index.md` | {one line} |
-| `Glossary.md` | Domain language glossary (only if the team uses the glossary) |
-| `adr/` | Decision records (only if the team uses ADRs) |
-| `house-style.md` | How docs are written here |
+<!-- Delete the Glossary.md and adr/ rows below if this project does not use them. Also delete the matching Glossary and ADRs bullets under "How to read it". -->
+
+| File                     | Contents                                                      |
+| ------------------------ | ------------------------------------------------------------- |
+| `L1-vision.md`           | {one line}                                                    |
+| `L2-architecture.md`     | {one line}                                                    |
+| `L3-modules/index.md`    | {one line}                                                    |
+| `L4-operations/index.md` | {one line}                                                    |
+| `Glossary.md`            | Domain language glossary (only if the team uses the glossary) |
+| `adr/`                   | Decision records (only if the team uses ADRs)                 |
+| `house-style.md`         | How docs are written here                                     |
 
 ### L3 sections
 
 <!-- One row per section in L3-modules/index.md, with an approximate line number. -->
 
 | Section | Line |
-|---|---|
-| {name} | ~{n} |
+| ------- | ---- |
+| {name}  | ~{n} |
 
 ### L4 sections
 
 | Section | Line |
-|---|---|
-| {name} | ~{n} |
+| ------- | ---- |
+| {name}  | ~{n} |
 
 ### Forked files
 
 <!-- When a section passes about 100 lines it moves to its own file, listed here. -->
 
 | File | Contents |
-|---|---|
+| ---- | -------- |
 
 ## Keeping it current
 
 - Update the docs your change makes stale
-- A section stays inline until it passes about 100 lines. Then fork it to its own file, leave a summary and a link, and update this index.
+- A section is one document or module of a layer. Small sections share their layer's file. When one passes about 100 lines, fork it to its own file, leave a summary and a link, and update this index.
 - One fact has one home. Link to it instead of restating it.
 - Derived files such as `llms.txt` shouldn't be consolidated into these docs but left in place.
 - Follow `house-style.md`. {<- if applicable / wanted, otherwise remove line}

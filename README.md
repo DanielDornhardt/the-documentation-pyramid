@@ -169,7 +169,7 @@ Optional:
     references/house-style.md       ->  <docs>/house-style.md             - OPTIONAL: smol instructions on how to keep the docs tidy & how to write. Use if you don't have a better tech-writer skill or instructions available already.
     (no template)                   ->  <docs>/adr/                       - OPTIONAL: use if you or the user wants to use adrs and don't have a good place for them too. Otherwise: you can also just reference the ADRs in the index.md and point the agents there, there.
 
-L3 and L4 get a folder from the start, so a section that grows past about 100 lines can fork into its own file without moving anything else. The index.md template lists them as `L3-modules/index.md` and `L4-operations/index.md`.
+A "section" is one document or module of a layer, for example one module in L3. Small sections live together in their layer's file. When one grows past about 100 lines, it moves into its own file. L3 and L4 get a folder from the start, so that move doesn't shift anything else. The index.md template lists them as `L3-modules/index.md` and `L4-operations/index.md`.
 
 
 3. Find the best ways to integrate the pyramid for this team.
