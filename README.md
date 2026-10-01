@@ -264,6 +264,10 @@ ASK / THINK / SUGGEST - should the existing docs be dissolved & migrated into th
 
 If there's other things needing the docs or you want to perhaps include forward references to the docs' new home in the previous locations, so be it - but i'd recommend TRYING to commit to the new structure.
 
+EXCEPTION - files that a tool or framework owns or generates (for example OpenSpec specs, or BMAD's planning artifacts) stay where they are. Link to them, don't move them.
+
+And if the framework already has its own home for the same kind of content as one of our layers (an architecture doc, say), and it is not clear which should win: STOP and ask the user. One side has to adapt to the other, and that choice belongs to the project. If no human is available, leave the framework's files untouched, put ours next to them, link both ways, and record the conflict in your report.
+
 The nice thing is - once you have it - you know the saying - a place for everything - and everything in it's place.
 
 I'd recommend doing a research round and putting this into a temporary file - and talking this through with your friendly operator, if applicable, before you go in and start renovating the place :) 
