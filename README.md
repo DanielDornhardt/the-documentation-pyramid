@@ -13,7 +13,8 @@ The goal is to have technical documentation that is both human and agent readabl
 
 - [Disambiguation](#disambiguation)
 - [Behold, the pyramid](#behold-the-pyramid)
-- [How this helps agents in practice](#how-this-helps-agents-in-practice)
+- [Wavelet Architecture](#wavelet-architecture)
+- [Advantages of the documentation pyramid](#advantages-of-the-documentation-pyramid)
 - [How this helps us finding what we need](#how-this-helps-us-finding-what-we-need)
 - [The different levels in a few nutshells](#the-different-levels-in-a-few-nutshells)
   - [Layer 1 - the vision layer](#layer-1---the-vision-layer)
