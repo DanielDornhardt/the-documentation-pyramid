@@ -10,7 +10,7 @@ The goal is technical documentation that is both human and agent readable, succi
 **Contents**
 
 - [Disambiguation](#disambiguation)
-- [Behold, the pyramid](#behold-the-pyramid)
+- [Behold, the documentation pyramid](#behold-the-documentation-pyramid)
 - [Wavelet Architecture](#wavelet-architecture)
 - [Advantages of the documentation pyramid](#advantages-of-the-documentation-pyramid)
 - [How this helps us find what we need](#how-this-helps-us-find-what-we-need)
@@ -44,7 +44,7 @@ We're talking _technical documentation_ for a software project.
 > [INSTALL.md](INSTALL.md).
 
 
-## Behold, the pyramid:
+## Behold, the documentation pyramid:
 
 ```
                                 +-------------------+
@@ -222,7 +222,7 @@ The full, step-by-step instructions (written for agents, fine for humans too) ar
 
 A: No.
 
-![img_1.png](img_1.png)
+![Pyramid Layer Cake](pyramid-final-4.jpg)
 
 ## Possible next steps
 
