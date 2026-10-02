@@ -2,7 +2,7 @@
 
 How docs in this repo are written. Edit this file to change the style.
 
-**Writer:** the working agent, following the rules below. To use another agent or skill, name it here.
+**Writer:** whichever agent writes the docs, the implementing agent or a separate one, following the rules below. To fix a specific writer (an agent or a skill), name it here.
 
 **Style guide:** the Google developer documentation style guide. If the team has its own guide, name it here and it replaces this one. Write human readable.
 

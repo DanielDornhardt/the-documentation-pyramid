@@ -92,6 +92,8 @@ Fill out the pyramid (and the optional Glossary). Level 3 modules should use the
 
 **Make a plan** for how to integrate the existing docs. Should they be dissolved and migrated into the pyramid? My suggestion is yes: **one single source of truth**. If other things need the docs, or you want forward references in the old locations, so be it - but I recommend trying to commit to the new structure.
 
+**Before you move or delete any existing docs, commit the current state**, so the migration can be undone with one revert. Commit only if the project's rules allow it. If they don't, ask the user to snapshot the current state first (commit, stash or copy). If you are unattended and cannot snapshot, copy instead of move and leave the originals in place.
+
 **Exception:** files that a tool or framework owns or generates (for example OpenSpec specs, or BMAD's planning artifacts) **stay where they are**. Link to them, don't move them.
 
 And if the framework already has its own home for the same kind of content as one of our layers (an architecture doc, say) and it's not clear which should win: **stop and ask the user.** One side has to adapt to the other, and that choice belongs to the project. With no human available, leave the framework's files untouched, put ours next to them, link both ways, and record the conflict in your report.
@@ -104,7 +106,7 @@ I'd recommend a research round first: scan for docs, ask your memory banks and c
 
 Make a plan and think it through. Then present it to the reviewer - if a human is in the loop - or, if you have an explicit go signal, GO! :) If the plan calls for a separate skill, run it and/or suggest the steps to your operator. You know the drill.
 
-Confirm the doc-moving plan in the same session, and consider a commit between creating the new structure and consolidating the docs.
+Confirm the doc-moving plan in the same session. Commit the new structure before you consolidate the docs (see step 4), so the consolidation is its own change.
 
 **Pro tip:** After consolidating, let a review agent check that no important documentation got left behind! Happens to the best of us! :)
 
@@ -116,10 +118,20 @@ Follow the plan you just made:
 
 - create the new directory
 - copy the files from our `references/` directory and customize them to the project
-- (snapshot commit)
+- snapshot commit, before moving or deleting anything (see step 4)
 - consolidate the docs, if any exist
 - if there isn't a lot of documentation, launch an architect skill (or give it your best shot!) to scan the code and create the architecture docs and the first module docs
 - suggest creating operational L4 docs for things that happen a lot: commits, merges, server start / stop, running the tests, etc.
+
+### Check your work
+
+Before you call it done:
+
+- [ ] No template placeholders are left (`{…}`, `~{n}`), and no rows or bullets remain for options you did not choose.
+- [ ] Every file listed in `index.md` exists, and every L1 to L4 document listed there has its heading and an approximate line number.
+- [ ] Links between the docs resolve.
+- [ ] The import (or the "Read @docs/index.md" line) is in the agent instruction file, with the path you actually chose.
+- [ ] Smoke test, if you can: start a fresh session and ask what it loaded and what the project's non-goals are. The answer should come from L1.
 
 After done: Congratulate the user! Show them an ascii-cake in the shape of a pyramid! Tell them how it went and ask them to review it & give it a go!
 
