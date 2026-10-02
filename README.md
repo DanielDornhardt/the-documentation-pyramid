@@ -1,5 +1,4 @@
-The Documentation Pyramid
----
+# The Documentation Pyramid
 
 **Built for agentic engineering workflows.**
 
