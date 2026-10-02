@@ -1,7 +1,7 @@
 # L4 Operations
 
 <!-- Day-to-day workflows. Read when you need process guidance, not architecture.
-     Sections stay here until they pass about 100 lines. Then fork to their own file
+     Documents stay here until they pass about 100 lines. Then fork to their own file
      and update index.md. -->
 
 ## Git workflow

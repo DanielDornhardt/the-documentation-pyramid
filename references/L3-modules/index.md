@@ -1,7 +1,7 @@
 # L3 Modules
 
 <!-- How specific parts work. Read before working in a module.
-     Sections stay here until they pass about 100 lines. Then fork one to its own file
+     Documents stay here until they pass about 100 lines. Then fork one to its own file
      (L3-modules/{name}.md), leave a summary and a link here, and update index.md. -->
 
 ## {Module}
