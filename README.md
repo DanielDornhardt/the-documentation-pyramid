@@ -10,7 +10,7 @@ The goal is technical documentation that is both human and agent readable, succi
 **Contents**
 
 - [Disambiguation](#disambiguation)
-- [Behold, the pyramid](#behold-the-pyramid)
+- [Behold, the documentation pyramid](#behold-the-documentation-pyramid)
 - [Wavelet Architecture](#wavelet-architecture)
 - [Advantages of the documentation pyramid](#advantages-of-the-documentation-pyramid)
 - [How this helps us find what we need](#how-this-helps-us-find-what-we-need)
@@ -44,7 +44,7 @@ We're talking _technical documentation_ for a software project.
 > [INSTALL.md](INSTALL.md).
 
 
-## Behold, the pyramid:
+## Behold, the documentation pyramid:
 
 ```
                                 +-------------------+
@@ -103,7 +103,7 @@ So this is where these two meet - as a well-kept, concise and helpful documentat
 The idea is reminiscent of a few things:
 - **a zoomed out vs. a detailed view**, if you look from the top of the pyramid down.
 - **a progressively loaded image file** (eg. **JPEG or wavelet compression**) * (think JPEG or wavelet compression): each layer further down reveals more detail, so you can zoom in strategically on the areas that matter.
-- 
+
 The planner, or the agent itself, decides which parts of the documentation, in what detail, help with the current task.
 
 **The basic algorithm for the agents:**
@@ -222,7 +222,7 @@ The full, step-by-step instructions (written for agents, fine for humans too) ar
 
 A: No.
 
-![img_1.png](img_1.png)
+![Pyramid Layer Cake](pyramid-final-4.jpg)
 
 ## Possible next steps
 

@@ -1,0 +1,33 @@
+
+## TODO (working notes, remove before publishing)
+
+**Design filter.** The core idea is small: set up the docs directory, point the agents there, and get out. Do not reinvent planning or workflow frameworks. Before adding anything, ask: is it really helpful, for whom, and should we instead point people at something more substantial?
+
+### Helper skills to consider
+
+- **Brownfield import.** A small assistant skill that brings existing documentation into the pyramid. Look at BMAD's brownfield documentation skill (`bmad-document-project`: project-type scan, resumable state, deep-dive mode) for ideas. If the repo's docs look thin, the skill can ask the user (or their agent) for other sources: a published docs site, a wiki, a Notion export.
+- **Suggested writing style.** Keep it small. Current models already know good technical writing, so ship a short default `house-style.md` and link to fuller guides (Cursor's technical-writing skill, riekelt/technical-writer) instead of re-teaching them.
+- **Adversarial impact reviewer.** Given a story or plan, and/or the pyramid's list of documents, ask: which documents are potentially affected by the current change and were not updated? Did the change create new systems that should be added to the pyramid? Advisory only: it reports, and the working agent or the human decides.
+
+### Tooling to consider
+
+- **Index updater.** A mechanism that regenerates the index's section tables and line numbers from the markdown headings, so agents can jump into a file without reading all of it. The line numbers stay; they are kept true by regeneration.
+- **Deeper scans.** The first pass maps a project from structure and existing docs, which is thin for a complex project. After the scaffold, report which sections rest on file names or skimming only, and offer per-section deep dives (BMAD's document-project has scan levels and a deep-dive mode to learn from).
+- **Move and polish existing technical docs.** Suggest moving purely technical docs that already exist into the pyramid and polishing them, with the change reviewable in git, then an adversarial review to check nothing important went missing.
+- **Viewers and renderers.** Offer one or more ways to read the pyramid as a browsable site or document (a starter kit, not a requirement).
+- **Doc generator script.** A small script that fetches all or selected layers and topics and assembles them into one document.
+- **Ship copies into the project.** Scripts like these should be copied into the user's repo at setup (with consent), so the pyramid keeps working without the plugin.
+
+### Later ideas
+
+- **Fractal pyramids.** A higher-level pyramid (a company, or a setup with several projects or channels) linked up and down with the more local project pyramids. Open: how to link across repos and machines consistently.
+
+### README preamble
+
+- **State the scope up front.** This pyramid is documentation for the developers and agents of a system. It is not end-user documentation; build a separate pyramid for that. (Whether the approach also works for end-user documentation has not been explored.)
+
+### Rules to consider
+
+- **Size rule ("Gmail rule", working name).** An edit should not make the docs bigger overall. Prefer updating and tightening existing text over adding new text, and when an edit would grow a document, cut something else. The docs stay adequate to the size of the project. Expect exceptions: the aim is a habit of trimming, not a hard limit.
+- **Less is more.** Keep it crisp, so humans and agents both enjoy reading it.
+- **A third rule** was mentioned and forgotten. Add it here when remembered.
