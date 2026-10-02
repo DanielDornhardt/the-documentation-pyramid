@@ -14,7 +14,7 @@ Docs follow a wavelet model — progressive refinement like image compression.
 - **L2** — CTO whiteboard. Tech stack, subsystems, data flow. Read before implementation work.
 - **L3** — Module deep dives. How each technical piece works. Read when working in a specific module.
 - **L4** — Operations. Git workflow, testing, dev setup, deployment, debugging. Read when you need process guidance.
-{#if glossary has been selected}- **Glossary** — Domain language. Should probably be read by all agents.{/if}
+- **Glossary** — Domain language. Should probably be read by all agents.
 - **ADRs** — Historical decision records. Read when asking "why not X?"
 
 Each layer is independently useful. No layer requires a lower layer to make sense.
@@ -27,6 +27,8 @@ For agents - how to navigate and use the documentation pyramid:
 **IMPORTANT: Always, before diving into the code or evaluation of the project:**
 > **Choose at least one document from each layer from Layer 1 to Layer 3** before working with the code.
 > Choose as many additional documents from L1 - L4 as you deem useful for the task at hand.
+
+Use your judgement, if it makes sense: pick the most relevant document in each layer. If a layer has nothing that applies to the task, or is still empty, skip it and say so. The "Read when" hints above show which layers matter most for which kind of task.
 
 -> Then pick the documents each implementing agent should read before it starts, by the same method as above, and put that list into the story / plan.
 
