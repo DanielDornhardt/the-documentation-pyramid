@@ -1,6 +1,8 @@
 The Documentation Pyramid
 ---
 
+**Built for agentic engineering workflows.**
+
 A simple and effective structure for the documentation necessary to implement a software system _well_.
 
 > "A place for everything - and everything in its place."
