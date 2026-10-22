@@ -40,6 +40,13 @@ The `references/` folder of this repo mirrors the docs directory you are about t
 
 - **One file per layer** at the base level of the docs: `L1-vision.md`, `L2-architecture.md`, `L3-modules.md`, `L4-operations.md`. A "document" is the unit an agent reads: a topic in L1 or L2 (one `##` heading), a module in L3, an operations topic in L4.
 - **The 100-line break-out rule.** When a section grows past about 100 lines, move it to its own file in the layer folder (`L3-modules/<name>.md`) and **delete it from the layer file**. Nothing is left behind, no summary, no pointer. The routing table in `index.md` points to the new file. That is why `L2-architecture/`, `L3-modules/` and `L4-operations/` exist from the start, each holding only a `.gitkeep` so git keeps the empty folder. Delete the `.gitkeep` when you add the first real file. L1 gets no folder: it stays under 100 lines.
+- **Heading levels are the same everywhere.** A layer file has one `#`, the layer title. Every module is a `##`, and its sections are `###`. A broken-out file has no `#`: it starts at the module's `##` heading, and its sections stay `###`. Moving a module between the layer file and the folder is a cut and paste; no level changes, and no tool changes one. Other documents (`index.md`, `Glossary.md`, `house-style.md`, decision records in `adr/`) are ordinary documents with one `#`.
+
+  | Where | Module title | Section |
+  |---|---|---|
+  | Layer file (`L3-modules.md`) | `##` | `###` |
+  | Broken-out file (`L3-modules/<name>.md`) | `##` | `###` |
+
 - **One home per module.** A module is a section of the layer file or a file in the layer folder, never both.
 - **No index files in layer folders.** The root `index.md` is the only routing table. (`adr/` is the exception: it may have its own `index.md` or `README.md`.)
 - **The byline rule.** Start every section, and every broken-out file, with one sentence of at most 140 characters that says what it covers. The routing table copies that sentence. A leading label like `**Purpose.**` is skipped.
@@ -170,10 +177,12 @@ node docs/tools/refresh-pyramid.js docs --fix-layout --dry-run   # preview: laye
 node docs/tools/refresh-pyramid.js docs --fix-layout             # do it
 node docs/tools/refresh-pyramid.js docs --split "L3-modules.md#sync-system" --dry-run   # preview a break-out of one long section
 node docs/tools/refresh-pyramid.js docs --split "L3-modules.md#sync-system"
+node docs/tools/refresh-pyramid.js docs --fix-headings --dry-run # preview: broken-out files that start with "# " (W10) move one level deeper
+node docs/tools/refresh-pyramid.js docs --fix-headings           # do it
 node docs/tools/refresh-pyramid.js docs                          # refresh the routing table
 ```
 
-`--fix-layout` leaves a summary section next to each module file; delete those (the tool reports them as E2). `--split` moves a section into the layer folder and leaves nothing behind. Replace the hand-written routing tables in `index.md` by the generated blocks. Details and all findings: `docs/tools/refresh-pyramid.md`.
+`--fix-layout` leaves a summary section next to each module file; delete those (the tool reports them as E2). `--split` moves a section into the layer folder, leaves nothing behind, and changes no heading level: the file starts at the module's `##` heading. `--fix-headings` is for broken-out files in the legacy form, which start with a `#` title: it moves every heading of such a file one level deeper, so the file starts at `##` like the module in the layer file. Replace the hand-written routing tables in `index.md` by the generated blocks. Details and all findings: `docs/tools/refresh-pyramid.md`.
 
 ----
 
