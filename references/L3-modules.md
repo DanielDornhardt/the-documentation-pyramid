@@ -4,7 +4,8 @@
      One module is one "##" section in this file. Under the heading, write one first sentence of at most 140 characters
      that says what the module is for. The routing table in index.md copies that sentence.
      A module that passes about 100 lines moves to its own file in L3-modules/<name>.md, and its section is removed
-     from this file: nothing is left behind, a module has one home. Do not add an index.md to L3-modules/.
+     from this file: nothing is left behind, a module has one home. The moved file has no "#" title and starts at its
+     "## <Module>" heading, with its sections still "###": cut and paste, no level changes. Do not add an index.md to L3-modules/.
      Delete the example section below when you add the first real module. -->
 
 ## {Module}

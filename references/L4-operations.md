@@ -4,7 +4,8 @@
      One topic is one "##" section. Under every heading, write one first sentence of at most 140 characters
      that says what the topic covers. The routing table in index.md copies that sentence.
      A topic that passes about 100 lines moves to its own file in L4-operations/<name>.md and its section is removed
-     from this file. Do not add an index.md to L4-operations/. -->
+     from this file. The moved file has no "#" title and starts at its "## <Topic>" heading, with its sections still "###":
+     cut and paste, no level changes. Do not add an index.md to L4-operations/. -->
 
 ## Git workflow
 
