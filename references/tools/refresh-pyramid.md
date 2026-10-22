@@ -21,9 +21,9 @@ docs/
   index.md              the routing table that agents read first
   L1-vision.md          one FILE per layer: L<n>-<name>.md
   L2-architecture.md
-  L3-modules.md         modules as "##" sections
+  L3-modules.md         one "#" title, modules as "##" sections
   L3-modules/           only modules that grew past about 100 lines
-    overdue-notices.md
+    overdue-notices.md  no "#" title: starts at "## Overdue notices"
   L4-operations.md
   adr/                  one file per decision, listed in the root index
 ```
@@ -31,7 +31,8 @@ docs/
 1. A module lives in exactly one place: a `##` section of the layer file, or a file in the layer folder, never both. When a module is broken out, nothing is left behind in the layer file (no summary, no pointer).
 2. There is no `index.md` inside a layer folder. All routing lives in the root `index.md`.
 3. The root `index.md` gives every module a short description and a pointer. For a section, the pointer is the layer file path with the section anchor and its current line number. For a broken-out module, it is the file path.
-4. The decisions folder `adr/` is special: one file per decision, listed in the root index, no layer file needed, and an `index.md` or `README.md` there is allowed.
+4. Heading levels are the same everywhere. A layer file has one H1, the layer title. Every module in it is an H2 and its own sections are H3. A broken-out file has no H1: it starts at the module's H2 (the same text and level as in the layer file) and its sections stay H3. Moving a module between the layer file and the folder is a pure cut and paste, and no tool changes a heading level when it moves or combines text. Other documents (`index.md`, a glossary, a house style page, the decision records in `adr/`) are ordinary documents with one H1.
+5. The decisions folder `adr/` is special: one file per decision, listed in the root index, no layer file needed, and an `index.md` or `README.md` there is allowed.
 
 What the tool recognises:
 
@@ -46,7 +47,8 @@ What the tool recognises:
 The byline is the single source of the description in the routing table: the table copies it and the tool never invents text.
 
 * For a section: the first sentence of the first paragraph directly under the heading, before any further heading.
-* For a broken-out file (and a decision record): the first sentence of the first paragraph under its `# ` title, or the `summary:` line in the front matter. The front matter value wins.
+* For a broken-out file: the first sentence of the first paragraph under its `## ` module title, or the `summary:` line in the front matter. The front matter value wins. The module title of a broken-out file is its first heading of level 2. A level 1 heading is accepted as a legacy title only when no `##` comes before it (W10 reports it). Text before the title heading is not part of the byline. A file without any such heading takes its title from the file name.
+* For a decision record: the first sentence of the first paragraph under its `# ` title, or the `summary:` line. Decision records are ordinary documents, so their title is the first level 1 heading.
 * A sentence ends at the first `. ` (period and space), or at the end of the paragraph. Links are replaced by their text, emphasis and code marks are removed, HTML comments are removed, whitespace is collapsed.
 * A paragraph that starts with a list, a table, a code block, a quote or a block-level HTML element has no byline. A paragraph ends early at a list item (a bullet, or a number starting at 1), a quote, a code fence, a rule or a reference definition line; so "Intro text" followed directly by a list gives "Intro text". Inline HTML such as `<span>` is removed and its text kept.
 * A leading label is not the byline. A bold label such as `**Purpose.**` or `**Purpose:**`, or a plain label from a short list (Purpose, Summary, Overview, Role, Scope, Context, Description, Responsibilities, Goal, Intent, Decision, Problem, Background, Note, Definition), is skipped and the sentence after it is used. In a decision record, a leading `Status:` or `Date:` line is skipped. If the first sentence ends in a colon (a lead-in to a list), there is no byline (W2).
@@ -103,10 +105,11 @@ Options:
 | `--max-byline N`          | Longest byline before W3, error over twice N (default 140).                                                                                                                                                    |
 | `--split "<file>#<slug>"` | Opt-in refactor, see below.                                                                                                                                                                                    |
 | `--fix-layout`            | Opt-in migration, see below.                                                                                                                                                                                   |
-| `--force`                 | Override the clean git tree safety of the two refactors.                                                                                                                                                       |
+| `--fix-headings`          | Opt-in migration of broken-out files that start with `# `, see below.                                                                                                                                          |
+| `--force`                 | Override the clean git tree safety of the three refactors.                                                                                                                                                       |
 | `--help`                  | Usage.                                                                                                                                                                                                         |
 
-Text output is plain: one finding per line, `error E1 L3-modules/index.md:1 message (fix: ...)`, no colours, no emojis. `--check` and `--dry-run` cannot be combined, and neither can be combined with the two refactors (`--dry-run` can).
+Text output is plain: one finding per line, `error E1 L3-modules/index.md:1 message (fix: ...)`, no colours, no emojis. `--check` and `--dry-run` cannot be combined, and neither can be combined with the three refactors (`--dry-run` can), and the refactors cannot be combined with each other.
 
 ## Exit codes
 
@@ -125,7 +128,7 @@ Codes are stable. Severity is `error`, `warning` or `info`. Errors fail `--check
 | Code | Severity                   | Meaning                                                                                                                                                                            | Fix                                                                                      |
 | ---- | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | E1   | error                      | An `index.md` inside a layer folder (not in `adr/`).                                                                                                                               | `--fix-layout`; when the layer file already exists, merge by hand and delete the folder index. |
-| E2   | error                      | The same module as a section and as a file in the layer folder (section slug equals the file title slug or the file name slug), or the same section title twice in one layer file. | The finding names the section and its line range: delete it if it only summarises the file, else merge it into the file first. |
+| E2   | error                      | The same module as a section and as a file in the layer folder (the slug of the layer file's `##` title equals the slug of the file's `##` title or of the file name), or the same section title twice in one layer file. | The finding names the section and its line range: delete it if it only summarises the file, else merge it into the file first. |
 | E3   | error                      | Broken markers: unbalanced, nested, duplicated, mismatched, or `index.md` ends inside an unclosed code fence. Nothing is written.                                                                                                    | Fix the marker lines.                                                                    |
 | E4   | error                      | Root `index.md` missing. It is never created.                                                                                                                                      | Create it with one marker pair per layer.                                                |
 | E5   | error                      | A byline longer than twice the limit.                                                                                                                                              | Shorten the first sentence.                                                              |
@@ -144,25 +147,37 @@ Codes are stable. Severity is `error`, `warning` or `info`. Errors fail `--check
 | W7   | warning                    | A file over 5 MB was skipped.                                                                                                                                                      | Split or exclude it.                                                                     |
 | W8   | warning                    | A marker block for a layer that does not exist. It is left alone.                                                                                                                  | Remove the block or restore the layer.                                                   |
 | W9   | warning                    | A bare file name in a hand-written part of `index.md` that exists nowhere in the docs folder (it may be a repository file outside it).                                             | Correct the name, or ignore it.                                                          |
+| W10  | warning                    | A broken-out file starts with a level 1 heading (the legacy form). The finding gives the exact fix.                                                                                | `--fix-headings`, or change `# Title` to `## Title` and move every other heading one level deeper by hand. |
 | S1   | error (not a content code) | The index is stale: a generated block differs from the documents. This is what makes `--check` fail on an out-of-date table.                                                       | Run write mode.                                                                          |
 | I1   | info                       | Counts per layer.                                                                                                                                                                  | None.                                                                                    |
 | I2   | info                       | Table rows in the hand-written part of `index.md` when blocks were appended; they may duplicate the generated tables.                                                              | Review and remove what is redundant.                                                     |
 
-## The two opt-in refactors
+## The three opt-in refactors
 
-Both refuse to run unless the docs folder is inside a git work tree and the files they would touch have no uncommitted changes (untracked files count as changes). Outside git, or on a dirty tree, use `--force` to override. `--dry-run` shows the result and writes nothing, and skips the git check. A refusal exits 2 and changes nothing. A refactor that fails half way is not rolled back; use git to undo it.
+All three refuse to run unless the docs folder is inside a git work tree and the files they would touch have no uncommitted changes (untracked files count as changes). Outside git, or on a dirty tree, use `--force` to override. `--dry-run` shows the result and writes nothing, and skips the git check. A refusal exits 2 and changes nothing. A refactor that fails half way is not rolled back; use git to undo it.
 
 ### `--split "<file>#<section-slug>"`
 
 Moves one section of a layer file into `<layer folder>/<slug>.md`, for the case where W1 says a section grew.
 
 * The folder is created. If the target exists, the tool refuses.
-* The section heading becomes a level-1 heading and all deeper headings move up one level (never inside fenced code).
+* No heading changes level: the module's `##` heading stays `##` and its `###` headings stay `###`. The new file starts at the `##` heading and gets no H1. The text of the section is copied line for line.
 * The section is removed from the layer file. No summary or pointer is left behind. A single blank line separates the neighbours.
 * The generated blocks are refreshed (if the index cannot be refreshed, the split still happens and the tool says so).
 * The tool then lists other places in the docs that still use the old anchor (`L3-modules.md#sync-system`, in links, reference definitions and backticks, and `#sync-system` inside the layer file), so a human can fix them. It does not edit them. Each occurrence is listed, also several on one line.
 * Reference-style link definitions (`[label]: url`) move with the section. The tool lists definitions that now sit on the other side of a link that uses them (a link left behind whose definition moved, or the reverse), so they can be fixed by hand.
 * `--split --dry-run` prints the line range that would be removed, the first and last lines of the new file (not the whole text) and the full diff of `index.md`.
+
+### `--fix-headings`
+
+Moves broken-out files in the legacy form (they start with `# Title`) to the one rule: every heading of the file goes one level deeper, so `# Title` becomes `## Title`, its `##` sections become `###`, and so on. The module title keeps its text, so anchors, bylines and links do not change.
+
+* Only broken-out files of layer folders whose title heading is a level 1 heading are changed (the files W10 reports). Layer files, decision records, folder indexes and files that already start at `##` are never touched.
+* Fenced code (backticks or tildes), front matter, HTML comments and HTML blocks are not headings and stay as they are. Indentation and closing hashes are kept. Line endings (CRLF) and a BOM are kept.
+* A file that already has a level 6 heading cannot move deeper. It is refused and listed (`refused <file>:<line> ...`), left as it is, and the other files are still changed; the exit code is then 1.
+* The generated blocks are refreshed afterwards (if the index cannot be refreshed, the headings still move and the tool says so).
+* Same safety as `--split`: a clean git tree for the files it touches (or `--force`), `--dry-run` shows a short diff of every file and of `index.md`. Setext (underlined) headings are not recognised, so they are not moved.
+* `--json` gives `{operation, dryRun, files: [{file, headings}], refused: [{file, line, reason}], indexRefreshed}`.
 
 ### `--fix-layout`
 
@@ -243,6 +258,7 @@ The single file can be copied into any project. In a pyramid installation it liv
 ## What is not verified
 
 * Behaviour on Windows (path separators in findings use `/`; the file system calls were not run there).
+* `--fix-headings` was tested on invented fixtures and on a temporary copy of a real documentation folder, not on a Windows machine.
 * Setext (underlined) headings and nested lists are not interpreted; only ATX headings and the inline syntax described above. Reference-style links are reduced to their text in bylines, but `[text]` shortcut links are not recognised.
 * Files with lone CR line endings (old Mac style) are read as one line; only LF and CRLF are handled.
 * Headings inside an HTML block are recognised by a fixed list of block-level element names, not by the full CommonMark rules.

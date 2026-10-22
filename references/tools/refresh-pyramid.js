@@ -471,18 +471,27 @@ export function sectionsOf(doc) {
   return out;
 }
 
-/** Title and byline of a broken-out file (or a decision record). */
-export function moduleOfFile(doc, fileName) {
+/**
+ * Title and byline of a broken-out file, or of a decision record ({adr: true}).
+ *
+ * A broken-out module has no H1: it starts at its "##" module title, the same level it has in the layer file. Its
+ * title is the first heading of level 2. A level 1 heading is accepted as a legacy title only when no "##" precedes
+ * it (legacyH1, reported as W10). A decision record is an ordinary document: its title is the first "#".
+ */
+export function moduleOfFile(doc, fileName, { adr = false } = {}) {
   const { lines, analysis } = doc;
   const hs = analysis.headings;
-  const k = hs.findIndex((h) => h.level === 1);
-  const h1 = k >= 0 ? hs[k] : null;
-  const title = (h1 && h1.title) || humanise(fileName);
-  const start = h1 ? h1.idx + 1 : analysis.frontEnd + 1;
-  const nextH = h1 ? hs[k + 1] : hs[0];
+  const k = adr ? hs.findIndex((h) => h.level === 1) : hs.findIndex((h) => h.level === 1 || h.level === 2);
+  const head = k >= 0 ? hs[k] : null;
+  const title = (head && head.title) || humanise(fileName);
+  const start = head ? head.idx + 1 : analysis.frontEnd + 1;
+  const nextH = head ? hs[k + 1] : hs[0];
   const fromBody = bylineFrom(lines, start, nextH ? nextH.idx : lines.length);
   const summary = frontMatterSummary(lines, analysis.frontEnd);
-  return { title, line: h1 ? h1.line : 1, slugBase: slugBase((h1 && h1.titleRaw) || title), byline: summary ?? fromBody };
+  return {
+    title, line: head ? head.line : 1, slugBase: slugBase((head && head.titleRaw) || title), byline: summary ?? fromBody,
+    legacyH1: !adr && !!head && head.level === 1,
+  };
 }
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -695,9 +704,12 @@ export function buildModel(io, options = {}) {
         }
         const res = io.load(rel);
         if (res.status !== 'ok') { unreadable(rel, res); continue; }
-        const m = moduleOfFile(res.doc, e.name);
+        const m = moduleOfFile(res.doc, e.name, { adr: L.isAdr });
         const stemSlug = slugBase(e.name.slice(0, -3));
-        folderModules.push({ title: m.title, where: `\`${rel}\``, byline: m.byline, kind: 'file', file: rel, line: m.line, slugBase: m.slugBase, stemSlug, name: e.name });
+        folderModules.push({ title: m.title, where: `\`${rel}\``, byline: m.byline, kind: 'file', file: rel, line: m.line, slugBase: m.slugBase, stemSlug, name: e.name, legacyH1: m.legacyH1 });
+        if (m.legacyH1) {
+          add('warning', 'W10', rel, m.line, `broken-out file starts with a level 1 heading ("# ${m.title}"); modules are level 2 everywhere, so the file should start at "## ${m.title}"`, `--fix-headings, or by hand: change "# ${m.title}" to "## ${m.title}" and move every other heading one level deeper`);
+        }
         bylineFindings(add, opts, rel, m.line, m.title, m.byline);
       }
       L.brokenOut = folderModules;
@@ -1096,10 +1108,6 @@ function guardGit(root, touchedRel, force, what) {
 // ---------------------------------------------------------------------------------------------------------------
 // --split
 
-function removeOneHash(line) {
-  return line.t.replace(/^( {0,3})#/, '$1');
-}
-
 /** Plan moving one section into its own file. Pure: returns the new texts. */
 export function planSplit(io, fileRel, slug) {
   if (!LAYER_FILE.test(fileRel) || fileRel.includes('/')) throw new UsageError(`--split needs a layer file at the top of the docs folder (like L3-modules.md#slug), got ${fileRel}`);
@@ -1122,13 +1130,8 @@ export function planSplit(io, fileRel, slug) {
   if (folder && folder.type !== 'dir') throw new UsageError(`--split refused: ${layerId} exists and is not a folder`);
   if (io.stat(targetRel)) throw new UsageError(`--split refused: ${targetRel} already exists`);
   const eol = doc.lines[sec.idx].e || doc.eol;
-  const { mark } = doc.analysis;
-  const moved = [];
-  for (let i = sec.idx; i < sec.endIdx; i++) {
-    const l = doc.lines[i];
-    const h = !mark[i] ? parseHeading(l.t) : null;
-    moved.push(h && (i === sec.idx || h.level > 2) ? { t: removeOneHash(l), e: l.e } : l);
-  }
+  // A pure cut: heading levels are the same in the layer file and in the folder, so no line is changed.
+  const moved = doc.lines.slice(sec.idx, sec.endIdx);
   while (moved.length && moved[moved.length - 1].t.trim() === '') moved.pop();
   const movedLines = moved.map((l, i) => ({ t: l.t, e: l.e || (i === moved.length - 1 ? eol : l.e) }));
   movedLines[movedLines.length - 1].e = eol;
@@ -1169,6 +1172,39 @@ export function findAnchorReferences(io, fileRel, slug) {
     }
   }
   return found;
+}
+
+// ---------------------------------------------------------------------------------------------------------------
+// --fix-headings
+
+/**
+ * Plan the move of legacy broken-out files (they start with "# Title") to the one rule: every heading of the file
+ * goes one level deeper, so "# Title" becomes "## Title" and its "##" sections become "###". Pure: returns the new
+ * texts. Fenced code, front matter, HTML comments and HTML blocks are not headings and are never touched. A file
+ * that has a level 6 heading cannot move deeper and is refused (listed in `refused`).
+ */
+export function planFixHeadings(io) {
+  const model = buildModel(io);
+  const files = [];
+  const refused = [];
+  for (const L of model.layers) {
+    if (L.isAdr) continue;
+    for (const m of L.brokenOut) {
+      if (!m.legacyH1) continue;
+      const res = io.load(m.file);
+      if (res.status !== 'ok') continue;
+      if (res.link) { refused.push({ file: m.file, line: 1, reason: 'the file is a symlink and is not rewritten' }); continue; }
+      const { doc } = res;
+      if (!doc.validUtf8) { refused.push({ file: m.file, line: 1, reason: 'the file is not valid UTF-8 and is not rewritten' }); continue; }
+      const heads = doc.analysis.headings;
+      const six = heads.find((h) => h.level >= 6);
+      if (six) { refused.push({ file: m.file, line: six.line, reason: `a heading of level ${six.level} cannot move one level deeper (Markdown stops at level 6); change it by hand first` }); continue; }
+      const lines = doc.lines.slice();
+      for (const h of heads) lines[h.idx] = { t: `${lines[h.idx].t.slice(0, h.indent)}#${lines[h.idx].t.slice(h.indent)}`, e: lines[h.idx].e };
+      files.push({ rel: m.file, headings: heads.length, oldText: (doc.bom ? '\ufeff' : '') + doc.raw, newText: (doc.bom ? '\ufeff' : '') + joinLines(lines) });
+    }
+  }
+  return { files, refused };
 }
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -1258,15 +1294,16 @@ Options
   --max-byline N         a byline longer than N characters is a warning, over 2N an error (default 140)
   --split "<file>#<slug>"  move one section of a layer file into its own file in the layer folder
   --fix-layout           migrate a legacy layer folder (index.md, no layer file) to a layer file
-  --force                allow --split and --fix-layout on a dirty git tree or outside git
+  --fix-headings         move every heading of a broken-out file that starts with "# " one level deeper
+  --force                allow --split, --fix-layout and --fix-headings on a dirty git tree or outside git
   --help                 this text
 
 Exit codes: 0 fine, 1 findings or a stale index (per mode), 2 usage or I/O error.
 `;
 
 export function parseArgs(argv) {
-  const o = { docs: null, dryRun: false, check: false, json: false, strict: false, force: false, fixLayout: false, split: null, help: false, maxSectionLines: DEFAULTS.maxSectionLines, maxByline: DEFAULTS.maxByline };
-  const flags = { '--dry-run': 'dryRun', '--check': 'check', '--json': 'json', '--strict': 'strict', '--force': 'force', '--fix-layout': 'fixLayout', '--help': 'help', '-h': 'help' };
+  const o = { docs: null, dryRun: false, check: false, json: false, strict: false, force: false, fixLayout: false, fixHeadings: false, split: null, help: false, maxSectionLines: DEFAULTS.maxSectionLines, maxByline: DEFAULTS.maxByline };
+  const flags = { '--dry-run': 'dryRun', '--check': 'check', '--json': 'json', '--strict': 'strict', '--force': 'force', '--fix-layout': 'fixLayout', '--fix-headings': 'fixHeadings', '--help': 'help', '-h': 'help' };
   const values = { '--max-section-lines': 'maxSectionLines', '--max-byline': 'maxByline', '--split': 'split' };
   let rest = false;
   for (let i = 0; i < argv.length; i++) {
@@ -1292,9 +1329,10 @@ export function parseArgs(argv) {
       o[values[name]] = v;
     } else throw new UsageError(`unknown option: ${arg} (see --help)`);
   }
-  if (o.split !== null && o.fixLayout) throw new UsageError('--split and --fix-layout cannot be combined');
+  const refactors = [o.split !== null && '--split', o.fixLayout && '--fix-layout', o.fixHeadings && '--fix-headings'].filter(Boolean);
+  if (refactors.length > 1) throw new UsageError(`${refactors.join(' and ')} cannot be combined`);
   if (o.check && o.dryRun) throw new UsageError('--check and --dry-run cannot be combined');
-  if (o.check && (o.split !== null || o.fixLayout)) throw new UsageError('--check cannot be combined with --split or --fix-layout');
+  if (o.check && refactors.length) throw new UsageError(`--check cannot be combined with ${refactors[0]}`);
   return o;
 }
 
@@ -1313,6 +1351,7 @@ export function run(argv, { out = (s) => process.stdout.write(s), err = (s) => p
     if (!statSync(root).isDirectory()) throw new UsageError(`not a folder: ${o.docs ?? 'docs'}`);
     if (o.split !== null) return runSplit(root, o, out);
     if (o.fixLayout) return runFixLayout(root, o, out);
+    if (o.fixHeadings) return runFixHeadings(root, o, out);
     return runModel(root, o, out);
   } catch (e) {
     if (e instanceof UsageError) { err(`refresh-pyramid: ${e.message}\n`); return 2; }
@@ -1451,6 +1490,43 @@ function runSplit(root, o, out) {
   if (gaps.length) out(`${gaps.length} reference definition${gaps.length === 1 ? '' : 's'} on the other side of their links, to fix by hand\n`);
   if (refs.length) out(`${refs.length} reference${refs.length === 1 ? '' : 's'} to the old anchor ${plan.fileRel}#${slug} to fix by hand\n`);
   return 0;
+}
+
+function runFixHeadings(root, o, out) {
+  const io = makeIo(root);
+  const plan = planFixHeadings(io);
+  const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+  if (!plan.files.length && !plan.refused.length) {
+    if (o.json) out(`${JSON.stringify({ operation: 'fix-headings', dryRun: o.dryRun, files: [], refused: [], indexRefreshed: false }, null, 2)}\n`);
+    else out('nothing to fix: no broken-out file starts with a level 1 heading\n');
+    return 0;
+  }
+  const overlay = new Map(plan.files.map((f) => [f.rel, f.newText]));
+  let ix = { canWrite: false, newRaw: '', oldRaw: '' };
+  if (plan.files.length) ix = buildModel(makeIo(root, overlay), { maxSectionLines: o.maxSectionLines, maxByline: o.maxByline }).index;
+  const indexChanges = ix.canWrite && ix.newRaw !== ix.oldRaw;
+  const touched = [...plan.files.map((f) => f.rel), ...(indexChanges ? ['index.md'] : [])];
+  if (!o.dryRun && plan.files.length) {
+    guardGit(root, touched, o.force, '--fix-headings');
+    for (const f of plan.files) writeAtomic(io.abs(f.rel), f.newText);
+    if (indexChanges) writeAtomic(io.abs('index.md'), ix.newRaw);
+  }
+  if (o.json) {
+    out(`${JSON.stringify({ operation: 'fix-headings', dryRun: o.dryRun, files: plan.files.map((f) => ({ file: f.rel, headings: f.headings })), refused: plan.refused, indexRefreshed: indexChanges }, null, 2)}\n`);
+    return plan.refused.length ? 1 : 0;
+  }
+  if (o.dryRun) {
+    const diffs = fileDiffs([
+      ...plan.files.map((f) => ({ label: f.rel, oldText: f.oldText, newText: f.newText })),
+      ...(indexChanges ? [{ label: 'index.md', oldText: ix.oldRaw, newText: ix.newRaw }] : []),
+    ]);
+    if (diffs) out(`${diffs}\n`);
+  }
+  for (const f of plan.files) out(`${o.dryRun ? 'would shift' : 'shifted'} ${f.rel}: ${plural(f.headings, 'heading', 'headings')} one level deeper\n`);
+  for (const r of plan.refused) out(`refused ${r.file}:${r.line} ${r.reason}\n`);
+  if (plan.files.length) out(`${o.dryRun ? 'dry-run: would move' : 'moved'} every heading of ${plural(plan.files.length, 'file', 'files')} one level deeper; ${indexChanges ? 'index.md refreshed' : ix.canWrite ? 'index.md was already current' : 'index.md could not be refreshed (see the findings of a normal run)'}\n`);
+  if (plan.refused.length) out(`${plural(plan.refused.length, 'file was', 'files were')} refused and left as they are\n`);
+  return plan.refused.length ? 1 : 0;
 }
 
 function runFixLayout(root, o, out) {
