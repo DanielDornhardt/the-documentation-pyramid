@@ -24,6 +24,7 @@ If `stale` is true or findings exist, explain each one in plain words (file, lin
   * E3 (broken marker lines or an unclosed code fence in index.md), E6 (hand-written pointer with a path or anchor to something that is gone), E5 (byline over twice the limit): edit the lines named in the finding.
   * E4, E8, E9, E10, E11 (index missing, symlink out of the docs folder, unreadable file, layer not fully read so its table was left unchanged, index too big): these need a human fix of the file or permissions named in the finding; report them and stop.
   * E7 (layer without a marker block) and S1 (stale table) are cured by the write run below.
+* W10 (a broken-out file starts with a level 1 heading, the legacy form): see step 3b.
 * Warnings W2 and W3 (missing or long byline): propose a one-sentence first paragraph under the heading (at most 140 characters) and apply it if the user agrees. A leading label such as "Purpose." is skipped by the tool, so the sentence after it is the byline. W9 is a bare file name in the hand-written index that exists nowhere in the docs folder; it is often a repository file such as a README, so mention it and move on.
 * Refresh the table:
 
@@ -43,7 +44,17 @@ Propose the split with the exact argument from the finding's `fix` field, and sh
 node docs/tools/refresh-pyramid.js docs --split "L3-modules.md#sync-system" --dry-run
 ```
 
-Run it for real (same command without `--dry-run`) only after the user agrees. It moves the section to `L3-modules/sync-system.md`, leaves no summary behind, refreshes the table, and lists other documents that still link to the old anchor and reference definitions that ended up on the other side of their links. Fix those by hand, or offer to. It refuses on a dirty git tree for the files it touches: commit or stash first, and use `--force` only if the user asks.
+Run it for real (same command without `--dry-run`) only after the user agrees. It moves the section to `L3-modules/sync-system.md` without changing any heading level (the module keeps its `##` heading, no `#` is added), leaves no summary behind, refreshes the table, and lists other documents that still link to the old anchor and reference definitions that ended up on the other side of their links. Fix those by hand, or offer to. It refuses on a dirty git tree for the files it touches: commit or stash first, and use `--force` only if the user asks.
+
+## Step 3b: W10 (broken-out file starts with `# `)
+
+Headings are the same everywhere: a layer file has one `#` title, modules are `##`, a broken-out file starts at its `## ` module title and has no `#`. Preview, then run after the user agrees (same git rules as step 3):
+
+```sh
+node docs/tools/refresh-pyramid.js docs --fix-headings --dry-run
+```
+
+It moves every heading of the legacy files one level deeper, refreshes the table, and refuses a file that already has a level 6 heading (fix that by hand first).
 
 ## Step 4: E1 (index.md inside a layer folder)
 
