@@ -17,7 +17,7 @@ Base guide: Google developer documentation style. A team guide named here replac
 - Claims about the system: cite the file path, or mark them unverified. Check that named paths exist.
 - Smallest edit. Keep the author's voice. Docs and code disagree: say so, replace the wrong fact, keep no second version.
 - Cut before adding. Table cells and list items: one or two sentences.
-- Section over about 100 lines: move it to its own file in the layer folder (`refresh-pyramid --split`).
+- Section over about 100 lines: move it to its own file in the layer folder, starting at its `##` heading.
 - Keep the agent's chat persona out of docs. A light touch of humour in the text is fine.
 
 ## Structure
@@ -42,4 +42,4 @@ Base guide: Google developer documentation style. A team guide named here replac
 
 ## Done when
 
-Edits are finished (not after each one): run `node docs/tools/refresh-pyramid.js` and fix what it reports. When it reports something hairy, the skill `/refresh-pyramid` walks you through it. Claims are cited or marked unverified.
+Edits are finished (not after each one): run `node docs/tools/refresh-pyramid.js` and fix what it reports (it never edits your docs). The skill `/refresh-pyramid` helps when the report is long. Claims are cited or marked unverified.
