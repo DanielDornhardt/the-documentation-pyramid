@@ -22,6 +22,7 @@ The goal is technical documentation that is both human and agent readable, succi
   - [Layer 4: Operations](#layer-4-operations)
 - [Installation Instructions](#installation-instructions)
   - [Example prompts for different agentic frameworks](#example-prompts-for-different-agentic-frameworks)
+  - [Keeping the index current](#keeping-the-index-current)
   - [The short version](#the-short-version)
 - [FAQ](#faq)
 - [Possible next steps](#possible-next-steps)
@@ -81,10 +82,12 @@ We're talking _technical documentation_ for a software project.
 
 Docs follow a wavelet model — progressive refinement like image compression.
 
-- **L1** — Blurry but complete. Business context, product strategy. Read first for any product decision.
-- **L2** — CTO whiteboard. Tech stack, subsystems, data flow. Read before implementation work.
-- **L3** — Module deep dives. How each technical piece works. Read when working in a specific module.
-- **L4** — Operations. Git workflow, testing, dev setup, deployment, debugging. Read when you need process guidance.
+- **L1** (`L1-vision.md`) — Blurry but complete. Business context, product strategy. Read first for any product decision.
+- **L2** (`L2-architecture.md`) — CTO whiteboard. Tech stack, subsystems, data flow. Read before implementation work.
+- **L3** (`L3-modules.md`) — Module deep dives. How each technical piece works. Read when working in a specific module.
+- **L4** (`L4-operations.md`) — Operations. Git workflow, testing, dev setup, deployment, debugging. Read when you need process guidance.
+
+Each layer is one file. A module that outgrows about 100 lines moves into its own file in the layer folder (`L3-modules/<name>.md`).
 - **Glossary** (optional) — Domain language. Should probably be read by all agents.
 - **ADRs** — Historical decision records. Read when asking "why not X?"
 
@@ -118,7 +121,7 @@ This way, the agents will
 
 Each layer down the pyramid reveals additional details and practical scripts necessary to work effectively on the project.
 
-Agents will always see the big picture and goal of the company or project, and they'll always receive a concise index of all the available documentation from the index.md file.
+Agents will always see the big picture and goal of the company or project, and they'll always receive a concise routing table of all the available documentation from the index.md file, with one line per module.
 
 
 ## The different levels in a few nutshells:
@@ -138,7 +141,7 @@ The system displayed in an abstract fashion, as a system built from different pa
 
 ### Layer 3 - individual modules
 
-Each module gets documented here, so humans and agents can design and implement with clarity while keeping tabs on the process. It should hold everything relevant for that module, for example:
+Each module gets documented here, as a section of `L3-modules.md` (or its own file once it outgrows about 100 lines), so humans and agents can design and implement with clarity while keeping tabs on the process. It should hold everything relevant for that module, for example:
 
 - the concepts and ideas behind the implementation
 - schemas and diagrams
@@ -206,10 +209,14 @@ I'd recommend running those first and pointing them to this repository in order 
 
 (Command names can differ with how a framework was installed and with your tool. For example, a skill installed as a Claude Code plugin is called with a prefix, like `/superpowers:using-superpowers`, and OpenSpec registers `/opsx-propose` in Cursor and GitHub Copilot. Use the equivalent in your setup.)
 
+### Keeping the index current
+
+The routing table in `index.md` is generated: `references/tools/refresh-pyramid.js` (one file, Node 20.11 or later, no dependencies) rewrites the marker blocks from the documents, and checks the layout rules (one home per module, no folder indexes, bylines of at most 140 characters). Agents run it once when their doc edits are finished. The skill in `references/skills/refresh-pyramid/` helps them when it reports findings. See [INSTALL.md](INSTALL.md).
+
 ### The short version
 
 1. Create a docs directory: `docs/`, or `dev-docs/` if `docs/` is taken.
-2. Copy the templates from `references/` into it and adapt them to your project.
+2. Copy the templates from `references/` into it, plus the refresh tool (`docs/tools/`) and skill, and adapt them to your project.
 3. Import `docs/index.md` from your `AGENTS.md` / `CLAUDE.md`.
 4. Add "read before / update after" steps to your planning and story workflow.
 5. Fill it from the code and from your existing docs. Greenfield? Start small, it fills up as you go.
@@ -232,12 +239,12 @@ None of these are big, and they can probably be vibecoded extremely quickly. Go 
 If you get something with good results, please share and we can link it up or integrate it with this repo.
 
 - Support / guidelines for a multi-project overarching structure
-- Pyramid browser & viewer in multiple versions / languages
+- Pyramid browser & viewer in multiple versions / languages (a first viewer exists as a separate private repository)
 - Document renderer - turn your pyramid into a fully fledged document
 - Skills:
     - more detailed tech writing skills / a tech writer
     - adversarial reviewer that makes sure no docs get lost in the initial transfer
     - adversarial reviewer for checking doc updates have happened after a story has been implemented
 - a more clearly defined pattern on how to format the docs
-- auto-index-generation scripts
+- auto-index-generation scripts (done for the routing table, see `references/tools/`)
 - ...
