@@ -23,7 +23,10 @@ Base guide: Google developer documentation style. A team guide named here replac
 ## Structure
 
 - Byline: first sentence under each heading, at most 140 characters, says what the section covers.
-- A heading is an anchor. Rename it: fix every link to it in the same edit. One H1. No repeated headings in a file. No links in headings.
+- A heading is an anchor. Rename it: fix every link to it in the same edit. No repeated headings in a file. No links in headings.
+- Heading levels are the same everywhere. A layer file has one H1, the layer title. Every module is `##`, in the layer file and in its own file; its sections are `###`.
+- A broken-out file has no H1: it starts at its `##` module title. Moving a module between the layer file and the folder never changes a level.
+- Other documents (`index.md`, glossary, this file, decision records) keep one H1.
 
 ## Links
 
