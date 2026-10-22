@@ -141,7 +141,7 @@ The system displayed in an abstract fashion, as a system built from different pa
 
 ### Layer 3 - individual modules
 
-Each module gets documented here, as a section of `L3-modules.md` (or its own file once it outgrows about 100 lines), so humans and agents can design and implement with clarity while keeping tabs on the process. It should hold everything relevant for that module, for example:
+Each module gets documented here, as a section of `L3-modules.md` (or its own file once it outgrows about 100 lines; the module's `##` heading and its `###` sections stay the same in both places), so humans and agents can design and implement with clarity while keeping tabs on the process. It should hold everything relevant for that module, for example:
 
 - the concepts and ideas behind the implementation
 - schemas and diagrams
