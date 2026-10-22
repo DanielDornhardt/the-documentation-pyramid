@@ -16,26 +16,34 @@ This project creates the structure for the documentation pyramid, makes it known
 
 Technical and development documentation: basically everything an engineering team needs.
 
-We propose `<project root>/docs/` as the canonical home. But if there are already other docs there, or your framework would do something funky with a new folder there, put it somewhere else - another level of the tree, or another name, e.g. `<project root>/dev-docs/`.
+We propose `<project root>/docs/` as the canonical home. But if there are already other docs there, or your framework would do something funky with a new folder there, put it somewhere else - another level of the tree, or another name, e.g. `<project root>/dev-docs/`. Where this guide says `docs/`, read your folder. The commands below assume `docs/`.
 
-## 2. Copy the templates from `references/`
+## 2. Copy the templates, the tool and the skill from `references/`
 
 The `references/` folder of this repo mirrors the docs directory you are about to create: same names, same layout. Clone the repo (or fetch the files) to get it, then copy it over and adapt each file to the project. **Take out** references to unselected options.
 
-    references/                 ->  <docs>/
-      index.md                      the central dispatch - both instructions & index of the documentation pyramid
-      L1-vision.md                  Layer 1: the vision
-      L2-architecture.md            Layer 2: the architecture
-      L3-modules/index.md           Layer 3: one document per module
-      L4-operations/index.md        Layer 4: one document per operations topic, same fork rule as L3
+    references/                          ->  <docs>/
+      index.md                               the central dispatch: agent instructions, plus the routing table
+      L1-vision.md                           Layer 1: the vision (one file, stays under 100 lines)
+      L2-architecture.md                     Layer 2: the architecture
+      L3-modules.md                          Layer 3: one "##" section per module
+      L4-operations.md                       Layer 4: one "##" section per operations topic
+      L2-architecture/  L3-modules/          empty folders (each holds a .gitkeep), see below
+      L4-operations/
+      Glossary.md                            optional: a DDD-style ubiquitous language glossary. Recommended if your team / agents don't have one yet.
+      house-style.md                         optional: the rules for how to keep the docs tidy and how to write. Use it if you don't have a better tech-writer skill or instructions.
+      tools/refresh-pyramid.js  .md      ->  <docs>/tools/        the refresh tool and its reference
+      skills/refresh-pyramid/SKILL.md    ->  .claude/skills/refresh-pyramid/SKILL.md   (outside docs; see 3.5)
+      adr/  (no template)                    optional: decision records, one file per decision. Add it if you want ADRs and have no good place for them. Otherwise just reference the ADRs in index.md and point the agents there.
 
-Optional:
+### The layout rules
 
-      Glossary.md                   a DDD - style ubiquitous language glossary. Recommended if your team / agents don't have one yet.
-      house-style.md                smol instructions on how to keep the docs tidy & how to write. Use it if you don't have a better tech-writer skill or instructions.
-      adr/  (no template)           if you or the user want ADRs and have no good place for them. Otherwise just reference the ADRs in index.md and point the agents there.
-
-A "document" is the unit an agent reads: a topic in L1 or L2 (one heading of the file), a module in L3, an operations topic in L4. Small documents live together in their layer's file (`L3-modules/index.md`). When one grows past about 100 lines, it moves into its own file in the same folder (`L3-modules/<name>.md`), leaving a short summary and a link behind. That is why L3 and L4 get a folder from the start. "Docs" means the pyramid as a whole.
+- **One file per layer** at the base level of the docs: `L1-vision.md`, `L2-architecture.md`, `L3-modules.md`, `L4-operations.md`. A "document" is the unit an agent reads: a topic in L1 or L2 (one `##` heading), a module in L3, an operations topic in L4.
+- **The 100-line break-out rule.** When a section grows past about 100 lines, move it to its own file in the layer folder (`L3-modules/<name>.md`) and **delete it from the layer file**. Nothing is left behind, no summary, no pointer. The routing table in `index.md` points to the new file. That is why `L2-architecture/`, `L3-modules/` and `L4-operations/` exist from the start, each holding only a `.gitkeep` so git keeps the empty folder. Delete the `.gitkeep` when you add the first real file. L1 gets no folder: it stays under 100 lines.
+- **One home per module.** A module is a section of the layer file or a file in the layer folder, never both.
+- **No index files in layer folders.** The root `index.md` is the only routing table. (`adr/` is the exception: it may have its own `index.md` or `README.md`.)
+- **The byline rule.** Start every section, and every broken-out file, with one sentence of at most 140 characters that says what it covers. The routing table copies that sentence. A leading label like `**Purpose.**` is skipped.
+- **Marker blocks.** `index.md` holds one block per layer between `<!-- pyramid:begin L3-modules -->` and `<!-- pyramid:end L3-modules -->`. The tool rewrites what is between the markers (module, pointer with line number or file path, byline). Never edit inside the markers; edit the document and refresh. Everything outside the markers is yours. If you use ADRs, add a block for `adr` the same way.
 
 ## 3. Find the best ways to integrate the pyramid for this team
 
@@ -78,6 +86,22 @@ Otherwise add a new step between implementation and review. Make three suggestio
 - PR templates: checkboxes for "Documentation Pyramid updated" or "I reviewed the Documentation Pyramid"?
 - Review scripts / agents / retrospectives: should they check the pyramid changes? Did a change that should have become part of the pyramid get missed? Does the pyramid need maintenance?
 
+### 3.5 Install the refresh tool and its skill
+
+Copy `references/tools/refresh-pyramid.js` and `refresh-pyramid.md` to `docs/tools/`. Copy `references/skills/refresh-pyramid/SKILL.md` to `.claude/skills/refresh-pyramid/SKILL.md` (or the skills folder your harness uses). The tool needs Node 20.11 or later and nothing else.
+
+Add one instruction to `AGENTS.md` / `CLAUDE.md`, next to the import:
+
+```
+When your edits to docs/ are finished, run `node docs/tools/refresh-pyramid.js docs` once and fix what it reports. The skill /refresh-pyramid helps when it reports findings.
+```
+
+Run it once when the edits are finished, not after each edit. It rewrites only the marker blocks in `index.md`, so it is safe to run at any time; `--check` writes nothing and suits a pre-commit hook or CI (see `docs/tools/refresh-pyramid.md`).
+
+### 3.6 Use the house style
+
+`house-style.md` is the writing guide. Keep it, or replace it with the team's own and name that in the file. Its "Done when" section already tells agents to run the refresh tool.
+
 ## 4. Documentation transfer
 
 > [!NOTE]
@@ -88,7 +112,7 @@ You have an existing system, and a great _new_ documentation system next to it. 
 - **Seed it**, so we get off to a good start, and
 - if there is existing documentation, in the project or outside it, **find it and consolidate it**: howtos, scripts and helpers, explanations, architecture notes, diagrams, decision records. Anything that leads to a **current and useful** description of the system.
 
-Fill out the pyramid (and the optional Glossary). Level 3 modules should use the same words as the modules in Level 2, where possible.
+Fill out the pyramid (and the optional Glossary). Level 3 modules should use the same words as the modules in Level 2, where possible. Then run the refresh tool to fill the routing table.
 
 **Make a plan** for how to integrate the existing docs. Should they be dissolved and migrated into the pyramid? My suggestion is yes: **one single source of truth**. If other things need the docs, or you want forward references in the old locations, so be it - but I recommend trying to commit to the new structure.
 
@@ -117,7 +141,7 @@ Confirm the doc-moving plan in the same session. Commit the new structure before
 Follow the plan you just made:
 
 - create the new directory
-- copy the files from our `references/` directory and customize them to the project
+- copy the files from our `references/` directory (templates, tool, skill) and customize them to the project
 - snapshot commit, before moving or deleting anything (see step 4)
 - consolidate the docs, if any exist
 - if there isn't a lot of documentation, launch an architect skill (or give it your best shot!) to scan the code and create the architecture docs and the first module docs
@@ -127,13 +151,29 @@ Follow the plan you just made:
 
 Before you call it done:
 
-- [ ] No template placeholders are left (`{…}`, `~{n}`), and no rows or bullets remain for options you did not choose.
-- [ ] Every file listed in `index.md` exists, and every L1 to L4 document listed there has its heading and an approximate line number.
+- [ ] No template placeholders are left (`{…}`), and no sections or bullets remain for options you did not choose.
+- [ ] `node docs/tools/refresh-pyramid.js docs` has been run, and `node docs/tools/refresh-pyramid.js docs --check` exits 0 with no findings.
+- [ ] Every section has a byline of at most 140 characters, no module lives in two places, and no layer folder has an `index.md`.
 - [ ] Links between the docs resolve.
+- [ ] An empty layer folder still holds its `.gitkeep`; a folder with real files does not.
 - [ ] The import (or the "Read @docs/index.md" line) is in the agent instruction file, with the path you actually chose.
 - [ ] Smoke test, if you can: start a fresh session and ask what it loaded and what the project's non-goals are. The answer should come from L1.
 
 After done: Congratulate the user! Show them an ascii-cake in the shape of a pyramid! Tell them how it went and ask them to review it & give it a go!
+
+## Migrating an existing pyramid
+
+For a pyramid in the old layout (a folder with an `index.md` per layer, for example `L3-modules/index.md`). Work on a clean git tree, and **dry-run first**:
+
+```sh
+node docs/tools/refresh-pyramid.js docs --fix-layout --dry-run   # preview: layer folder index.md -> layer file, links rewritten
+node docs/tools/refresh-pyramid.js docs --fix-layout             # do it
+node docs/tools/refresh-pyramid.js docs --split "L3-modules.md#sync-system" --dry-run   # preview a break-out of one long section
+node docs/tools/refresh-pyramid.js docs --split "L3-modules.md#sync-system"
+node docs/tools/refresh-pyramid.js docs                          # refresh the routing table
+```
+
+`--fix-layout` leaves a summary section next to each module file; delete those (the tool reports them as E2). `--split` moves a section into the layer folder and leaves nothing behind. Replace the hand-written routing tables in `index.md` by the generated blocks. Details and all findings: `docs/tools/refresh-pyramid.md`.
 
 ----
 
