@@ -488,9 +488,17 @@ export function moduleOfFile(doc, fileName, { adr = false } = {}) {
   const nextH = head ? hs[k + 1] : hs[0];
   const fromBody = bylineFrom(lines, start, nextH ? nextH.idx : lines.length);
   const summary = frontMatterSummary(lines, analysis.frontEnd);
+  // The shape checks of the heading rule (W11, W12); they do not apply to decision records.
+  let startsAtTitle = true;
+  let extra = null;
+  if (!adr && hs.length) {
+    const before = lines.slice(analysis.frontEnd + 1, hs[0].idx).map((l) => l.t).join('\n').replace(/<!--[\s\S]*?-->/g, '').trim();
+    startsAtTitle = hs[0].level <= 2 && before === '';
+    if (head) extra = hs.slice(k + 1).find((h) => h.level === 1 || (h.level === 2 && head.level === 2)) || null;
+  }
   return {
     title, line: head ? head.line : 1, slugBase: slugBase((head && head.titleRaw) || title), byline: summary ?? fromBody,
-    legacyH1: !adr && !!head && head.level === 1,
+    legacyH1: !adr && !!head && head.level === 1, startsAtTitle, extraTitle: extra ? { title: extra.title, line: extra.line, level: extra.level } : null,
   };
 }
 
@@ -710,9 +718,22 @@ export function buildModel(io, options = {}) {
         if (m.legacyH1) {
           add('warning', 'W10', rel, m.line, `broken-out file starts with a level 1 heading ("# ${m.title}"); modules are level 2 everywhere, so the file should start at "## ${m.title}"`, `--fix-headings, or by hand: change "# ${m.title}" to "## ${m.title}" and move every other heading one level deeper`);
         }
+        if (!m.startsAtTitle) {
+          add('warning', 'W11', rel, m.line, `broken-out file does not start with its "##" module title (text or a heading of another level comes first); it is titled "${m.title}"`, `make "## ${m.title}" the first thing in the file (front matter and HTML comments may come before it); sections below it are "###"`);
+        }
+        if (m.extraTitle) {
+          add('warning', 'W12', rel, m.extraTitle.line, `"${'#'.repeat(m.extraTitle.level)} ${m.extraTitle.title}" is a second module heading in a file that is titled "${m.title}"; sections of a module are level 3`, 'give the module its own file or move it into the layer file, or make this heading a "###" section');
+        }
         bylineFindings(add, opts, rel, m.line, m.title, m.byline);
       }
       L.brokenOut = folderModules;
+      if (!L.isAdr) {
+        const firstOf = new Map();
+        for (const f of folderModules) {
+          if (firstOf.has(f.slugBase)) add('error', 'E2', f.file, f.line, `module "${f.title}" is the title of two files (${firstOf.get(f.slugBase)} and ${f.file})`, 'a module lives in exactly one place: merge the files or rename one title');
+          else firstOf.set(f.slugBase, f.file);
+        }
+      }
       for (const s of L.sections) {
         const twin = folderModules.find((f) => f.slugBase === s.slugBase || f.stemSlug === s.slugBase);
         if (twin) add('error', 'E2', L.file, s.line, `module "${s.title}" is a section of ${L.file} and also a file (${twin.file})`, `the file is the module: delete the section "${s.title}" (lines ${s.line}-${s.endIdx}) from ${L.file} if it only summarises ${twin.file}, otherwise merge its text into ${twin.file} first`);
@@ -1525,7 +1546,7 @@ function runFixHeadings(root, o, out) {
   for (const f of plan.files) out(`${o.dryRun ? 'would shift' : 'shifted'} ${f.rel}: ${plural(f.headings, 'heading', 'headings')} one level deeper\n`);
   for (const r of plan.refused) out(`refused ${r.file}:${r.line} ${r.reason}\n`);
   if (plan.files.length) out(`${o.dryRun ? 'dry-run: would move' : 'moved'} every heading of ${plural(plan.files.length, 'file', 'files')} one level deeper; ${indexChanges ? 'index.md refreshed' : ix.canWrite ? 'index.md was already current' : 'index.md could not be refreshed (see the findings of a normal run)'}\n`);
-  if (plan.refused.length) out(`${plural(plan.refused.length, 'file was', 'files were')} refused and left as they are\n`);
+  if (plan.refused.length) out(`${plural(plan.refused.length, 'file was', 'files were')} refused and left as ${plan.refused.length === 1 ? 'it is' : 'they are'}\n`);
   return plan.refused.length ? 1 : 0;
 }
 
