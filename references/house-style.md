@@ -1,21 +1,42 @@
 # House style
 
-How docs in this repo are written. Edit this file to change the style.
+Rules for docs here. Edit this file to change them.
 
-**Writer:** whichever agent writes the docs, the implementing agent or a separate one, following the rules below. To fix a specific writer (an agent or a skill), name it here.
+Readers: humans and agents, equally. One text serves both. It must read well to a person at first glance and parse cleanly for an agent. Write terse: short sentences, plain words, no filler, no repetition. Keep a little fun: a light joke is welcome when it helps and never when it costs clarity. A concrete example beats a rule. A diagram can beat a thousand words.
 
-**Style guide:** the Google developer documentation style guide. If the team has its own guide, name it here and it replaces this one. Write human readable.
+Writer: any agent that follows this file. A named writer (`agent:` or `skill:`, plus when it runs) follows it too; this file wins.
+Base guide: Google developer documentation style. A team guide named here replaces it.
 
-Think Joel on Software on writing docs - be helpful AND readable AND fun. A diagram can say more than a 1000 words. Use diagrams where applicable.
+## Write
 
-## Rules
+- Say who the doc is for and what it skips. Answer first, detail after.
+- One home per fact. Link to it, never copy it.
+- One kind per doc: why, how, or what. Link across.
+- Present tense. Describe what exists. One word per thing; define it once.
+- Dates as YYYY-MM-DD. No relative dates, no time estimates.
+- Claims about the system: cite the file path, or mark them unverified. Check that named paths exist.
+- Smallest edit. Keep the author's voice. Docs and code disagree: say so, replace the wrong fact, keep no second version.
+- Cut before adding. Table cells and list items: one or two sentences.
+- Section over about 100 lines: move it to its own file in the layer folder (`refresh-pyramid --split`).
+- Keep the agent's chat persona out of docs. A light touch of humour in the text is fine.
 
-- Say who a doc is for. Put the answer first and the detail after.
-- Give each fact one home and link to it from elsewhere.
-- Describe what exists now, in the present tense.
-- Use one word for one thing, and define terms in `Glossary.md` if the project has one, otherwise where the term first appears.
-- Write dates as YYYY-MM-DD. Never write "yesterday" or "next week".
-- Do not invent details. Cite a file path, or mark the claim unverified.
-- Make the smallest edit that fixes the gap. Leave correct text alone and keep the author's voice.
-- When docs and code disagree, raise the conflict. If a fact is now wrong, replace it; do not add a second version beside it.
-- Keep it short. If a doc reads as long, cut before you add.
+## Structure
+
+- Byline: first sentence under each heading, at most 140 characters, says what the section covers.
+- A heading is an anchor. Rename it: fix every link to it in the same edit. One H1. No repeated headings in a file. No links in headings.
+
+## Links
+
+- Relative paths. Link text names the target. Never "here". Never a bare URL.
+- Link a file or a heading, never a line number. Only the generated blocks in `index.md` carry line numbers.
+- Code references: path and symbol in code font, `src/billing/invoice.js`, `createInvoice`. No links into source.
+
+## Format
+
+- Plain CommonMark. Headings in sentence case. Lists for two or more parallel items, tables with a header row, code fenced with a language.
+- Viewer-safe: no task lists, footnotes, alert blocks, raw HTML, emoji.
+- Diagrams: ASCII in a fenced block. No Mermaid.
+
+## Done when
+
+Edits are finished (not after each one): run `node docs/tools/refresh-pyramid.js` and fix what it reports. When it reports something hairy, the skill `/refresh-pyramid` walks you through it. Claims are cited or marked unverified.
