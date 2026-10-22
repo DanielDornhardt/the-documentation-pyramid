@@ -211,7 +211,7 @@ I'd recommend running those first and pointing them to this repository in order 
 
 ### Keeping the index current
 
-The routing table in `index.md` is generated: `references/tools/refresh-pyramid.js` (one file, Node 20.11 or later, no dependencies) rewrites the marker blocks from the documents, and checks the layout rules (one home per module, no folder indexes, bylines of at most 140 characters). Agents run it once when their doc edits are finished. The skill in `references/skills/refresh-pyramid/` helps them when it reports findings. See [INSTALL.md](INSTALL.md).
+The routing table in `index.md` is generated: `references/tools/refresh-pyramid.js` (one file, Node 20.11 or later, no dependencies) regenerates the marker blocks from the documents and reports problems with the fix for each (one home per module, no folder indexes, bylines of at most 140 characters, sections over 100 lines). It never edits a document; agents fix what it reports by hand. Agents run it once when their doc edits are finished. The skill in `references/skills/refresh-pyramid/` helps them when the report is long. See [INSTALL.md](INSTALL.md).
 
 ### The short version
 

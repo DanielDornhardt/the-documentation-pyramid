@@ -40,7 +40,7 @@ The `references/` folder of this repo mirrors the docs directory you are about t
 
 - **One file per layer** at the base level of the docs: `L1-vision.md`, `L2-architecture.md`, `L3-modules.md`, `L4-operations.md`. A "document" is the unit an agent reads: a topic in L1 or L2 (one `##` heading), a module in L3, an operations topic in L4.
 - **The 100-line break-out rule.** When a section grows past about 100 lines, move it to its own file in the layer folder (`L3-modules/<name>.md`) and **delete it from the layer file**. Nothing is left behind, no summary, no pointer. The routing table in `index.md` points to the new file. That is why `L2-architecture/`, `L3-modules/` and `L4-operations/` exist from the start, each holding only a `.gitkeep` so git keeps the empty folder. Delete the `.gitkeep` when you add the first real file. L1 gets no folder: it stays under 100 lines.
-- **Heading levels are the same everywhere.** A layer file has one `#`, the layer title. Every module is a `##`, and its sections are `###`. A broken-out file has no `#`: it starts at the module's `##` heading, and its sections stay `###`. Moving a module between the layer file and the folder is a cut and paste; no level changes, and no tool changes a level when it moves or combines text (`--fix-headings` is the one-time migration of legacy files). Other documents (`index.md`, `Glossary.md`, `house-style.md`, decision records in `adr/`) are ordinary documents with one `#`.
+- **Heading levels are the same everywhere.** A layer file has one `#`, the layer title. Every module is a `##`, and its sections are `###`. A broken-out file has no `#`: it starts at the module's `##` heading, and its sections stay `###`. Moving a module between the layer file and the folder is a cut and paste; no level changes. Other documents (`index.md`, `Glossary.md`, `house-style.md`, decision records in `adr/`) are ordinary documents with one `#`.
 
   | Where | Module title | Section |
   |---|---|---|
@@ -50,7 +50,7 @@ The `references/` folder of this repo mirrors the docs directory you are about t
 - **One home per module.** A module is a section of the layer file or a file in the layer folder, never both.
 - **No index files in layer folders.** The root `index.md` is the only routing table. (`adr/` is the exception: it may have its own `index.md` or `README.md`.)
 - **The byline rule.** Start every section, and every broken-out file, with one sentence of at most 140 characters that says what it covers. The routing table copies that sentence. A leading label like `**Purpose.**` is skipped.
-- **Marker blocks.** `index.md` holds one block per layer between `<!-- pyramid:begin L3-modules -->` and `<!-- pyramid:end L3-modules -->`. The tool rewrites what is between the markers (module, pointer with line number or file path, byline). Never edit inside the markers; edit the document and refresh. Everything outside the markers is yours. If you use ADRs, add a block for `adr` the same way.
+- **Marker blocks.** `index.md` holds one block per layer between `<!-- pyramid:begin L3-modules -->` and `<!-- pyramid:end L3-modules -->`. The refresh tool rewrites what is between the markers (module, pointer with line number or file path, byline). Never edit inside the markers; edit the document and refresh. Everything outside the markers is yours. If you use ADRs, add a block for `adr` the same way.
 
 ## 3. Find the best ways to integrate the pyramid for this team
 
@@ -97,13 +97,15 @@ Otherwise add a new step between implementation and review. Make three suggestio
 
 Copy `references/tools/refresh-pyramid.js` and `refresh-pyramid.md` to `docs/tools/`. Copy `references/skills/refresh-pyramid/SKILL.md` to `.claude/skills/refresh-pyramid/SKILL.md` (or the skills folder your harness uses). The tool needs Node 20.11 or later and nothing else.
 
+The tool regenerates the routing blocks of `docs/index.md` from the documents and reports problems, each with a message that says what is wrong and what to do. It never edits a document: agents fix what it reports by hand. Modes: write (the default, rewrites only the marker blocks of `index.md`), `--dry-run` (prints the findings and which blocks would change, writes nothing) and `--check` (writes nothing, exits 1 on errors or a stale index; suits a pre-commit hook or CI, see `docs/tools/refresh-pyramid.md`).
+
 Add one instruction to `AGENTS.md` / `CLAUDE.md`, next to the import:
 
 ```
-When your edits to docs/ are finished, run `node docs/tools/refresh-pyramid.js docs` once and fix what it reports. The skill /refresh-pyramid helps when it reports findings.
+When your edits to docs/ are finished, run `node docs/tools/refresh-pyramid.js docs` once and fix what it reports. The skill /refresh-pyramid helps when the report is long.
 ```
 
-Run it once when the edits are finished, not after each edit. It rewrites only the marker blocks in `index.md`, so it is safe to run at any time; `--check` writes nothing and suits a pre-commit hook or CI (see `docs/tools/refresh-pyramid.md`).
+Run it once when the edits are finished, not after each edit.
 
 ### 3.6 Use the house style
 
@@ -167,22 +169,6 @@ Before you call it done:
 - [ ] Smoke test, if you can: start a fresh session and ask what it loaded and what the project's non-goals are. The answer should come from L1.
 
 After done: Congratulate the user! Show them an ascii-cake in the shape of a pyramid! Tell them how it went and ask them to review it & give it a go!
-
-## Migrating an existing pyramid
-
-For a pyramid in the old layout (a folder with an `index.md` per layer, for example `L3-modules/index.md`). Work on a clean git tree, and **dry-run first**:
-
-```sh
-node docs/tools/refresh-pyramid.js docs --fix-layout --dry-run   # preview: layer folder index.md -> layer file, links rewritten
-node docs/tools/refresh-pyramid.js docs --fix-layout             # do it
-node docs/tools/refresh-pyramid.js docs --split "L3-modules.md#sync-system" --dry-run   # preview a break-out of one long section
-node docs/tools/refresh-pyramid.js docs --split "L3-modules.md#sync-system"
-node docs/tools/refresh-pyramid.js docs --fix-headings --dry-run # preview: broken-out files that start with "# " (W10) move one level deeper
-node docs/tools/refresh-pyramid.js docs --fix-headings           # do it
-node docs/tools/refresh-pyramid.js docs                          # refresh the routing table
-```
-
-`--fix-layout` leaves a summary section next to each module file; delete those (the tool reports them as E2). `--split` moves a section into the layer folder, leaves nothing behind, and changes no heading level: the file starts at the module's `##` heading. `--fix-headings` is for broken-out files in the legacy form, which start with a `#` title: it moves every heading of such a file one level deeper, so the file starts at `##` like the module in the layer file. Replace the hand-written routing tables in `index.md` by the generated blocks. Details and all findings: `docs/tools/refresh-pyramid.md`.
 
 ----
 
