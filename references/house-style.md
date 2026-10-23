@@ -19,7 +19,6 @@ Base guide: Google developer documentation style. A team guide named here replac
 - Cut before adding. Table cells and list items: one or two sentences.
 - Section over about 100 lines: move it to its own file in the layer folder, starting at its `##` heading.
 - Draw a diagram when structure or flow is the point: nearly always in L2. Sketch it first, then write around it.
-- Module text is prose, no label prefixes: a short summary first, then where it lives and what is special about it. The idea behind it, why it is built that way, and a trap come only where they apply, and never explain what readers already know.
 - Keep the agent's chat persona out of docs. A light touch of humour in the text is fine.
 
 ## Structure
