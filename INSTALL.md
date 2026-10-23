@@ -165,6 +165,8 @@ Confirm the doc-moving plan in the same session. The commit order is: snapshot (
 
 **Optional deep dive.** The regular first pass is a seed. For the modules that matter, the skill `skills/code-module-deep-dive/SKILL.md` digs into the code of one module and returns its findings in a file: design ideas, principles the authors defend, traps, and claims in the docs that are wrong. It does not edit the docs. Run it once per L3 module, one agent per module, in parallel, in a longer session; a mid-size model is enough. Then one technical writer agent integrates the findings. The writer follows `house-style.md`, reads each findings file next to the module's current text, keeps what helps someone change the code, corrects the wrong claims, and edits the module in its layer file (or in its own file if it has grown past the break-out rule). It does not paste the findings. It also revisits L1 and L2 where the findings change the big picture, and keeps those two layers easy to understand. At the end it runs the refresh tool. The deep dive is optional and does not replace the first pass above.
 
+Heads-up for the owner: the deep dive takes a while and uses a lot of tokens. It usually pays off later, because every future change starts from better docs. Tell the owner before you start, and let them decide.
+
 ## 6. Implement!
 
 Follow the plan you just made:
