@@ -1,6 +1,6 @@
 # refresh-pyramid
 
-`tools/refresh-pyramid.js` does two things for a documentation pyramid:
+`tools/refresh-pyramid.js` does two things for a documentation pyramid, part of THE-108 (pyramid viewer and renderer):
 
 1. It regenerates the routing blocks of the root `index.md` from the documents.
 2. It reports problems, each with a message that says what is wrong and what to do.
@@ -11,7 +11,7 @@ It never edits a document other than the generated blocks of `index.md`. Fixing 
 node tools/refresh-pyramid.js [docs-folder] [--dry-run | --check] [--max-section-lines N] [--max-byline N] [--help]
 ```
 
-The docs folder defaults to `./docs`; limits default to 100 lines and 140 characters.
+The docs folder defaults to `./docs`; limits default to 100 lines and 100 characters.
 
 | Mode            | Writes                                    | Exit code                                      |
 | --------------- | ----------------------------------------- | ---------------------------------------------- |
@@ -88,7 +88,7 @@ Info lines (`info L3-modules: 14 sections, 3 broken out`) give counts per layer.
 * One line scan, used for headings, bylines and the marker lines of `index.md`, follows CommonMark: a fenced code block opens with three or more backticks or tildes indented 0 to 3 spaces (a backtick fence has no backtick in its info string) and closes with at least as many of the same character and nothing else on the line; an HTML comment block starts with `<!--` (indented 0 to 3 spaces) and ends at the line holding `-->`. Headings, bylines and markers inside either are not seen.
 * A heading is an ATX heading: `#` to `######`, indented 0 to 3 spaces, followed by a space or the end of the line (a bare `##` is a heading with an empty title, slug `section`). Setext headings and headings in block quotes or other HTML blocks are not seen. Limit: a heading indented under a list item (for example two spaces below `- item`) is seen by the tool; CommonMark treats it as part of the list.
 * A section runs from its `##` heading to the line before the next `##` heading, or the end of the file.
-* The title is the heading text with links reduced to their text and emphasis and code marks removed. The anchor is the heading slug (lowercase, Unicode letters and digits kept, other punctuation removed, spaces to hyphens); duplicates in one file get `-1`, `-2`. Headings of levels 1 to 4 count for numbering. Numeric entities and `&amp; &lt; &gt; &quot; &apos; &nbsp;` are decoded for the slug; other named entities are not.
+* The title is the heading text with links reduced to their text and emphasis and code marks removed. The anchor is the viewer's slug (lowercase, Unicode letters and digits kept, other punctuation removed, spaces to hyphens); duplicates in one file get `-1`, `-2`. Headings of levels 1 to 4 count for numbering, as in the viewer. Numeric entities and `&amp; &lt; &gt; &quot; &apos; &nbsp;` are decoded for the slug; other named entities are not.
 * The byline is the first sentence of the first paragraph under the heading, before any other heading. Blank lines and HTML comments (also over several lines) before it are skipped; a leading bold label such as `**Purpose.**` is skipped. A paragraph that starts with a list marker, table, quote, code fence or thematic break (`---`, `***`, `___`) has no byline. A sentence ends at the first `. `, `? ` or `! `, or at the end of the paragraph. The paragraph also ends at a line that starts a list, table, quote, fence, comment or thematic break. Only the first 2000 characters of the paragraph are read, so a pathological paragraph cannot slow the tool down. Images are dropped from the byline (`![alt](x.png)` leaves nothing); reference links (`[text][ref]`) are left as written.
 * The first `. ` also ends a sentence after "e.g."; the fix is a better first sentence.
 * The title of a broken-out file is its first heading of level 1 or 2; a file with no heading is named after its file name.
@@ -129,4 +129,4 @@ As a Claude Code `PostToolUse` hook in `.claude/settings.json` (a recipe: it has
 
 ## Copying the tool
 
-The single file can be copied into any project. It imports nothing else.
+The single file can be copied into any project. It imports nothing from the viewer. The tests (`tests/refresh-pyramid.test.js`) and the fixture (`tests/fixtures/refresh/clean/`) are for this repository.

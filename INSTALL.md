@@ -47,26 +47,12 @@ The `references/` folder of this repo mirrors the docs directory you are about t
 
 - **One home per module.** A module is a section of the layer file or a file in the layer folder, never both.
 - **No index files in layer folders.** The root `index.md` is the only routing table. (`adr/` is the exception: it may have its own `index.md` or `README.md`.)
-- **The byline rule.** Start every section, and every broken-out file, with one sentence of at most 140 characters that says what it covers. The routing table copies that sentence. A leading label like `**Purpose.**` is skipped.
+- **The byline rule.** Start every section, and every broken-out file, with one sentence of at most 100 characters that says what it covers. The routing table copies that sentence. A leading label like `**Purpose.**` is skipped.
 - **Marker blocks.** `index.md` holds one block per layer between `<!-- pyramid:begin L3-modules -->` and `<!-- pyramid:end L3-modules -->`. The refresh tool rewrites what is between the markers (module, pointer with line number or file path, byline). Never edit inside the markers; edit the document and refresh. Everything outside the markers is yours. When an `adr/` folder exists, the refresh tool adds its block to `index.md` automatically (write mode adds a block for any layer that has none), so you do not add it by hand.
 
-### The story pass: how the thing is modelled
+### The story pass
 
-Read the code for its ideas before you write a line of docs. The aim is the story inside the code: how the thing is modelled and why it is shaped this way, so a person or an agent changing it keeps the design consistent. This is not an index, a dependency graph or a file inventory; it is the 20% of text that explains 80% of the code. The routing table and the module list come after, and come cheap.
-
-Read the entry points, the central headers or types, the build files, the tests (they show intended behaviour), and the comments and commit messages near the oldest and most-changed code. Take notes as you read. Then answer these questions, each in a sentence or two, each with a file path as evidence. Put the answers in L1 and L2, and weave the ones that concern a module into its text, as plain prose without labels.
-
-1. **Core nouns.** What are the five to ten things this system is made of, and which one is the center? Use the code's own names.
-2. **The central trick.** Which one decision makes the rest cheap or possible?
-3. **Refusals.** What does the code deliberately not do, not allow or not abstract? The design shows most clearly in what it leaves out.
-4. **Seams.** Where does one idea hand over to another (a boundary, a conversion, a lifecycle step), and what is paid there?
-5. **Drift.** Where do the idea and the code disagree today? Each case is a gotcha candidate: what someone would change, what would break, how they would notice.
-6. **Vocabulary.** Which words does the code use for the ideas? Use them in the docs, and put the ones that carry meaning in the glossary.
-7. **The why.** What do comments, commit messages and changelogs say about the reasons? Quote or cite them. A reason you infer is marked inferred; a reason you cannot find is left out.
-
-Keep it short: if an answer needs more than a paragraph, it is two ideas, so split them. Skip a question that does not apply (not every module has a story), and skip a question the project has no answer for. A module tree is welcome where it helps, as names with one-line pointers, never as the main content.
-
-Before you finish, check your own claims. For each claim, open the path you cited and confirm it says what you wrote. Then, for the five claims you are least sure of, ask a second agent that has not seen your notes to try to refute them against the code. Fix or drop what fails.
+Before you write the layers, read the code for its ideas: how the thing is modelled and why it is shaped this way. This is not an index or a dependency graph. The skill `skills/story-pass/SKILL.md` has the questions, the writing rules and the claim check. Read it from the package and follow it now; step 3.5 installs it for later. It can be run again for one module, or as a check of existing text.
 
 ### First pass: what to look for
 
@@ -131,7 +117,7 @@ Otherwise add a new step between implementation and review. Make three suggestio
 
 ### 3.5 Install the refresh tool and its skill
 
-The repo has two more folders next to `references/`: `tools/` and `skills/`. They are not documentation and never go inside the docs folder. Copy `tools/refresh-pyramid.js` and `tools/refresh-pyramid.md` to a `tools/` folder next to `docs/` (or to the project's existing scripts folder, if it has one; then adjust the commands below). Copy `skills/refresh-pyramid/SKILL.md` to `.claude/skills/refresh-pyramid/SKILL.md` (or the skills folder your harness uses). The tool needs Node 20.11 or later and nothing else.
+The repo has two more folders next to `references/`: `tools/` and `skills/`. They are not documentation and never go inside the docs folder. Copy `tools/refresh-pyramid.js` and `tools/refresh-pyramid.md` to a `tools/` folder next to `docs/` (or to the project's existing scripts folder, if it has one; then adjust the commands below). Copy the folders in `skills/` (`refresh-pyramid/` and `story-pass/`) to `.claude/skills/` (or the skills folder your harness uses). The tool needs Node 20.11 or later and nothing else.
 
 The tool regenerates the routing blocks of `docs/index.md` from the documents and reports problems, each with a message that says what is wrong and what to do. It never edits a document: agents fix what it reports by hand. Modes: write (the default, rewrites the marker blocks of `index.md` and adds a block for a layer that has none), `--dry-run` (prints the findings and which blocks would change, writes nothing) and `--check` (writes nothing, exits 1 on errors or a stale index; suits a pre-commit hook or CI, see `tools/refresh-pyramid.md`).
 
@@ -186,7 +172,7 @@ Confirm the doc-moving plan in the same session. The commit order is: snapshot (
 Follow the plan you just made:
 
 - snapshot commit, only if you are going to move or delete existing docs (see step 4)
-- create the new directory and copy the templates from `references/`, the tool from `tools/` and the skill from `skills/`; commit this structure on its own
+- create the new directory and copy the templates from `references/`, the tool from `tools/` and the skills from `skills/`; commit this structure on its own
 - consolidate the docs, if any exist, as a separate commit
 - if there isn't a lot of documentation, launch an architect skill (or give it your best shot!) to scan the code and create the architecture docs and the first module docs
 - suggest creating operational L4 docs for things that happen a lot: commits, merges, server start / stop, running the tests, etc.
@@ -197,7 +183,7 @@ Before you call it done:
 
 - [ ] No template placeholders (`{…}`) or template HTML comments are left (only the `pyramid:` marker lines), and no sections or bullets remain for options you did not choose.
 - [ ] `node tools/refresh-pyramid.js docs` has been run, and `node tools/refresh-pyramid.js docs --check` exits 0 and its output has no `error` or `warning` lines (the exit code alone does not show warnings: read the output).
-- [ ] Every section has a byline of at most 140 characters, no module lives in two places, and no layer folder has an `index.md`.
+- [ ] Every section has a byline of at most 100 characters, no module lives in two places, and no layer folder has an `index.md`.
 - [ ] Links between the docs resolve.
 - [ ] An empty layer folder still holds its `.gitkeep`; a folder with real files does not.
 - [ ] The import (or the "Read @docs/index.md" line) is in the agent instruction file, with the path you actually chose.

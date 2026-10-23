@@ -17,7 +17,7 @@ const FENCE = /^ {0,3}(`{3,}|~{3,})(.*)$/;
 const FENCE_END = /^ {0,3}(`{3,}|~{3,})[ \t]*$/;
 const BYLINE_CAP = 2000; // characters of a paragraph considered for a byline
 const DEFAULT_SECTION_LINES = 100;
-const DEFAULT_BYLINE = 140;
+const DEFAULT_BYLINE = 100;
 const USAGE = `usage: node refresh-pyramid.js [docs-folder] [--dry-run | --check] [--max-section-lines N] [--max-byline N] [--help]
   Regenerates the routing blocks of <docs-folder>/index.md (default ./docs) and reports problems.
   --dry-run              write nothing, show which blocks would change

@@ -19,7 +19,7 @@ The tool is `tools/refresh-pyramid.js` (one file, Node 20.11+, no dependencies; 
 
 2. Fix the documents by editing them, following the `fix:` text of each finding. Typical cases:
    * W1 (section over 100 lines): cut the whole `##` section and paste it unchanged into a new file `L3-modules/<name>.md` that starts at its `## ` heading. Never cut detail to get under the limit.
-   * W2, W3, E5 (byline missing or too long): write one sentence of at most 140 characters directly under the heading.
+   * W2, W3, E5 (byline missing or too long): write one sentence of at most 100 characters directly under the heading.
    * E1, E2, W5 (folder index, duplicate module, broken-out file shape): the finding names the file; ask the user before deleting content.
    * E3, E4, E7: markers, missing index or unreadable files; fix the named lines or permissions, or report them and stop.
 

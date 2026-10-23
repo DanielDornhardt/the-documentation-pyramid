@@ -66,7 +66,7 @@ Every module has one row: its name, where it lives (a file, or a file with a sec
 
 | Module | Where | What |
 | --- | --- | --- |
-| {Module} | `L3-modules.md#module` (line 18) | {What it is and holds, under 140 characters, copied into the index table; then where it lives and what is special about it.} |
+| {Module} | `L3-modules.md#module` (line 18) | {What this module is and holds, in one sentence under 100 characters. |
 
 <!-- pyramid:end L3-modules -->
 
@@ -92,7 +92,7 @@ Every module has one row: its name, where it lives (a file, or a file with a sec
 
 - Update the docs your change makes stale.
 - A module has one home: a `##` section in its layer file, or its own file in the layer folder when it passes about 100 lines. Never both, and no `index.md` inside a layer folder.
-- Start each section with one sentence of at most 140 characters that says what it covers. The routing table copies it.
+- Start each section with one sentence of at most 100 characters that says what it covers. The routing table copies it.
 - One fact has one home. Link to it instead of restating it.
 - Derived files such as `llms.txt` shouldn't be consolidated into these docs but left in place.
 - Follow `house-style.md`.

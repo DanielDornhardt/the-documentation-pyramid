@@ -2,7 +2,7 @@
 
 <!-- Blurry but complete. A new team member reads this first.
      Answer: what is this, who is it for, why does it matter, where is it heading.
-     Under every heading, write one first sentence of at most 140 characters that says what the section covers.
+     Under every heading, write one first sentence of at most 100 characters that says what the section covers.
      The routing table in index.md copies that sentence. Keep this file under 100 lines: L1 never gets a folder. -->
 
 ## What is {project}?

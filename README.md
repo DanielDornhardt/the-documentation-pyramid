@@ -211,7 +211,7 @@ I'd recommend running those first and pointing them to this repository in order 
 
 ### Keeping the index current
 
-The routing table in `index.md` is generated: `tools/refresh-pyramid.js` (one file, Node 20.11 or later, no dependencies) regenerates the marker blocks from the documents and reports problems with the fix for each (one home per module, no folder indexes, bylines of at most 140 characters, sections over 100 lines). It never edits a document; agents fix what it reports by hand. Agents run it once when their doc edits are finished. The skill in `skills/refresh-pyramid/` helps them when the report is long. See [INSTALL.md](INSTALL.md).
+The routing table in `index.md` is generated: `tools/refresh-pyramid.js` (one file, Node 20.11 or later, no dependencies) regenerates the marker blocks from the documents and reports problems with the fix for each (one home per module, no folder indexes, bylines of at most 100 characters, sections over 100 lines). It never edits a document; agents fix what it reports by hand. Agents run it once when their doc edits are finished. The skill in `skills/refresh-pyramid/` helps them when the report is long. A second skill, `skills/story-pass/`, guides the reading of the code for its ideas and the check of the claims. See [INSTALL.md](INSTALL.md).
 
 ### The short version
 

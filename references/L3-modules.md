@@ -2,7 +2,7 @@
 
 <!-- How specific parts work. Read before working in a module.
      One module is one "##" section in this file. Write it as prose, with no label prefixes.
-     The first sentence is a short summary of what the module is and holds, at most 140 characters, shorter is
+     The first sentence is a short summary of what the module is and holds, at most 100 characters, shorter is
      better: the routing table in index.md copies it. The rest of the opening paragraph says where the module
      lives and what is special about it. Do not explain what readers already know.
      Everything below the opening paragraph is optional and only where it applies:
@@ -17,7 +17,7 @@
 
 ## {Module}
 
-{What it is and holds, under 140 characters, copied into the index table; then where it lives and what is special about it.}
+{What this module is and holds, in one sentence under 100 characters. The index table copies this sentence. Then say where it lives and what is special about it.}
 
 {Optional: the idea behind it and why it is built that way IF there's a useful story to tell.}
 

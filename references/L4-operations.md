@@ -1,7 +1,7 @@
 # L4 Operations
 
 <!-- Day-to-day workflows. Read when you need process guidance, not architecture.
-     One topic is one "##" section. Under every heading, write one first sentence of at most 140 characters
+     One topic is one "##" section. Under every heading, write one first sentence of at most 100 characters
      that says what the topic covers. The routing table in index.md copies that sentence.
      A topic that passes about 100 lines moves to its own file in L4-operations/<name>.md and its section is removed
      from this file. The moved file has no "#" title and starts at its "## <Topic>" heading, with its sections still "###":

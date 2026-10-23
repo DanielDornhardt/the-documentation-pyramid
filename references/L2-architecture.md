@@ -1,7 +1,7 @@
 # L2 Architecture
 
 <!-- The whiteboard view. A senior engineer reads this before a first change.
-     Under every heading, write one first sentence of at most 140 characters that says what the section covers.
+     Under every heading, write one first sentence of at most 100 characters that says what the section covers.
      If a section needs a list, a table or a diagram, put a plain sentence before it.
      A section that passes about 100 lines moves to its own file in L2-architecture/ (nothing left behind).
      The moved file has no "#" title and starts at its "## <Section>" heading, with its sections still "###": cut and paste,
