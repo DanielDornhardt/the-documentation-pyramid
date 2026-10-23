@@ -2,7 +2,7 @@
 
 Rules for docs here. Edit this file to change them.
 
-Readers: humans and agents, equally. One text serves both. It must read well to a person at first glance and parse cleanly for an agent. Write terse: short sentences, plain words, no filler, no repetition. Keep a little fun: a light joke is welcome when it helps and never when it costs clarity. A concrete example beats a rule.
+Readers: humans and agents, equally. One text serves both. It must read well to a person at first glance and parse cleanly for an agent. Write terse: short sentences, plain words, no filler, no repetition. Keep a little fun: a light joke is welcome when it helps and never when it costs clarity. A concrete example beats a rule. A diagram can beat a thousand words.
 
 Writer: any agent that follows this file. A named writer (`agent:` or `skill:`, plus when it runs) follows it too; this file wins.
 Base guide: Google developer documentation style. A team guide named here replaces it.
@@ -16,13 +16,9 @@ Base guide: Google developer documentation style. A team guide named here replac
 - Dates as YYYY-MM-DD. No relative dates, no time estimates.
 - Claims about the system: cite the file path, or mark them unverified. Check that named paths exist.
 - Smallest edit. Keep the author's voice. Docs and code disagree: say so, replace the wrong fact, keep no second version.
-- Cut repetition, not detail. Table cells and list items: one or two sentences.
+- Cut before adding. Table cells and list items: one or two sentences.
 - Section over about 100 lines: move it to its own file in the layer folder, starting at its `##` heading.
-- A module is prose, not a form: no label prefixes. It opens with a short summary, then says where it lives and what is special about it. Do not explain what readers already know (what a router or a cache is).
-- Only where it applies: the idea that explains the module, said plainly, with why it is built that way (what it bought, what it cost, in the repository's own words, else marked inferred); and one trap that is highly relevant (what someone changed, what broke, how they would notice). Skip both when there is nothing to say.
-- Draw a diagram when structure or flow is the point: nearly always in L2, and in any module with more than a few sections or a schema, state machine or flow worth seeing. Sketch it first, then write around it. Skip it when it would only decorate. Plain text, no Mermaid. One sentence says what it shows; it never holds the only copy of a fact.
-- One scenario per layer file: a single short trace.
-- Few identifiers per sentence; the rest in a key-files table. Keep inventories (counts, file lists, line numbers) only where they mark a boundary or back a claim.
+- Module text is prose, no label prefixes: a short summary first, then where it lives and what is special about it. The idea behind it, why it is built that way, and a trap come only where they apply, and never explain what readers already know.
 - Keep the agent's chat persona out of docs. A light touch of humour in the text is fine.
 
 ## Structure
@@ -43,6 +39,7 @@ Base guide: Google developer documentation style. A team guide named here replac
 
 - Plain CommonMark. Headings in sentence case. Lists for two or more parallel items, tables with a header row, code fenced with a language.
 - Viewer-safe: no task lists, footnotes, alert blocks, raw HTML, emoji.
+- Diagrams: ASCII in a fenced block. No Mermaid.
 
 ## Done when
 
