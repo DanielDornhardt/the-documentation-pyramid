@@ -33,7 +33,21 @@ Answer these in a sentence or two each, with a file path as evidence. Skip a que
 6. **Vocabulary.** Which words does the code use for the ideas? Use them in the docs, and put the ones that carry meaning in the glossary.
 7. **The why.** What do comments, commit messages and changelogs say about the reasons? Quote or cite them. A reason you infer is marked inferred; a reason you cannot find is left out.
 
+## Judge what is worth writing
+
+Most findings do not belong in the pyramid. Standard patterns and ordinary code need no story, and some projects have almost nothing out of the ordinary. Before writing, list your findings and judge each one on its own, ideally with a second agent that sees only the list and the cited paths, not your enthusiasm. Ask:
+
+* **Surprise.** Would a competent engineer new to this codebase expect it? A textbook pattern is at most a few words, usually nothing.
+* **Cost of ignorance.** If someone changed this without knowing, would it break silently or expensively? That is the strongest reason to write it down.
+* **Reach.** Does it shape several modules, or only one corner?
+* **Durability.** Will it still be true after the next few changes?
+* **Findable.** Can a reader see it in thirty seconds from the code? Then link to the code and say nothing more.
+
+Give each finding one of three verdicts: write it up (L1, L2 or a module), mention it in a clause, or drop it. Expect to drop most of them. An empty result for a module is a fine result: say nothing rather than pad. Keep the list of dropped findings out of the docs; mention only the count in your report.
+
 ## Write
+
+Write only what survived the judging.
 
 * L1 and L2 carry the big picture: the nouns, the central trick, the refusals, the seams.
 * Weave the answers that concern a module into its L3 text as plain prose, without labels. Say where it lives and what is special about it; do not explain what readers already know.
@@ -49,4 +63,4 @@ Answer these in a sentence or two each, with a file path as evidence. Skip a que
 
 ## Finish
 
-Run the refresh tool (`node tools/refresh-pyramid.js docs`) and fix what it reports. Report to the user: which mode ran, what was written, which claims were checked and which were corrected, and what you could not verify.
+Run the refresh tool (`node tools/refresh-pyramid.js docs`) and fix what it reports. Report to the user: which mode ran, what was read and what was not, how many findings were judged and how many dropped, what was written, which claims were checked and which were corrected, and what you could not verify.
