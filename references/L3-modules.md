@@ -17,14 +17,14 @@
 
 ## {Module}
 
-{Short summary of what it is and holds, in under 140 characters; then where it lives and what is special about it.}
+{What it is and holds, under 140 characters, copied into the index table; then where it lives and what is special about it.}
 
-{Optional: the idea behind it and why it is built that way.}
+{Optional: the idea behind it and why it is built that way IF there's a useful story to tell.}
 
-{Optional: a diagram.}
+{Optional: a diagram. Always nice to have IF useful.}
 
 | File | Role |
 |---|---|
 | `{path}` | {what it does} |
 
-{Optional, only if highly relevant: the trap, in a sentence or two.}
+{Optional, only if highly relevant: Any traps, footguns etc? -> in a sentence or two.}
