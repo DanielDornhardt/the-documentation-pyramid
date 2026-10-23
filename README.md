@@ -228,6 +228,14 @@ The full, step-by-step instructions (written for agents, fine for humans too) ar
 
 [pyramid-viewer](https://github.com/DanielDornhardt/the-documentation-pyramid-viewer) is a small, dependency-free viewer for a pyramid. It shows the layers as a picture of bricks and as a tree browser, serves the docs live (with `--watch` it animates as you write), and exports static HTML or one big Markdown file. One command: `node viewer.js serve docs`.
 
+![A pyramid growing in the viewer as docs are written (watch mode)](images/pyramid-grows.gif)
+
+![The Lua sample pyramid in the viewer, metal skin](images/viewer-pyramid-metal.png)
+
+Two finished examples are in [`samples/`](samples/README.md) (the Lua interpreter and NetHack), ready to open in the viewer. They were written in a single session from one snapshot of each project; a pyramid that grows with your project should end up richer.
+
+![The NetHack sample pyramid in the viewer, light skin](images/viewer-pyramid-light.png)
+
 
 ## FAQ:
 
