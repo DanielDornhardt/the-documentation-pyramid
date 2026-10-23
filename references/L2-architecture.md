@@ -33,7 +33,13 @@
 
 {One sentence on how data moves from its source to the user.}
 
-{A short text diagram or numbered list. Start with a diagram if it helps.}
+{A short text diagram or numbered list. A diagram is nearly always worth it here; sketch it first, then write around it.}
+
+### Scenario
+
+{Optional. One sentence naming the one request or event you trace.}
+
+{A single short trace of it through the parts above, ten lines at most. Delete this subsection if it adds nothing.}
 
 ## Data model
 

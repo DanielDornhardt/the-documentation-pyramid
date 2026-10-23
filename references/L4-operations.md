@@ -31,6 +31,12 @@
 
 {Log locations, useful commands, known failure modes.}
 
+## Change recipes
+
+{One sentence on what this section covers: the changes people make often.}
+
+{For each recipe: what to do X, which files to touch, and what silently breaks if you miss one.}
+
 ## Deployment
 
 {One sentence on how and where it is deployed.}

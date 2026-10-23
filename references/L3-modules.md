@@ -12,11 +12,13 @@
 
 **Purpose.** {What it does, in one sentence.}
 
-{Then a paragraph if needed.}
+**Motif.** {The one idea or pattern that explains this module, named in a few words. Reuse the name wherever the idea comes back.}
+
+**Why.** {One or two sentences: what the design bought and what it cost. Use the repository's own words, else mark it as inferred.}
 
 **How it works.** {The key mechanics: data flow, main functions, lifecycle. Code-level detail belongs here.}
 
-{VISUALIZATION - Diagrams are HIGHLY WELCOME if applicable and useful.}
+{DIAGRAM - Add one if the module has more than a few parts, or a schema, state machine or flow worth seeing. Skip it if it would only decorate.}
 
 **Key files.**
 
@@ -24,4 +26,4 @@
 |---|---|
 | `{path}` | {what it does} |
 
-**Gotchas.** {Non-obvious things that will bite someone. The most valuable part of L3.}
+**Gotcha.** {One thing that will bite someone: what they changed, what broke, how they would notice. The most valuable part of L3.}
