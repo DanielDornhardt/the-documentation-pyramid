@@ -50,7 +50,27 @@ The `references/` folder of this repo mirrors the docs directory you are about t
 - **One home per module.** A module is a section of the layer file or a file in the layer folder, never both.
 - **No index files in layer folders.** The root `index.md` is the only routing table. (`adr/` is the exception: it may have its own `index.md` or `README.md`.)
 - **The byline rule.** Start every section, and every broken-out file, with one sentence of at most 140 characters that says what it covers. The routing table copies that sentence. A leading label like `**Purpose.**` is skipped.
-- **Marker blocks.** `index.md` holds one block per layer between `<!-- pyramid:begin L3-modules -->` and `<!-- pyramid:end L3-modules -->`. The refresh tool rewrites what is between the markers (module, pointer with line number or file path, byline). Never edit inside the markers; edit the document and refresh. Everything outside the markers is yours. If you use ADRs, add a block for `adr` the same way.
+- **Marker blocks.** `index.md` holds one block per layer between `<!-- pyramid:begin L3-modules -->` and `<!-- pyramid:end L3-modules -->`. The refresh tool rewrites what is between the markers (module, pointer with line number or file path, byline). Never edit inside the markers; edit the document and refresh. Everything outside the markers is yours. When an `adr/` folder exists, the refresh tool adds its block to `index.md` automatically (write mode adds a block for any layer that has none), so you do not add it by hand.
+
+### First pass: what to look for
+
+Before you call the first pass done, look at the project for each topic below. If the topic exists and matters to someone changing the code, give it a module section or a line in one; if it does not exist, say nothing (no "n/a" entries). This list is a prompt for coverage, not a template to fill. The writing rules are in `house-style.md`; they are not repeated here.
+
+- **L1:** who it is for, what it is not, platforms and licence in one line.
+- **L2:** the main parts and how they fit, with a diagram (nearly always worth it here); data flow; core data structures; state (what is saved, what is lost on exit, where it lives); configuration layers (build time, run time, environment); extension points (plugins, hooks, scripting, an API for modules); trust and safety boundaries (sandbox, untrusted input, permissions); outside interfaces (protocols, CLI, file formats).
+- **L3:** one module per cohesive subsystem, each with its motif, its why and one gotcha; where to start reading (entry points).
+- **L4:** build and its options; run; test, and what CI covers and, just as useful, what it does not run; debug; release and packaging; security and deployment settings; contribution rules only where the repository has non-obvious ones; change recipes (what to touch to do X, and what silently breaks).
+- **Glossary:** look for an existing glossary and point to it from the index, or move it over if the owner agrees; otherwise collect the domain terms that appear in more than one document.
+
+Match the topics to the kind of project: a service adds interface contracts, data models, authentication and deployment; a library adds the public interface, versioning and extension points; a command-line tool adds commands and configuration; a game adds content and data files, the save format and modding hooks; an application with a screen adds component structure and state handling.
+
+**Decisions are a conversation, not a document an agent writes.** During setup, look for existing decision records (`adr/`, `doc/decisions/`, an RFC folder, a decisions log) and point to them from the index or move them over, as the owner prefers. If there are none, ask: "Do you want agents to record important decisions as they are made?" Never write records for decisions you did not witness and never infer past ones. If the answer is yes, create `adr/` (with a `.gitkeep`, like the other folders) and add this note to `docs/index.md` in its hand-written part, where every agent reads it (AGENTS.md already imports that file, so it is not repeated there):
+
+```
+**Decisions.** When a significant decision is made (why X, not Y), record it as one short file in `adr/`: context, decision, consequences. If you are unsure whether it counts, ask.
+```
+
+If the answer is no, do nothing. If the owner says how or when decisions should be recorded (who decides, which kinds, which format), write that into the same note.
 
 ## 3. Find the best ways to integrate the pyramid for this team
 
@@ -121,7 +141,7 @@ You have an existing system, and a great _new_ documentation system next to it. 
 - **Seed it**, so we get off to a good start, and
 - if there is existing documentation, in the project or outside it, **find it and consolidate it**: howtos, scripts and helpers, explanations, architecture notes, diagrams, decision records. Anything that leads to a **current and useful** description of the system.
 
-Fill out the pyramid (and the optional Glossary). Level 3 modules should use the same words as the modules in Level 2, where possible. Then run the refresh tool to fill the routing table.
+Fill out the pyramid (and the optional Glossary), using "First pass: what to look for" in step 2 as the coverage check. Level 3 modules should use the same words as the modules in Level 2, where possible. Then run the refresh tool to fill the routing table.
 
 **Make a plan** for how to integrate the existing docs. Should they be dissolved and migrated into the pyramid? My suggestion is yes: **one single source of truth**. If other things need the docs, or you want forward references in the old locations, so be it - but I recommend trying to commit to the new structure.
 
