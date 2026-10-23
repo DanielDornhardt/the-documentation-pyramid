@@ -50,6 +50,24 @@ The `references/` folder of this repo mirrors the docs directory you are about t
 - **The byline rule.** Start every section, and every broken-out file, with one sentence of at most 140 characters that says what it covers. The routing table copies that sentence. A leading label like `**Purpose.**` is skipped.
 - **Marker blocks.** `index.md` holds one block per layer between `<!-- pyramid:begin L3-modules -->` and `<!-- pyramid:end L3-modules -->`. The refresh tool rewrites what is between the markers (module, pointer with line number or file path, byline). Never edit inside the markers; edit the document and refresh. Everything outside the markers is yours. When an `adr/` folder exists, the refresh tool adds its block to `index.md` automatically (write mode adds a block for any layer that has none), so you do not add it by hand.
 
+### The story pass: how the thing is modelled
+
+Read the code for its ideas before you write a line of docs. The aim is the story inside the code: how the thing is modelled and why it is shaped this way, so a person or an agent changing it keeps the design consistent. This is not an index, a dependency graph or a file inventory; it is the 20% of text that explains 80% of the code. The routing table and the module list come after, and come cheap.
+
+Read the entry points, the central headers or types, the build files, the tests (they show intended behaviour), and the comments and commit messages near the oldest and most-changed code. Take notes as you read. Then answer these questions, each in a sentence or two, each with a file path as evidence. Put the answers in L1 and L2, and open each L3 module with the answers that concern it.
+
+1. **Core nouns.** What are the five to ten things this system is made of, and which one is the center? Use the code's own names.
+2. **The central trick.** Which one decision makes the rest cheap or possible?
+3. **Refusals.** What does the code deliberately not do, not allow or not abstract? The design shows most clearly in what it leaves out.
+4. **Seams.** Where does one idea hand over to another (a boundary, a conversion, a lifecycle step), and what is paid there?
+5. **Drift.** Where do the idea and the code disagree today? Each case is a gotcha candidate: what someone would change, what would break, how they would notice.
+6. **Vocabulary.** Which words does the code use for the ideas? Use them in the docs, and put the ones that carry meaning in the glossary.
+7. **The why.** What do comments, commit messages and changelogs say about the reasons? Quote or cite them. A reason you infer is marked inferred; a reason you cannot find is left out.
+
+Keep it short: if an answer needs more than a paragraph, it is two ideas, so split them. Skip a question the project has no answer for. A module tree is welcome where it helps, as names with one-line pointers, never as the main content.
+
+Before you finish, check your own claims. For each claim, open the path you cited and confirm it says what you wrote. Then, for the five claims you are least sure of, ask a second agent that has not seen your notes to try to refute them against the code. Fix or drop what fails.
+
 ### First pass: what to look for
 
 Before you call the first pass done, look at the project for each topic below. If the topic exists and matters to someone changing the code, give it a module section or a line in one; if it does not exist, say nothing (no "n/a" entries). This list is a prompt for coverage, not a template to fill. The writing rules are in `house-style.md`; they are not repeated here.
