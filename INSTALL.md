@@ -20,7 +20,7 @@ We propose `<project root>/docs/` as the canonical home. But if there are alread
 
 ## 2. Copy the templates from `references/`
 
-The `references/` folder of this repo mirrors the docs directory you are about to create: same names, same layout. Clone the repo (or fetch the files) to get it, then copy it over and adapt each file to the project. **Take out** references to unselected options.
+The `references/` folder of this repo mirrors the docs directory you are about to create: same names, same layout. Clone the repo (or fetch the files) to get it, then copy it over and adapt each file to the project. **Take out** references to unselected options. The sections in the layer files are suggestions: add the ones the project needs, delete the ones it does not (a C library has no Deployment section). Delete the template's HTML comments once you have followed them; only the `pyramid:begin` and `pyramid:end` marker lines stay. Ignore the other files in the repo root (images, notes): only `references/`, `tools/` and `skills/` matter here.
 
     references/                          ->  <docs>/
       index.md                               the central dispatch: agent instructions, plus the routing table
@@ -113,7 +113,7 @@ Otherwise add a new step between implementation and review. Make three suggestio
 
 ### 3.5 Install the refresh tool and its skill
 
-The repo has two more folders next to `references/`: `tools/` and `skills/`. They are not documentation and never go inside the docs folder. Copy `tools/refresh-pyramid.js` and `refresh-pyramid.md` to a `tools/` folder next to `docs/` (or to the project's existing scripts folder, if it has one; then adjust the commands below). Copy `skills/refresh-pyramid/SKILL.md` to `.claude/skills/refresh-pyramid/SKILL.md` (or the skills folder your harness uses). The tool needs Node 20.11 or later and nothing else.
+The repo has two more folders next to `references/`: `tools/` and `skills/`. They are not documentation and never go inside the docs folder. Copy `tools/refresh-pyramid.js` and `tools/refresh-pyramid.md` to a `tools/` folder next to `docs/` (or to the project's existing scripts folder, if it has one; then adjust the commands below). Copy `skills/refresh-pyramid/SKILL.md` to `.claude/skills/refresh-pyramid/SKILL.md` (or the skills folder your harness uses). The tool needs Node 20.11 or later and nothing else.
 
 The tool regenerates the routing blocks of `docs/index.md` from the documents and reports problems, each with a message that says what is wrong and what to do. It never edits a document: agents fix what it reports by hand. Modes: write (the default, rewrites the marker blocks of `index.md` and adds a block for a layer that has none), `--dry-run` (prints the findings and which blocks would change, writes nothing) and `--check` (writes nothing, exits 1 on errors or a stale index; suits a pre-commit hook or CI, see `tools/refresh-pyramid.md`).
 
@@ -157,7 +157,7 @@ I'd recommend a research round first: scan for docs, ask your memory banks and c
 
 Make a plan and think it through. Then present it to the reviewer - if a human is in the loop - or, if you have an explicit go signal, GO! :) If the plan calls for a separate skill, run it and/or suggest the steps to your operator. You know the drill.
 
-Confirm the doc-moving plan in the same session. Commit the new structure before you consolidate the docs (see step 4), so the consolidation is its own change.
+Confirm the doc-moving plan in the same session. The commit order is: snapshot (only if you move or delete docs), new structure, consolidation, then the written content. Each is its own change.
 
 **Pro tip:** After consolidating, let a review agent check that no important documentation got left behind! Happens to the best of us! :)
 
@@ -167,10 +167,9 @@ Confirm the doc-moving plan in the same session. Commit the new structure before
 
 Follow the plan you just made:
 
-- create the new directory
-- copy the files from our `references/` directory (templates, tool, skill) and customize them to the project
-- snapshot commit, before moving or deleting anything (see step 4)
-- consolidate the docs, if any exist
+- snapshot commit, only if you are going to move or delete existing docs (see step 4)
+- create the new directory and copy the templates from `references/`, the tool from `tools/` and the skill from `skills/`; commit this structure on its own
+- consolidate the docs, if any exist, as a separate commit
 - if there isn't a lot of documentation, launch an architect skill (or give it your best shot!) to scan the code and create the architecture docs and the first module docs
 - suggest creating operational L4 docs for things that happen a lot: commits, merges, server start / stop, running the tests, etc.
 
@@ -178,8 +177,8 @@ Follow the plan you just made:
 
 Before you call it done:
 
-- [ ] No template placeholders are left (`{…}`), and no sections or bullets remain for options you did not choose.
-- [ ] `node tools/refresh-pyramid.js docs` has been run, and `node tools/refresh-pyramid.js docs --check` exits 0 with no errors or warnings.
+- [ ] No template placeholders (`{…}`) or template HTML comments are left (only the `pyramid:` marker lines), and no sections or bullets remain for options you did not choose.
+- [ ] `node tools/refresh-pyramid.js docs` has been run, and `node tools/refresh-pyramid.js docs --check` exits 0 and its output has no `error` or `warning` lines (the exit code alone does not show warnings: read the output).
 - [ ] Every section has a byline of at most 140 characters, no module lives in two places, and no layer folder has an `index.md`.
 - [ ] Links between the docs resolve.
 - [ ] An empty layer folder still holds its `.gitkeep`; a folder with real files does not.
