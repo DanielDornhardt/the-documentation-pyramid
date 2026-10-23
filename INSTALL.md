@@ -18,7 +18,7 @@ Technical and development documentation: basically everything an engineering tea
 
 We propose `<project root>/docs/` as the canonical home. But if there are already other docs there, or your framework would do something funky with a new folder there, put it somewhere else - another level of the tree, or another name, e.g. `<project root>/dev-docs/`. Where this guide says `docs/`, read your folder. The commands below assume `docs/`.
 
-## 2. Copy the templates, the tool and the skill from `references/`
+## 2. Copy the templates from `references/`
 
 The `references/` folder of this repo mirrors the docs directory you are about to create: same names, same layout. Clone the repo (or fetch the files) to get it, then copy it over and adapt each file to the project. **Take out** references to unselected options.
 
@@ -32,8 +32,6 @@ The `references/` folder of this repo mirrors the docs directory you are about t
       L4-operations/
       Glossary.md                            optional: a DDD-style ubiquitous language glossary. Recommended if your team / agents don't have one yet.
       house-style.md                         optional: the rules for how to keep the docs tidy and how to write. Use it if you don't have a better tech-writer skill or instructions.
-      tools/refresh-pyramid.js  .md      ->  <docs>/tools/        the refresh tool and its reference
-      skills/refresh-pyramid/SKILL.md    ->  .claude/skills/refresh-pyramid/SKILL.md   (outside docs; see 3.5)
       adr/  (no template)                    optional: decision records, one file per decision. Add it if you want ADRs and have no good place for them. Otherwise just reference the ADRs in index.md and point the agents there.
 
 ### The layout rules
@@ -115,14 +113,14 @@ Otherwise add a new step between implementation and review. Make three suggestio
 
 ### 3.5 Install the refresh tool and its skill
 
-Copy `references/tools/refresh-pyramid.js` and `refresh-pyramid.md` to `docs/tools/`. Copy `references/skills/refresh-pyramid/SKILL.md` to `.claude/skills/refresh-pyramid/SKILL.md` (or the skills folder your harness uses). The tool needs Node 20.11 or later and nothing else.
+The repo has two more folders next to `references/`: `tools/` and `skills/`. They are not documentation and never go inside the docs folder. Copy `tools/refresh-pyramid.js` and `refresh-pyramid.md` to a `tools/` folder next to `docs/` (or to the project's existing scripts folder, if it has one; then adjust the commands below). Copy `skills/refresh-pyramid/SKILL.md` to `.claude/skills/refresh-pyramid/SKILL.md` (or the skills folder your harness uses). The tool needs Node 20.11 or later and nothing else.
 
-The tool regenerates the routing blocks of `docs/index.md` from the documents and reports problems, each with a message that says what is wrong and what to do. It never edits a document: agents fix what it reports by hand. Modes: write (the default, rewrites the marker blocks of `index.md` and adds a block for a layer that has none), `--dry-run` (prints the findings and which blocks would change, writes nothing) and `--check` (writes nothing, exits 1 on errors or a stale index; suits a pre-commit hook or CI, see `docs/tools/refresh-pyramid.md`).
+The tool regenerates the routing blocks of `docs/index.md` from the documents and reports problems, each with a message that says what is wrong and what to do. It never edits a document: agents fix what it reports by hand. Modes: write (the default, rewrites the marker blocks of `index.md` and adds a block for a layer that has none), `--dry-run` (prints the findings and which blocks would change, writes nothing) and `--check` (writes nothing, exits 1 on errors or a stale index; suits a pre-commit hook or CI, see `tools/refresh-pyramid.md`).
 
 Add one instruction to `AGENTS.md` / `CLAUDE.md`, next to the import:
 
 ```
-When your edits to docs/ are finished, run `node docs/tools/refresh-pyramid.js docs` once and fix what it reports. The skill /refresh-pyramid helps when the report is long.
+When your edits to docs/ are finished, run `node tools/refresh-pyramid.js docs` once and fix what it reports. The skill /refresh-pyramid helps when the report is long.
 ```
 
 Run it once when the edits are finished, not after each edit.
@@ -181,7 +179,7 @@ Follow the plan you just made:
 Before you call it done:
 
 - [ ] No template placeholders are left (`{…}`), and no sections or bullets remain for options you did not choose.
-- [ ] `node docs/tools/refresh-pyramid.js docs` has been run, and `node docs/tools/refresh-pyramid.js docs --check` exits 0 with no errors or warnings.
+- [ ] `node tools/refresh-pyramid.js docs` has been run, and `node tools/refresh-pyramid.js docs --check` exits 0 with no errors or warnings.
 - [ ] Every section has a byline of at most 140 characters, no module lives in two places, and no layer folder has an `index.md`.
 - [ ] Links between the docs resolve.
 - [ ] An empty layer folder still holds its `.gitkeep`; a folder with real files does not.

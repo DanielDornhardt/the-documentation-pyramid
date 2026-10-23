@@ -45,4 +45,4 @@ Base guide: Google developer documentation style. A team guide named here replac
 
 ## Done when
 
-Edits are finished (not after each one): run `node docs/tools/refresh-pyramid.js` and fix what it reports (it never edits your docs). The skill `/refresh-pyramid` helps when the report is long. Claims are cited or marked unverified.
+Edits are finished (not after each one): run `node tools/refresh-pyramid.js` and fix what it reports (it never edits your docs). The skill `/refresh-pyramid` helps when the report is long. Claims are cited or marked unverified.

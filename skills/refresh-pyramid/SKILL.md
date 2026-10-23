@@ -1,18 +1,18 @@
 ---
 name: refresh-pyramid
-description: Check and refresh the routing table (root index.md) of a documentation pyramid with docs/tools/refresh-pyramid.js. Use only when the project has a docs folder with a root index.md, layer files like L1-vision.md and L3-modules.md, and pyramid:begin marker lines, and the documents were edited (before committing documentation changes), or when asked to refresh, check, lint or update the pyramid index, routing table, bylines or module line numbers, or when a section has grown long.
+description: Check and refresh the routing table (root index.md) of a documentation pyramid with tools/refresh-pyramid.js. Use only when the project has a docs folder with a root index.md, layer files like L1-vision.md and L3-modules.md, and pyramid:begin marker lines, and the documents were edited (before committing documentation changes), or when asked to refresh, check, lint or update the pyramid index, routing table, bylines or module line numbers, or when a section has grown long.
 ---
 
 # Refresh the documentation pyramid index
 
-The tool is `docs/tools/refresh-pyramid.js` (one file, Node 20.11+, no dependencies; reference: `docs/tools/refresh-pyramid.md`). It never edits a document: it regenerates the routing blocks of `docs/index.md` and prints findings. You fix the documents by hand. If the tool is not in the project, say so and ask the user to copy it from the documentation pyramid repository (`references/tools/`) to `docs/tools/`; do not write your own. The docs folder is `docs` unless the project says otherwise; if it is unclear which folder is the pyramid, ask before running anything.
+The tool is `tools/refresh-pyramid.js` (one file, Node 20.11+, no dependencies; reference: `tools/refresh-pyramid.md`). It never edits a document: it regenerates the routing blocks of `docs/index.md` and prints findings. You fix the documents by hand. If the tool is not in the project, say so and ask the user to copy it from the documentation pyramid repository (`tools/`) to a `tools/` folder next to the docs folder; do not write your own. The docs folder is `docs` unless the project says otherwise; if it is unclear which folder is the pyramid, ask before running anything.
 
 ## Loop
 
 1. Look without writing:
 
    ```sh
-   node docs/tools/refresh-pyramid.js docs --dry-run
+   node tools/refresh-pyramid.js docs --dry-run
    ```
 
    Lines that start with `error`, `warning` or `status` are findings: `error E2 <file>:<line>: <what is wrong> (fix: <what to do>)`. Errors (E) must be fixed, warnings (W) should be, `S1` only says the index is stale. `info` lines are counts per layer.
@@ -26,12 +26,12 @@ The tool is `docs/tools/refresh-pyramid.js` (one file, Node 20.11+, no dependenc
 3. Refresh the index:
 
    ```sh
-   node docs/tools/refresh-pyramid.js docs
+   node tools/refresh-pyramid.js docs
    ```
 
    It rewrites the generated blocks between the `pyramid:begin` and `pyramid:end` marker lines. For a layer without markers it appends a block to the end of `index.md` (after a `## Routing table` heading, added if missing) and says so; tell the user.
 
-4. Run `node docs/tools/refresh-pyramid.js docs --check`. Repeat from step 2 until it exits 0 or only warnings the user accepts remain.
+4. Run `node tools/refresh-pyramid.js docs --check`. Repeat from step 2 until it exits 0 or only warnings the user accepts remain.
 
 ## Report
 

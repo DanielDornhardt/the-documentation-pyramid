@@ -1,6 +1,6 @@
 # refresh-pyramid
 
-`docs/tools/refresh-pyramid.js` does two things for a documentation pyramid:
+`tools/refresh-pyramid.js` does two things for a documentation pyramid:
 
 1. It regenerates the routing blocks of the root `index.md` from the documents.
 2. It reports problems, each with a message that says what is wrong and what to do.
@@ -8,7 +8,7 @@
 It never edits a document other than the generated blocks of `index.md`. Fixing a problem is done by hand (or by an agent); the tool then refreshes the index. One file, Node 20.11 or later, no dependencies, reads and writes only inside the docs folder.
 
 ```text
-node docs/tools/refresh-pyramid.js [docs-folder] [--dry-run | --check] [--max-section-lines N] [--max-byline N] [--help]
+node tools/refresh-pyramid.js [docs-folder] [--dry-run | --check] [--max-section-lines N] [--max-byline N] [--help]
 ```
 
 The docs folder defaults to `./docs`; limits default to 100 lines and 140 characters.
@@ -101,8 +101,8 @@ As a git pre-commit hook (`.git/hooks/pre-commit`, executable):
 
 ```sh
 #!/bin/sh
-node docs/tools/refresh-pyramid.js docs --check || {
-  echo "docs index is stale or has errors: run node docs/tools/refresh-pyramid.js docs --dry-run" >&2
+node tools/refresh-pyramid.js docs --check || {
+  echo "docs index is stale or has errors: run node tools/refresh-pyramid.js docs --dry-run" >&2
   exit 1
 }
 ```
@@ -118,7 +118,7 @@ As a Claude Code `PostToolUse` hook in `.claude/settings.json` (a recipe: it has
         "hooks": [
           {
             "type": "command",
-            "command": "node docs/tools/refresh-pyramid.js docs --check > /dev/null 2>&1 || { echo 'docs index is stale or has errors: run node docs/tools/refresh-pyramid.js docs --dry-run' >&2; exit 2; }"
+            "command": "node tools/refresh-pyramid.js docs --check > /dev/null 2>&1 || { echo 'docs index is stale or has errors: run node tools/refresh-pyramid.js docs --dry-run' >&2; exit 2; }"
           }
         ]
       }

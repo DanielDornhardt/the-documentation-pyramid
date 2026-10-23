@@ -211,12 +211,12 @@ I'd recommend running those first and pointing them to this repository in order 
 
 ### Keeping the index current
 
-The routing table in `index.md` is generated: `references/tools/refresh-pyramid.js` (one file, Node 20.11 or later, no dependencies) regenerates the marker blocks from the documents and reports problems with the fix for each (one home per module, no folder indexes, bylines of at most 140 characters, sections over 100 lines). It never edits a document; agents fix what it reports by hand. Agents run it once when their doc edits are finished. The skill in `references/skills/refresh-pyramid/` helps them when the report is long. See [INSTALL.md](INSTALL.md).
+The routing table in `index.md` is generated: `tools/refresh-pyramid.js` (one file, Node 20.11 or later, no dependencies) regenerates the marker blocks from the documents and reports problems with the fix for each (one home per module, no folder indexes, bylines of at most 140 characters, sections over 100 lines). It never edits a document; agents fix what it reports by hand. Agents run it once when their doc edits are finished. The skill in `skills/refresh-pyramid/` helps them when the report is long. See [INSTALL.md](INSTALL.md).
 
 ### The short version
 
 1. Create a docs directory: `docs/`, or `dev-docs/` if `docs/` is taken.
-2. Copy the templates from `references/` into it, plus the refresh tool (`docs/tools/`) and skill, and adapt them to your project.
+2. Copy the templates from `references/` into it, plus the refresh tool (`tools/`, next to the docs folder, not inside it) and skill, and adapt them to your project.
 3. Import `docs/index.md` from your `AGENTS.md` / `CLAUDE.md`.
 4. Add "read before / update after" steps to your planning and story workflow.
 5. Fill it from the code and from your existing docs. Greenfield? Start small, it fills up as you go.
@@ -246,5 +246,5 @@ If you get something with good results, please share and we can link it up or in
     - adversarial reviewer that makes sure no docs get lost in the initial transfer
     - adversarial reviewer for checking doc updates have happened after a story has been implemented
 - a more clearly defined pattern on how to format the docs
-- auto-index-generation scripts (done for the routing table, see `references/tools/`)
+- auto-index-generation scripts (done for the routing table, see `tools/`)
 - ...
