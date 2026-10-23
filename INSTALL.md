@@ -54,7 +54,7 @@ The `references/` folder of this repo mirrors the docs directory you are about t
 
 Read the code for its ideas before you write a line of docs. The aim is the story inside the code: how the thing is modelled and why it is shaped this way, so a person or an agent changing it keeps the design consistent. This is not an index, a dependency graph or a file inventory; it is the 20% of text that explains 80% of the code. The routing table and the module list come after, and come cheap.
 
-Read the entry points, the central headers or types, the build files, the tests (they show intended behaviour), and the comments and commit messages near the oldest and most-changed code. Take notes as you read. Then answer these questions, each in a sentence or two, each with a file path as evidence. Put the answers in L1 and L2, and open each L3 module with the answers that concern it.
+Read the entry points, the central headers or types, the build files, the tests (they show intended behaviour), and the comments and commit messages near the oldest and most-changed code. Take notes as you read. Then answer these questions, each in a sentence or two, each with a file path as evidence. Put the answers in L1 and L2, and weave the ones that concern a module into its text, as plain prose without labels.
 
 1. **Core nouns.** What are the five to ten things this system is made of, and which one is the center? Use the code's own names.
 2. **The central trick.** Which one decision makes the rest cheap or possible?
@@ -64,7 +64,7 @@ Read the entry points, the central headers or types, the build files, the tests 
 6. **Vocabulary.** Which words does the code use for the ideas? Use them in the docs, and put the ones that carry meaning in the glossary.
 7. **The why.** What do comments, commit messages and changelogs say about the reasons? Quote or cite them. A reason you infer is marked inferred; a reason you cannot find is left out.
 
-Keep it short: if an answer needs more than a paragraph, it is two ideas, so split them. Skip a question the project has no answer for. A module tree is welcome where it helps, as names with one-line pointers, never as the main content.
+Keep it short: if an answer needs more than a paragraph, it is two ideas, so split them. Skip a question that does not apply (not every module has a story), and skip a question the project has no answer for. A module tree is welcome where it helps, as names with one-line pointers, never as the main content.
 
 Before you finish, check your own claims. For each claim, open the path you cited and confirm it says what you wrote. Then, for the five claims you are least sure of, ask a second agent that has not seen your notes to try to refute them against the code. Fix or drop what fails.
 
@@ -74,7 +74,7 @@ Before you call the first pass done, look at the project for each topic below. I
 
 - **L1:** who it is for, what it is not, platforms and licence in one line.
 - **L2:** the main parts and how they fit, with a diagram (nearly always worth it here); data flow; core data structures; state (what is saved, what is lost on exit, where it lives); configuration layers (build time, run time, environment); extension points (plugins, hooks, scripting, an API for modules); trust and safety boundaries (sandbox, untrusted input, permissions); outside interfaces (protocols, CLI, file formats).
-- **L3:** one module per cohesive subsystem, each with its motif, its why and one gotcha; where to start reading (entry points).
+- **L3:** one module per cohesive subsystem, each saying where it lives and what is special about it, plus the idea behind it and one relevant trap only where they apply; where to start reading (entry points).
 - **L4:** build and its options; run; test, and what CI covers and, just as useful, what it does not run; debug; release and packaging; security and deployment settings; contribution rules only where the repository has non-obvious ones; change recipes (what to touch to do X, and what silently breaks).
 - **Glossary:** look for an existing glossary and point to it from the index, or move it over if the owner agrees; otherwise collect the domain terms that appear in more than one document.
 

@@ -18,7 +18,8 @@ Base guide: Google developer documentation style. A team guide named here replac
 - Smallest edit. Keep the author's voice. Docs and code disagree: say so, replace the wrong fact, keep no second version.
 - Cut repetition, not detail. Table cells and list items: one or two sentences.
 - Section over about 100 lines: move it to its own file in the layer folder, starting at its `##` heading.
-- Open each module with its motif, the one idea that explains it, named in a few words; reuse the name. Then the why: what the design bought and what it cost, in the repository's own words, else marked as inferred. Then one gotcha: what someone changed, what broke, how they would notice.
+- A module is prose, not a form: no label prefixes. It opens with a short summary, then says where it lives and what is special about it. Do not explain what readers already know (what a router or a cache is).
+- Only where it applies: the idea that explains the module, said plainly, with why it is built that way (what it bought, what it cost, in the repository's own words, else marked inferred); and one trap that is highly relevant (what someone changed, what broke, how they would notice). Skip both when there is nothing to say.
 - Draw a diagram when structure or flow is the point: nearly always in L2, and in any module with more than a few sections or a schema, state machine or flow worth seeing. Sketch it first, then write around it. Skip it when it would only decorate. Plain text, no Mermaid. One sentence says what it shows; it never holds the only copy of a fact.
 - One scenario per layer file: a single short trace.
 - Few identifiers per sentence; the rest in a key-files table. Keep inventories (counts, file lists, line numbers) only where they mark a boundary or back a claim.
