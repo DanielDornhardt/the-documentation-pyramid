@@ -224,6 +224,11 @@ The routing table in `index.md` is generated: `tools/refresh-pyramid.js` (one fi
 The full, step-by-step instructions (written for agents, fine for humans too) are in **[INSTALL.md](INSTALL.md)**.
 
 
+### Viewing the pyramid
+
+[pyramid-viewer](https://github.com/DanielDornhardt/the-documentation-pyramid-viewer) is a small, dependency-free viewer for a pyramid. It shows the layers as a picture of bricks and as a tree browser, serves the docs live (with `--watch` it animates as you write), and exports static HTML or one big Markdown file. One command: `node viewer.js serve docs`.
+
+
 ## FAQ:
 
 **Q: Is this cake?**
@@ -239,7 +244,7 @@ None of these are big, and they can probably be vibecoded extremely quickly. Go 
 If you get something with good results, please share and we can link it up or integrate it with this repo.
 
 - Support / guidelines for a multi-project overarching structure
-- Pyramid browser & viewer in multiple versions / languages (a first viewer exists as a separate private repository)
+- Pyramid browser & viewer in multiple versions / languages (a first viewer exists: [pyramid-viewer](https://github.com/DanielDornhardt/the-documentation-pyramid-viewer))
 - Document renderer - turn your pyramid into a fully fledged document
 - Skills:
     - more detailed tech writing skills / a tech writer
