@@ -11,6 +11,7 @@ The aim is the story inside the code: how the thing is modelled and why it is sh
 
 * **Whole project.** Used at install: fill L1 and L2, and the L3 modules.
 * **One area.** Deepen one module or part: run the questions below for that area only, and edit its L3 text (and L2 where the answer changes the big picture).
+* **L2 polish.** Run once, after the module deep dives, and not per module. L2 is the structural layer, so it is not drilled; it is made easy to understand. Rewrite it so a newcomer grasps the whole system in one sitting: plain words, terms defined at first use, the core nouns and how they fit, one diagram where it helps, the central trick and the principles the modules surfaced. Link down to the modules instead of repeating them. Test: after reading only L1 and L2, could someone who has never seen the project explain it back?
 * **Check only.** Do not write. Take the explanations that already exist (ideas, whys, traps, recipes), verify them as in "Check your claims", and report what is wrong.
 
 ## Parallel runs
