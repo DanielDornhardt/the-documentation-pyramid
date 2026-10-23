@@ -15,7 +15,11 @@ The aim is the story inside the code: how the thing is modelled and why it is sh
 
 ## Read
 
-Read the entry points, the central headers or types, the build files, the tests (they show intended behaviour), and the comments and commit messages near the oldest and most-changed code. If there is no history, use comments, doc files and changelogs, and say in the docs that this is where the reasons come from. Take notes as you read.
+Read the code itself, not only its surroundings. Start with the entry points, the central headers or types, the build files and the tests (they show intended behaviour). Then read the implementation of the central pieces in full: the functions that carry the main flow, the core data structures and where they are changed. Skim the rest of each area enough to know what it does, and say in your report which parts you did not read.
+
+Hunt for what the authors wrote down. Comments that explain why are the best source: look at file and block headers, and search for words like `must`, `never`, `always`, `invariant`, `assume`, `careful`, `hack`, `workaround`, `XXX`, `TODO`, `FIXME`, `NOTE`, `WARNING`, and for comments that name another file. Read the commit messages near the oldest and most-changed code. If there is no history, use comments, doc files and changelogs, and say in the docs that this is where the reasons come from.
+
+Take notes as you read: each note is a claim and the path it rests on.
 
 ## Ask
 
