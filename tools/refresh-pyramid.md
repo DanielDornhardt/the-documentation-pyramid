@@ -1,6 +1,6 @@
 # refresh-pyramid
 
-`tools/refresh-pyramid.js` does two things for a documentation pyramid, part of THE-108 (pyramid viewer and renderer):
+`tools/refresh-pyramid.js` does two things for a documentation pyramid:
 
 1. It regenerates the routing blocks of the root `index.md` from the documents.
 2. It reports problems, each with a message that says what is wrong and what to do.
