@@ -55,8 +55,8 @@ Every module has one row: its name, where it lives (a file, or a file with a sec
 | Project structure | `L2-architecture.md#project-structure` (line 16) | {One sentence on how the repository is laid out.} |
 | Subsystems | `L2-architecture.md#subsystems` (line 26) | {One sentence naming the three to seven major parts.} |
 | Data flow | `L2-architecture.md#data-flow` (line 32) | {One sentence on how data moves from its source to the user.} |
-| Data model | `L2-architecture.md#data-model` (line 38) | {One sentence naming the few entities someone needs on day one.} |
-| Key decisions | `L2-architecture.md#key-decisions` (line 44) | {One sentence on the big decisions.} |
+| Data model | `L2-architecture.md#data-model` (line 44) | {One sentence naming the few entities someone needs on day one.} |
+| Key decisions | `L2-architecture.md#key-decisions` (line 50) | {One sentence on the big decisions.} |
 
 <!-- pyramid:end L2-architecture -->
 
@@ -80,7 +80,8 @@ Every module has one row: its name, where it lives (a file, or a file with a sec
 | Setup | `L4-operations.md#setup` (line 16) | {One sentence on how to get from a fresh clone to a running project.} |
 | Testing | `L4-operations.md#testing` (line 22) | {One sentence on how to run the tests.} |
 | Debugging | `L4-operations.md#debugging` (line 28) | {One sentence on where to look when something breaks.} |
-| Deployment | `L4-operations.md#deployment` (line 34) | {One sentence on how and where it is deployed.} |
+| Change recipes | `L4-operations.md#change-recipes` (line 34) | {One sentence on what this section covers: the changes people make often.} |
+| Deployment | `L4-operations.md#deployment` (line 40) | {One sentence on how and where it is deployed.} |
 
 <!-- pyramid:end L4-operations -->
 
