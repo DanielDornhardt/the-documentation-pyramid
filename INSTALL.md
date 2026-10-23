@@ -97,7 +97,7 @@ Otherwise add a new step between implementation and review. Make three suggestio
 
 Copy `references/tools/refresh-pyramid.js` and `refresh-pyramid.md` to `docs/tools/`. Copy `references/skills/refresh-pyramid/SKILL.md` to `.claude/skills/refresh-pyramid/SKILL.md` (or the skills folder your harness uses). The tool needs Node 20.11 or later and nothing else.
 
-The tool regenerates the routing blocks of `docs/index.md` from the documents and reports problems, each with a message that says what is wrong and what to do. It never edits a document: agents fix what it reports by hand. Modes: write (the default, rewrites only the marker blocks of `index.md`), `--dry-run` (prints the findings and which blocks would change, writes nothing) and `--check` (writes nothing, exits 1 on errors or a stale index; suits a pre-commit hook or CI, see `docs/tools/refresh-pyramid.md`).
+The tool regenerates the routing blocks of `docs/index.md` from the documents and reports problems, each with a message that says what is wrong and what to do. It never edits a document: agents fix what it reports by hand. Modes: write (the default, rewrites the marker blocks of `index.md` and adds a block for a layer that has none), `--dry-run` (prints the findings and which blocks would change, writes nothing) and `--check` (writes nothing, exits 1 on errors or a stale index; suits a pre-commit hook or CI, see `docs/tools/refresh-pyramid.md`).
 
 Add one instruction to `AGENTS.md` / `CLAUDE.md`, next to the import:
 
@@ -161,7 +161,7 @@ Follow the plan you just made:
 Before you call it done:
 
 - [ ] No template placeholders are left (`{…}`), and no sections or bullets remain for options you did not choose.
-- [ ] `node docs/tools/refresh-pyramid.js docs` has been run, and `node docs/tools/refresh-pyramid.js docs --check` exits 0 with no findings.
+- [ ] `node docs/tools/refresh-pyramid.js docs` has been run, and `node docs/tools/refresh-pyramid.js docs --check` exits 0 with no errors or warnings.
 - [ ] Every section has a byline of at most 140 characters, no module lives in two places, and no layer folder has an `index.md`.
 - [ ] Links between the docs resolve.
 - [ ] An empty layer folder still holds its `.gitkeep`; a folder with real files does not.

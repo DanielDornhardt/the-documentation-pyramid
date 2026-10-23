@@ -2,22 +2,28 @@
 /**
  * refresh-pyramid: keeps the routing blocks of a documentation pyramid's root index.md in step with the
  * documents and reports problems with messages that say what to do. It never edits a document other than
- * the generated blocks of index.md. Reference: tools/refresh-pyramid.md. Part of THE-108 (pyramid viewer and renderer).
+ * the generated blocks of index.md. Reference: refresh-pyramid.md next to this file or in tools/.
  */
 import { readFileSync, writeFileSync, renameSync, unlinkSync, readdirSync, realpathSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, relative } from 'node:path';
 import { parseArgs } from 'node:util';
 import { fileURLToPath } from 'node:url';
 
 const MARKER = /^<!-- pyramid:(begin|end) (\S+) -->\s*$/;
-// A line that starts a list, table, quote or code fence: such a line is not part of a byline paragraph.
-const BLOCK_START = /^\s*(?:[-*+]\s|\d+[.)]\s|\||>|```|~~~)/;
-const HTML_COMMENT_LINE = /^\s*<!--.*-->\s*$/;
-const HEADING = /^(#{1,6})[ \t]+(.*?)(?:[ \t]+#+)?[ \t]*$/;
-const USAGE = `usage: node refresh-pyramid.js [docs-folder] [--dry-run | --check] [--max-section-lines N] [--max-byline N]
+// A line that starts a list, table, quote or thematic break: such a line is not part of a byline paragraph.
+const BLOCK_START = /^\s*(?:[-*+]\s|\d+[.)]\s|\||>|-{3,}\s*$|\*{3,}\s*$|_{3,}\s*$)/;
+const HEADING = /^ {0,3}(#{1,6})(?:[ \t]+(.*?))?(?:[ \t]+#+)?[ \t]*$/;
+const FENCE = /^ {0,3}(`{3,}|~{3,})(.*)$/;
+const FENCE_END = /^ {0,3}(`{3,}|~{3,})[ \t]*$/;
+const BYLINE_CAP = 2000; // characters of a paragraph considered for a byline
+const DEFAULT_SECTION_LINES = 100;
+const DEFAULT_BYLINE = 140;
+const USAGE = `usage: node refresh-pyramid.js [docs-folder] [--dry-run | --check] [--max-section-lines N] [--max-byline N] [--help]
   Regenerates the routing blocks of <docs-folder>/index.md (default ./docs) and reports problems.
-  --dry-run   write nothing, show which blocks would change
-  --check     write nothing, exit 1 when the index is stale or errors exist
+  --dry-run              write nothing, show which blocks would change
+  --check                write nothing, exit 1 when the index is stale or errors exist
+  --max-section-lines N  longest section before warning W1 (default ${DEFAULT_SECTION_LINES})
+  --max-byline N         longest byline in characters before warning W3 (default ${DEFAULT_BYLINE}); errors above twice that
   exit codes: 0 fine, 1 errors or stale index (--check), 2 usage or unreadable folder`;
 
 // ---------------------------------------------------------------- text helpers
@@ -58,10 +64,46 @@ const cell = (text) => text.replace(/\|/g, '\\|');
 
 // ---------------------------------------------------------------- scanning one document
 
+/** Front matter as the viewer sees it: "---" on line 1, not followed by a blank line, closed by "---" or "...". */
 function frontMatterEnd(lines) {
-  if (lines[0]?.trimEnd() !== '---') return 0;
-  const close = lines.findIndex((line, i) => i > 0 && line.trimEnd() === '---');
+  if (lines[0] !== '---' || !lines[1]?.trim()) return 0;
+  const close = lines.findIndex((line, i) => i > 0 && (line === '---' || line === '...'));
   return close === -1 ? 0 : close + 1;
+}
+
+/**
+ * The kind of every line, one rule for the heading scan, the marker scan and the byline scan (CommonMark):
+ * 'front' (front matter), 'code' (fenced code, fences included), 'comment' (first line of an HTML comment block),
+ * 'comment-body' (its later lines) or 'text'.
+ */
+export function lineKinds(lines) {
+  const front = frontMatterEnd(lines);
+  const kinds = [];
+  let fence = null;
+  let inComment = false;
+  lines.forEach((raw, i) => {
+    const line = raw.replace(/\r$/, '');
+    const open = FENCE.exec(line);
+    if (i < front) {
+      kinds.push('front');
+    } else if (fence) {
+      const close = FENCE_END.exec(line)?.[1];
+      if (close?.[0] === fence[0] && close.length >= fence.length) fence = null;
+      kinds.push('code');
+    } else if (inComment) {
+      inComment = !line.includes('-->');
+      kinds.push('comment-body');
+    } else if (open && !(open[1][0] === '`' && open[2].includes('`'))) {
+      fence = open[1];
+      kinds.push('code');
+    } else if (/^ {0,3}<!--/.test(line)) {
+      inComment = !line.includes('-->');
+      kinds.push('comment');
+    } else {
+      kinds.push('text');
+    }
+  });
+  return kinds;
 }
 
 /** Anchors as the viewer makes them: levels 1 to 4 count, duplicates get -1, -2, and never take a slug another heading owns. */
@@ -84,47 +126,45 @@ function assignAnchors(headings) {
   }
 }
 
-/** Lines and ATX headings (outside front matter and fenced code) of a document. */
+/** Lines, line kinds and ATX headings of a document. */
 export function scanDocument(text) {
   const lines = text.replace(/^﻿/, '').split(/\r?\n/);
   if (lines.at(-1) === '') lines.pop();
+  const kinds = lineKinds(lines);
   const headings = [];
-  let fence = null;
-  for (let i = frontMatterEnd(lines); i < lines.length; i++) {
-    const marker = /^(```|~~~)/.exec(lines[i])?.[1];
-    if (fence) {
-      if (marker === fence) fence = null;
-    } else if (marker) {
-      fence = marker;
-    } else {
-      const match = HEADING.exec(lines[i]);
-      if (match) headings.push({ line: i + 1, level: match[1].length, title: plainText(match[2]) });
-    }
-  }
+  lines.forEach((line, i) => {
+    const match = kinds[i] === 'text' && HEADING.exec(line);
+    if (match) headings.push({ line: i + 1, level: match[1].length, title: plainText(match[2] ?? '') });
+  });
   assignAnchors(headings);
-  return { lines, headings, bodyStart: frontMatterEnd(lines) };
+  return { lines, kinds, headings };
 }
 
-/** First sentence of the first paragraph below the heading at index `at` of doc.headings (none for lists, tables, quotes, code). */
+/**
+ * First sentence of the first paragraph below the heading at index `at` of doc.headings (none for lists, tables,
+ * quotes, code, thematic breaks). Comments are skipped, images contribute nothing, reference links stay as written.
+ */
 export function bylineAfter(doc, at) {
-  const { lines, headings } = doc;
+  const { lines, kinds, headings } = doc;
   const end = headings[at + 1] ? headings[at + 1].line - 1 : lines.length;
+  const startsParagraph = (i) => kinds[i] === 'text' && lines[i].trim() !== '' && !BLOCK_START.test(lines[i]);
   let i = headings[at].line;
-  while (i < end && (lines[i].trim() === '' || HTML_COMMENT_LINE.test(lines[i]))) i++;
-  if (i >= end || BLOCK_START.test(lines[i])) return '';
+  while (i < end && (lines[i].trim() === '' || kinds[i].startsWith('comment'))) i++;
+  if (i >= end || !startsParagraph(i)) return '';
   const paragraph = [lines[i++]];
-  while (i < end && lines[i].trim() !== '' && !BLOCK_START.test(lines[i])) paragraph.push(lines[i++]);
+  while (i < end && startsParagraph(i)) paragraph.push(lines[i++]);
   // A bold label such as "**Purpose.**" is not the description; the sentence after it is.
-  const text = plainText(paragraph.join(' ').replace(/^\s*\*\*[^*]+?[.:]\*\*\s*/, ''));
+  const capped = paragraph.join(' ').slice(0, BYLINE_CAP).replace(/!\[[^\]]*\]\([^)]*\)/g, '').replace(/^\s*\*\*[^*]+?[.:]\*\*\s*/, '');
+  const text = plainText(capped);
   return /^.*?[.?!](?=\s)/.exec(text)?.[0] ?? text;
 }
 
 // ---------------------------------------------------------------- modules of a layer
 
 const finding = (severity, code, where, message, fix) => ({ severity, code, where, message, fix });
-const asModule = (doc, at, place, where, extra = {}) => {
+const asModule = (doc, at, place, where) => {
   const heading = doc.headings[at];
-  return { title: heading.title, slug: slugify(heading.title) || 'section', what: bylineAfter(doc, at), place, where, ...extra };
+  return { title: heading.title, slug: slugify(heading.title) || 'section', what: bylineAfter(doc, at), place, where };
 };
 
 /** Every ## section of a layer file is a module; W1 for long ones. */
@@ -150,7 +190,7 @@ function brokenOutOf(path, doc, findings, checkShape) {
   const at = doc.headings.findIndex((h) => h.level <= 2);
   const title = doc.headings[at];
   if (!checkShape) return title ? asModule(doc, at, path, `\`${path}\``) : untitled(path);
-  const firstLine = doc.lines.findIndex((line, i) => i >= doc.bodyStart && line.trim() !== '' && !HTML_COMMENT_LINE.test(line)) + 1;
+  const firstLine = doc.lines.findIndex((line, i) => line.trim() !== '' && ['text', 'code'].includes(doc.kinds[i])) + 1;
   if (!title) {
     findings.push(finding('warning', 'W5', path, 'broken-out file has no heading', 'start the file with the module title as a ## heading'));
   } else if (title.level === 1 || title.line !== firstLine) {
@@ -199,7 +239,7 @@ function bylineFindings(modules, maxByline) {
 const read = (path) => readFileSync(path, 'utf8');
 
 /** Reads the documents of one layer. Throws when any of them cannot be read. */
-function readLayer(docs, layer, options, ctx) {
+function readLayer(docs, layer, options) {
   const findings = [];
   const modules = [];
   let sections = 0;
@@ -209,7 +249,7 @@ function readLayer(docs, layer, options, ctx) {
   }
   if (layer.dir) {
     const isAdr = layer.id === 'adr';
-    for (const entry of listEntries(join(docs, layer.dir), ctx)) {
+    for (const entry of listEntries(join(docs, layer.dir))) {
       const path = `${layer.dir}/${entry.name}`;
       if (entry.isDirectory()) {
         if (!isAdr) findings.push(finding('warning', 'W4', path, 'sub-folder inside a layer folder is not scanned', 'move its files up into the layer folder or break them out one level'));
@@ -228,18 +268,18 @@ function readLayer(docs, layer, options, ctx) {
 
 // ---------------------------------------------------------------- the docs folder
 
-/** Directory entries without hidden ones and without symbolic links (those are counted, never followed), in name order. */
-function listEntries(dir, ctx) {
-  const entries = readdirSync(dir, { withFileTypes: true }).filter((e) => !e.name.startsWith('.'));
-  ctx.symlinks += entries.filter((e) => e.isSymbolicLink()).length;
-  return entries.filter((e) => !e.isSymbolicLink()).sort((a, b) => (a.name < b.name ? -1 : 1));
+/** Directory entries in name order, without hidden ones and without symbolic links (which are ignored, never followed). */
+function listEntries(dir) {
+  return readdirSync(dir, { withFileTypes: true })
+    .filter((e) => !e.name.startsWith('.') && !e.isSymbolicLink())
+    .sort((a, b) => (a.name < b.name ? -1 : 1));
 }
 
 /** Layers in order: L<n> by number, then adr. A layer may be a file, a folder, or both with the same stem. */
-function discoverLayers(docs, ctx) {
+function discoverLayers(docs) {
   const layers = new Map();
   let hasIndex = false;
-  for (const entry of listEntries(docs, ctx)) {
+  for (const entry of listEntries(docs)) {
     const stem = entry.isFile() ? /^(L\d+-.+)\.md$/.exec(entry.name)?.[1] : /^L\d+-.+$|^adr$/.exec(entry.name)?.[0];
     hasIndex ||= entry.isFile() && entry.name === 'index.md';
     if (!stem) continue;
@@ -263,21 +303,29 @@ export function tableLines(modules) {
 export function findBlocks(lines) {
   const blocks = new Map();
   const errors = [];
+  const kinds = lineKinds(lines);
+  let open = null; // the block whose begin marker was seen last and not yet closed
   const problem = (i, message, fix) => errors.push(finding('error', 'E3', `index.md:${i + 1}`, message, fix));
   lines.forEach((line, i) => {
-    const marker = MARKER.exec(line);
+    const marker = kinds[i] === 'comment' && MARKER.exec(line);
     if (!marker) return;
     const [, kind, id] = marker;
     const block = blocks.get(id);
     if (kind === 'begin') {
-      if (block) problem(i, `duplicate begin marker for ${id}`, 'keep one begin/end pair per layer and delete the other');
-      else blocks.set(id, { begin: i });
+      if (block) {
+        problem(i, `duplicate begin marker for ${id}`, 'keep one begin/end pair per layer and delete the other');
+      } else {
+        if (open) problem(i, `block ${id} starts inside block ${open}`, `close ${open} with its end marker before the begin marker of ${id}`);
+        blocks.set(id, { begin: i });
+        open = id;
+      }
     } else if (!block) {
       problem(i, `end marker for ${id} without a begin marker before it`, `put "<!-- pyramid:begin ${id} -->" above it, or delete the end marker`);
     } else if (block.end !== undefined) {
       problem(i, `duplicate end marker for ${id}`, 'keep one begin/end pair per layer and delete the other');
     } else {
       block.end = i;
+      open = null;
     }
   });
   for (const [id, block] of blocks) {
@@ -295,7 +343,7 @@ function describeChange(id, before, after) {
 
 /**
  * Applies the new tables to the index text. Returns the new text and the changed block ids; layers without
- * markers are appended under "## Routing table" when `append` is set, else only listed in `missing`.
+ * markers are appended to the end when `append` is set (after a "## Routing table" heading, added if missing), else only listed in `missing`.
  */
 export function updateIndex(text, tables, append) {
   const cr = text.includes('\r\n') ? '\r' : '';
@@ -317,6 +365,7 @@ export function updateIndex(text, tables, append) {
   if (append && result.missing.length) {
     const added = [];
     if (!lines.some((line) => /^## Routing table\s*$/.test(line))) added.push('', '## Routing table');
+    if (text === '') added.shift(); // no blank line before the heading in an empty file
     for (const id of result.missing) added.push('', `<!-- pyramid:begin ${id} -->`, ...tables.get(id), `<!-- pyramid:end ${id} -->`);
     if (lines.at(-1) !== '') lines.push('');
     lines.splice(-1, 0, ...added.map((line) => line + cr));
@@ -343,48 +392,56 @@ function writeAtomically(path, text) {
 const formatFinding = ({ severity, code, where, message, fix }) =>
   `${[severity, code, `${where}:`].filter(Boolean).join(' ')} ${message}${fix ? ` (fix: ${fix})` : ''}`;
 
+/** Brings index.md in step with the tables and adds its findings. Returns true when the index is stale (not in write mode). */
+function refreshIndex(docs, tables, mode, findings, out) {
+  const indexPath = join(docs, 'index.md');
+  const write = mode === 'write';
+  try {
+    const update = updateIndex(read(indexPath), tables, write);
+    if (write && update.changed.length) {
+      writeAtomically(indexPath, update.text);
+      out(`wrote index.md (blocks: ${update.changed.join(', ')})`);
+    }
+    findings.push(...update.errors);
+    for (const id of update.missing) {
+      findings.push(write ? { severity: 'note', code: 'E6', where: 'index.md', message: `added the missing block for ${id} at the end of index.md` }
+        : finding('error', 'E6', 'index.md', `no pyramid:begin/end markers for ${id}`, 'run this tool in write mode, or add the marker lines by hand'));
+    }
+    const outdated = [...update.changed, ...(write ? [] : update.missing)];
+    if (mode === 'dry-run') for (const line of update.diff) out(line);
+    if (write || outdated.length === 0) return false;
+    findings.push(finding('status', 'S1', 'index.md', `the index is stale (blocks: ${outdated.join(', ')})`, 'run this tool in write mode'));
+    return true;
+  } catch (error) {
+    findings.push(finding('error', 'E7', 'index.md', `could not read or write index.md (${error.code ?? error.message})`, 'make index.md and its folder readable and writable, then run this tool again'));
+    return false;
+  }
+}
+
 /** Runs the tool; returns the exit code. `out` receives every output line. */
 export function refreshPyramid(docs, { mode, maxSectionLines, maxByline }, out) {
-  const ctx = { symlinks: 0 };
-  const options = { maxSectionLines, maxByline };
-  const { layers, hasIndex } = discoverLayers(docs, ctx);
+  const { layers, hasIndex } = discoverLayers(docs);
   const findings = [];
   const tables = new Map();
   for (const layer of layers) {
     try {
-      const result = readLayer(docs, layer, options, ctx);
+      const result = readLayer(docs, layer, { maxSectionLines, maxByline });
       tables.set(layer.id, tableLines(result.modules));
       findings.push(...result.findings);
     } catch (error) {
-      const file = error.path ? error.path.slice(docs.length + 1) : layer.id;
+      const file = error.path ? relative(docs, error.path) : layer.id;
       findings.push(finding('error', 'E7', file, `could not read ${layer.id} (${error.code ?? error.message}); its block in index.md was left unchanged`, 'make the file or folder readable, then run this tool again'));
     }
   }
   let stale = false;
   if (!hasIndex) {
-    findings.push(finding('error', 'E4', 'index.md', 'root index.md is missing (or is a symbolic link)', 'create docs/index.md; this tool then adds the routing blocks'));
+    findings.push(finding('error', 'E4', 'index.md', `root index.md is missing in ${docs} (or is a symbolic link)`, `create ${join(docs, 'index.md')}; this tool then adds the routing blocks`));
   } else {
-    const indexPath = join(docs, 'index.md');
-    const write = mode === 'write';
-    const update = updateIndex(read(indexPath), tables, write);
-    findings.push(...update.errors);
-    for (const id of update.missing) {
-      findings.push(write ? { severity: 'note', code: 'E6', where: 'index.md', message: `added the missing block for ${id} under "## Routing table"` }
-        : finding('error', 'E6', 'index.md', `no pyramid:begin/end markers for ${id}`, 'run this tool in write mode, or add the marker lines by hand'));
-    }
-    const outdated = [...update.changed, ...(write ? [] : update.missing)];
-    stale = !write && outdated.length > 0;
-    if (stale) findings.push(finding('status', 'S1', 'index.md', `the index is stale (blocks: ${outdated.join(', ')})`, 'run this tool in write mode'));
-    if (write && update.changed.length) {
-      writeAtomically(indexPath, update.text);
-      out(`wrote index.md (blocks: ${update.changed.join(', ')})`);
-    }
-    if (mode === 'dry-run') for (const line of update.diff) out(line);
+    if (layers.length === 0) findings.push(finding('warning', 'W6', 'index.md', `no layers found in ${docs} (expected files like L1-vision.md)`, 'add the layer files, then run this tool'));
+    stale = refreshIndex(docs, tables, mode, findings, out);
   }
   findings.forEach((f) => out(formatFinding(f)));
-  if (ctx.symlinks) out(`skipped ${ctx.symlinks} symbolic link(s); they are never followed`);
-  const hasErrors = findings.some((f) => f.severity === 'error');
-  return hasErrors || (mode === 'check' && stale) ? 1 : 0;
+  return findings.some((f) => f.severity === 'error') || (mode === 'check' && stale) ? 1 : 0;
 }
 
 /** Parses the command line and runs; returns the exit code (2 for usage and unreadable-folder errors). */
@@ -407,8 +464,8 @@ export function main(argv, out = console.log, err = console.error) {
     return 0;
   }
   const limit = (name, fallback) => (values[name] === undefined ? fallback : Number(values[name]));
-  const maxSectionLines = limit('max-section-lines', 100);
-  const maxByline = limit('max-byline', 140);
+  const maxSectionLines = limit('max-section-lines', DEFAULT_SECTION_LINES);
+  const maxByline = limit('max-byline', DEFAULT_BYLINE);
   if (![maxSectionLines, maxByline].every((n) => Number.isInteger(n) && n > 0)) {
     err('refresh-pyramid: --max-section-lines and --max-byline need a positive whole number');
     return 2;
