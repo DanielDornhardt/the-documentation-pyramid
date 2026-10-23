@@ -32,6 +32,7 @@ Answer these in a sentence or two each, with a file path as evidence. Skip a que
 5. **Drift.** Where do the idea and the code disagree today? Each case is a trap candidate: what someone would change, what would break, how they would notice.
 6. **Vocabulary.** Which words does the code use for the ideas? Use them in the docs, and put the ones that carry meaning in the glossary.
 7. **The why.** What do comments, commit messages and changelogs say about the reasons? Quote or cite them. A reason you infer is marked inferred; a reason you cannot find is left out.
+8. **Declared principles.** What rules, invariants or values do the authors state outright, in comments, assertions, headers, READMEs or contributing guides? Look for strong words (`must`, `never`, `always`, `invariant`) and for rules the code enforces with checks or barriers. Quote the rule, cite the place, and say what enforces it.
 
 ## Judge what is worth writing
 
@@ -42,6 +43,8 @@ Most findings do not belong in the pyramid. Standard patterns and ordinary code 
 * **Reach.** Does it shape several modules, or only one corner?
 * **Durability.** Will it still be true after the next few changes?
 * **Findable.** Can a reader see it in thirty seconds from the code? Then link to the code and say nothing more.
+
+A principle the authors state outright, or that the code defends with checks or barriers, counts as surprising by definition: they thought it important enough to say or enforce. Weigh it heavily, and surface it even when the pattern behind it is standard.
 
 Give each finding one of three verdicts: write it up (L1, L2 or a module), mention it in a clause, or drop it. Expect to drop most of them. An empty result for a module is a fine result: say nothing rather than pad. Keep the list of dropped findings out of the docs; mention only the count in your report.
 
