@@ -85,8 +85,8 @@ Every module has one row: its name, where it lives (a file, or a file with a sec
 
 <!-- pyramid:end L4-operations -->
 
-<!-- Decisions: if the project keeps ADRs in adr/, add a "### adr" heading with a block between
-     pyramid:begin adr and pyramid:end adr in the same way. -->
+<!-- Decisions: when an adr/ folder exists, the refresh tool adds a block for it (pyramid:begin adr) at the end of
+     this file. Move the block under a "### adr" heading here if you want it grouped with the other layers. -->
 
 ## Keeping it current
 
