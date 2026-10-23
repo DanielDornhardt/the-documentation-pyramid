@@ -13,6 +13,10 @@ The aim is the story inside the code: how the thing is modelled and why it is sh
 * **One area.** Deepen one module or part: run the questions below for that area only, and edit its L3 text (and L2 where the answer changes the big picture).
 * **Check only.** Do not write. Take the explanations that already exist (ideas, whys, traps, recipes), verify them as in "Check your claims", and report what is wrong.
 
+## Parallel runs
+
+For a deep dive over many modules, run one agent per module in parallel; a mid-size model is enough. The agents must not edit the same file at once, and the L3 modules usually share one layer file. So each agent writes its module's text to its own scratch file (outside `docs/`), and one coordinating agent pastes the results into the layer file, runs the refresh tool and does the final report. Give every agent the area, this skill and the house style, and nothing else.
+
 ## Read
 
 Read the code itself, not only its surroundings. Start with the entry points, the central headers or types, the build files and the tests (they show intended behaviour). Then read the implementation of the central pieces in full: the functions that carry the main flow, the core data structures and where they are changed. Skim the rest of each area enough to know what it does, and say in your report which parts you did not read.

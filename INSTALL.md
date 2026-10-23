@@ -50,10 +50,6 @@ The `references/` folder of this repo mirrors the docs directory you are about t
 - **The byline rule.** Start every section, and every broken-out file, with one sentence of at most 100 characters that says what it covers. The routing table copies that sentence. A leading label like `**Purpose.**` is skipped.
 - **Marker blocks.** `index.md` holds one block per layer between `<!-- pyramid:begin L3-modules -->` and `<!-- pyramid:end L3-modules -->`. The refresh tool rewrites what is between the markers (module, pointer with line number or file path, byline). Never edit inside the markers; edit the document and refresh. Everything outside the markers is yours. When an `adr/` folder exists, the refresh tool adds its block to `index.md` automatically (write mode adds a block for any layer that has none), so you do not add it by hand.
 
-### The story pass
-
-Before you write the layers, read the code for its ideas: how the thing is modelled and why it is shaped this way. This is not an index or a dependency graph. The skill `skills/story-pass/SKILL.md` has the questions, the writing rules and the claim check. Read it from the package and follow it now; step 3.5 installs it for later. It can be run again for one module, or as a check of existing text.
-
 ### First pass: what to look for
 
 Before you call the first pass done, look at the project for each topic below. If the topic exists and matters to someone changing the code, give it a module section or a line in one; if it does not exist, say nothing (no "n/a" entries). This list is a prompt for coverage, not a template to fill. The writing rules are in `house-style.md`; they are not repeated here.
@@ -117,7 +113,7 @@ Otherwise add a new step between implementation and review. Make three suggestio
 
 ### 3.5 Install the refresh tool and its skill
 
-The repo has two more folders next to `references/`: `tools/` and `skills/`. They are not documentation and never go inside the docs folder. Copy `tools/refresh-pyramid.js` and `tools/refresh-pyramid.md` to a `tools/` folder next to `docs/` (or to the project's existing scripts folder, if it has one; then adjust the commands below). Copy the folders in `skills/` (`refresh-pyramid/` and `story-pass/`) to `.claude/skills/` (or the skills folder your harness uses). The tool needs Node 20.11 or later and nothing else.
+The repo has two more folders next to `references/`: `tools/` and `skills/`. They are not documentation and never go inside the docs folder. Copy `tools/refresh-pyramid.js` and `tools/refresh-pyramid.md` to a `tools/` folder next to `docs/` (or to the project's existing scripts folder, if it has one; then adjust the commands below). Copy `skills/refresh-pyramid/` to `.claude/skills/` (or the skills folder your harness uses). Also copy `skills/story-pass/` there if the owner wants the optional deep dive (see the pro tip in step 5). The tool needs Node 20.11 or later and nothing else.
 
 The tool regenerates the routing blocks of `docs/index.md` from the documents and reports problems, each with a message that says what is wrong and what to do. It never edits a document: agents fix what it reports by hand. Modes: write (the default, rewrites the marker blocks of `index.md` and adds a block for a layer that has none), `--dry-run` (prints the findings and which blocks would change, writes nothing) and `--check` (writes nothing, exits 1 on errors or a stale index; suits a pre-commit hook or CI, see `tools/refresh-pyramid.md`).
 
@@ -166,6 +162,8 @@ Confirm the doc-moving plan in the same session. The commit order is: snapshot (
 **Pro tip:** After consolidating, let a review agent check that no important documentation got left behind! Happens to the best of us! :)
 
 **Optional pro tip:** If there isn't a good architecture & other documentation anywhere, a next round after consolidation could run an architect through the system to create the missing docs - and discuss them with the user. Perhaps they'll be surprised what's in there, or how it's implemented! Good stuff!
+
+**Optional deep dive:** the skill `skills/story-pass/SKILL.md` reads the code for its ideas (how the thing is modelled, why, which principles the authors defend) and writes only what is worth keeping. Run it per module after the regular pass: one agent per L3 module, in parallel, in a longer session. A mid-size model is enough for this. It is optional, and it does not replace the first pass above.
 
 ## 6. Implement!
 
