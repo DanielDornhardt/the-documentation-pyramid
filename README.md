@@ -1,33 +1,46 @@
 # The Documentation Pyramid
 
-**Built for agentic engineering workflows.**
+**Built for human-agentic engineering workflows.**
+
+> A little structure is... not all you need, but sometimes helpful.  
+> 
+> "A place for everything - and everything in its place."
 
 A simple and effective structure for the documentation necessary to implement a software system _well_.
 
-> "A place for everything - and everything in its place."
+The goal is to provide a place and just enough structure for a projects' technical documentation that is both human and agent readable, succinct, and _actually helpful_ - the kind you need to develop a software project successfully over the long term.
 
-The goal is technical documentation that is both human and agent readable, succinct, and _mostly correct_ - the kind you need to develop a software project successfully over the long term.
+The documentation you'd alway wish you have had for your software systems 😄
+
+The software pyramid grows and improves with your codebase:
+
+![A documentation pyramid growing as bricks are added](images/pyramid-growth.gif)
+
+And provides a touchstone to iterate on and document the design of your app together with your agents.
 
 **Contents**
 
 - [Disambiguation](#disambiguation)
 - [Behold, the documentation pyramid](#behold-the-documentation-pyramid)
 - [Wavelet Architecture](#wavelet-architecture)
+- [Installation style & Mix and Match for your project(s)](#installation-style--mix-and-match-for-your-projects)
+- [Documentation viewer](#documentation-viewer)
 - [Advantages of the documentation pyramid](#advantages-of-the-documentation-pyramid)
 - [How this helps us find what we need](#how-this-helps-us-find-what-we-need)
 - [The different levels in a few nutshells](#the-different-levels-in-a-few-nutshells)
-  - [Layer 1 - the vision layer](#layer-1---the-vision-layer)
-  - [Layer 2 - the architecture](#layer-2---the-architecture)
-  - [Layer 3 - individual modules](#layer-3---individual-modules)
-  - [Layer 4: Operations](#layer-4-operations)
+	- [Layer 1 - the vision layer](#layer-1---the-vision-layer)
+	- [Layer 2 - the architecture](#layer-2---the-architecture)
+	- [Layer 3 - individual modules](#layer-3---individual-modules)
+	- [Layer 4: Operations](#layer-4-operations)
 - [Installation Instructions](#installation-instructions)
-  - [Example prompts for different agentic frameworks](#example-prompts-for-different-agentic-frameworks)
-  - [Keeping the index current](#keeping-the-index-current)
-  - [The short version](#the-short-version)
+	- [Example prompts for different agentic frameworks:](#example-prompts-for-different-agentic-frameworks)
+	- [Keeping the index current](#keeping-the-index-current)
+	- [The short version](#the-short-version)
+	- [Viewing the pyramid](#viewing-the-pyramid)
 - [FAQ](#faq)
 - [Possible next steps](#possible-next-steps)
 
-## Disambiguation:
+## What this is meant to help with
 
 This is in addition to, not a replacement for
 
@@ -46,7 +59,8 @@ We're talking _technical documentation_ for a software project.
 > [INSTALL.md](INSTALL.md).
 
 
-## Behold, the documentation pyramid:
+## Behold, the documentation pyramid
+
 
 ```
                                 +-------------------+
@@ -82,18 +96,50 @@ We're talking _technical documentation_ for a software project.
 
 Docs follow a wavelet model — progressive refinement like image compression.
 
-- **L1** (`L1-vision.md`) — Blurry but complete. Business context, product strategy. Read first for any product decision.
-- **L2** (`L2-architecture.md`) — CTO whiteboard. Tech stack, subsystems, data flow. Read before implementation work.
+- **L1** (`L1-vision.md`) — Blurry but complete. Business context, product strategy. Read first for any product decision. Only one document. Tip of the pyramid.
+- **L2** (`L2-architecture.md`) — CTO whiteboard. Tech stack, subsystems, data flow. Read, as applicable, before implementation work.
 - **L3** (`L3-modules.md`) — Module deep dives. How each technical piece works. Read when working in a specific module.
 - **L4** (`L4-operations.md`) — Operations. Git workflow, testing, dev setup, deployment, debugging. Read when you need process guidance.
 
-Each layer is one file. A module that outgrows about 100 lines moves into its own file in the layer folder (`L3-modules/<name>.md`).
+Each layer is one or more files, containing one or more individual "documents". Documents are the individual chapters of documentation in our Pyramid documentation structure.
+
+> [!NOTE]
+> We start each layer as a single markdown file so it's easier to read for humans to read instead of having to browse a bunch of individual tiny files. Once individual pieces of the documentation grow big enough to warrant their own file (> 100 lines) they move to the Layers' folder as a single markdown file.
+
+A document that outgrows about 100 lines moves into its own file in the layer folder (`L3-modules/<name>.md`).
 - **Glossary** (optional) — Domain language. Should probably be read by all agents.
 - **ADRs** — Historical decision records. Read when asking "why not X?"
 
 Each layer is independently useful. No layer requires a lower layer to make sense.
 
+## Installation style & Mix and match for your project(s)
 
+I chose a very basic instruction-based installation method on purpose.
+
+Because I feel this is more about the idea and a good initial structure to start from. But from then on, you should make it your own for your own project.
+
+See what works for you and change it, adapt it to your workflows as you see fit. The agents are really good with helping you with this.
+
+So our install instructions are almost all prose, with one or two additional helper tools and scripts for your agents to import this into your own project and make it your own.
+
+For example, I have customized this for different projects. In one project, I have all my story files in here, too - an additional layer below the ADRs and actually i find them very useful as a simple place for agents and me to look at them again as a history of things that happened.
+
+## Documentation viewer
+
+[pyramid-viewer](https://github.com/DanielDornhardt/the-documentation-pyramid-viewer) is a small, dependency-free viewer for a pyramid. It shows your documents in two variants:
+
+- A pyramid view: the layers as a picture of bricks (for the kicks!),
+- As more traditional tree-style browser.
+
+And it can also export them as HTML and markdown.
+A light and a dark style are included - apply your own projects' components and style for taste!
+
+
+![The Lua sample pyramid in the viewer, metal skin|335](images/viewer-pyramid-metal.png)![[viewer-pyramid-light.png|346]]
+
+Two finished examples are in [`samples/`](samples/README.md) (I've ran an [included brownfield analysis step](./skills/code-module-deep-dive/SKILL.md)  on the Lua interpreter and a recent NetHack commit (best game ever?!)), ready to open in the viewer.  
+
+They were written in a single session from one snapshot of each project; a pyramid that grows with your project should end up richer.
 ## Advantages of the documentation pyramid
 
 Agents need to be able to derive the appropriate context for their tasks while working on a software product. And they need to be able to construct this fresh for every new session.
@@ -124,7 +170,7 @@ Each layer down the pyramid reveals additional details and practical scripts nec
 Agents will always see the big picture and goal of the company or project, and they'll always receive a concise routing table of all the available documentation from the index.md file, with one line per module.
 
 
-## The different levels in a few nutshells:
+## The different levels in a few nutshells
 
 ### Layer 1 - the vision layer 
 
@@ -226,18 +272,8 @@ The full, step-by-step instructions (written for agents, fine for humans too) ar
 
 ### Viewing the pyramid
 
-[pyramid-viewer](https://github.com/DanielDornhardt/the-documentation-pyramid-viewer) is a small, dependency-free viewer for a pyramid. It shows the layers as a picture of bricks and as a tree browser, serves the docs live (with `--watch` it animates as you write), and exports static HTML or one big Markdown file. One command: `node viewer.js serve docs`.
 
-![A pyramid growing in the viewer as docs are written (watch mode)](images/pyramid-grows.gif)
-
-![The Lua sample pyramid in the viewer, metal skin](images/viewer-pyramid-metal.png)
-
-Two finished examples are in [`samples/`](samples/README.md) (the Lua interpreter and NetHack), ready to open in the viewer. They were written in a single session from one snapshot of each project; a pyramid that grows with your project should end up richer.
-
-![The NetHack sample pyramid in the viewer, light skin](images/viewer-pyramid-light.png)
-
-
-## FAQ:
+## FAQ
 
 **Q: Is this cake?**
 
@@ -251,13 +287,12 @@ None of these are big, and they can probably be vibecoded extremely quickly. Go 
 
 If you get something with good results, please share and we can link it up or integrate it with this repo.
 
-- Support / guidelines for a multi-project overarching structure
-- Pyramid browser & viewer in multiple versions / languages (a first viewer exists: [pyramid-viewer](https://github.com/DanielDornhardt/the-documentation-pyramid-viewer))
-- Document renderer - turn your pyramid into a fully fledged document
-- Skills:
-    - more detailed tech writing skills / a tech writer
+- [x] Pyramid browser & viewer in multiple versions / languages (a first viewer exists: [pyramid-viewer](https://github.com/DanielDornhardt/the-documentation-pyramid-viewer))
+- [x] Document renderer - turn your pyramid into a fully fledged document (also [pyramid-viewer](https://github.com/DanielDornhardt/the-documentation-pyramid-viewer))
+- [x] auto-index-generation scripts (done for the routing table, see `tools/`)
+- [ ] Skills:
+    - [x] more detailed tech writing skills / a tech writer
     - adversarial reviewer that makes sure no docs get lost in the initial transfer
     - adversarial reviewer for checking doc updates have happened after a story has been implemented
-- a more clearly defined pattern on how to format the docs
-- auto-index-generation scripts (done for the routing table, see `tools/`)
+- Support / guidelines for a multi-project overarching structure
 - ...
