@@ -18,6 +18,8 @@ The software pyramid grows and improves with your codebase:
 
 And provides a touchstone to iterate on and document the design of your app together with your agents.
 
+> **The story behind the pyramid:** why layers, why bricks, and what happened when agents started writing the docs. Read the article at [dornhardt.com/writing/the-documentation-pyramid](https://dornhardt.com/writing/the-documentation-pyramid).
+
 **Contents**
 
 - [Disambiguation](#disambiguation)
