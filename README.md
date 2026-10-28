@@ -10,7 +10,7 @@ A simple and effective structure for the documentation necessary to implement a 
 
 The goal is to provide a place and just enough structure for a project's technical documentation that is both human and agent readable, succinct, and _actually helpful_ - the kind you need to develop a software project successfully over the long term.
 
-The documentation you'd always wish you had for your software systems 😄
+The documentation you always wished you had for your software systems 😄
 
 The documentation pyramid grows and improves with your codebase:
 
