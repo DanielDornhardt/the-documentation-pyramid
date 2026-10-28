@@ -39,7 +39,7 @@ And provides a touchstone to iterate on and document the design of your app toge
 	- [Keeping the index current](#keeping-the-index-current)
 	- [The short version](#the-short-version)
 - [FAQ](#faq)
-- [Possible next steps](#possible-next-steps)
+- [Like and subscribe!](#like-and-subscribe-)
 - [Licence and credits](#licence-and-credits)
 
 ## What this is meant to help with
@@ -93,8 +93,7 @@ We're talking _technical documentation_ for a software project.
 > ![Egyptian pyramid seal of approval](images/img.png)
 >
 > "I am Egyptian and I approve this pyramid scheme."
->
-> (Picture used with permission of the friend in the costume.)
+> (Picture used with permission of the ~~pharao~~ friend in the costume.)
 
 ## Wavelet Architecture
 
@@ -285,21 +284,9 @@ A: No.
 
 ![Pyramid Layer Cake](images/pyramid-final-4.jpg)
 
-## Possible next steps
+## Like and subscribe! :) 
 
-None of these are big, and they can probably be vibecoded extremely quickly. Go for it! :D
-
-If you get something with good results, please share and we can link it up or integrate it with this repo.
-
-- [x] Pyramid browser & viewer in multiple versions / languages (a first viewer exists: [Documentation Pyramid Viewer](https://github.com/DanielDornhardt/the-documentation-pyramid-viewer))
-- [x] Document renderer - turn your pyramid into a fully fledged document (also [Documentation Pyramid Viewer](https://github.com/DanielDornhardt/the-documentation-pyramid-viewer))
-- [x] auto-index-generation scripts (done for the routing table, see `tools/`)
-- [ ] Skills:
-    - [x] more detailed tech writing skills / a tech writer
-    - adversarial reviewer that makes sure no docs get lost in the initial transfer
-    - adversarial reviewer for checking doc updates have happened after a story has been implemented
-- Support / guidelines for a multi-project overarching structure
-- ...
+If you like The Documentation Pyramid and you feel that it helps (or will help) with your projects, I'd be very happy if you would share this with other people you like and if you'd like to star this repo, that'd make me very happy too.
 
 ## Licence and credits
 
