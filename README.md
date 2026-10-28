@@ -8,11 +8,11 @@
 
 A simple and effective structure for the documentation necessary to implement a software system _well_.
 
-The goal is to provide a place and just enough structure for a projects' technical documentation that is both human and agent readable, succinct, and _actually helpful_ - the kind you need to develop a software project successfully over the long term.
+The goal is to provide a place and just enough structure for a project's technical documentation that is both human and agent readable, succinct, and _actually helpful_ - the kind you need to develop a software project successfully over the long term.
 
-The documentation you'd alway wish you have had for your software systems 😄
+The documentation you'd always wish you had for your software systems 😄
 
-The software pyramid grows and improves with your codebase:
+The documentation pyramid grows and improves with your codebase:
 
 ![A documentation pyramid growing as bricks are added](images/pyramid-growth.gif)
 
@@ -22,7 +22,7 @@ And provides a touchstone to iterate on and document the design of your app toge
 
 **Contents**
 
-- [Disambiguation](#disambiguation)
+- [What this is meant to help with](#what-this-is-meant-to-help-with)
 - [Behold, the documentation pyramid](#behold-the-documentation-pyramid)
 - [Wavelet Architecture](#wavelet-architecture)
 - [Installation style & Mix and Match for your project(s)](#installation-style--mix-and-match-for-your-projects)
@@ -38,9 +38,9 @@ And provides a touchstone to iterate on and document the design of your app toge
 	- [Example prompts for different agentic frameworks:](#example-prompts-for-different-agentic-frameworks)
 	- [Keeping the index current](#keeping-the-index-current)
 	- [The short version](#the-short-version)
-	- [Viewing the pyramid](#viewing-the-pyramid)
 - [FAQ](#faq)
 - [Possible next steps](#possible-next-steps)
+- [Licence and credits](#licence-and-credits)
 
 ## What this is meant to help with
 
@@ -93,6 +93,8 @@ We're talking _technical documentation_ for a software project.
 > ![img.png](img.png)
 >
 > "I am Egyptian and I approve this pyramid scheme."
+>
+> (Picture used with permission of the friend in the costume.)
 
 ## Wavelet Architecture
 
@@ -102,6 +104,8 @@ Docs follow a wavelet model — progressive refinement like image compression.
 - **L2** (`L2-architecture.md`) — CTO whiteboard. Tech stack, subsystems, data flow. Read, as applicable, before implementation work.
 - **L3** (`L3-modules.md`) — Module deep dives. How each technical piece works. Read when working in a specific module.
 - **L4** (`L4-operations.md`) — Operations. Git workflow, testing, dev setup, deployment, debugging. Read when you need process guidance.
+- **Glossary** (optional) — Domain language. Should probably be read by all agents.
+- **ADRs** — Historical decision records. Read when asking "why not X?"
 
 Each layer is one or more files, containing one or more individual "documents". Documents are the individual chapters of documentation in our Pyramid documentation structure.
 
@@ -109,8 +113,6 @@ Each layer is one or more files, containing one or more individual "documents". 
 > We start each layer as a single markdown file so it's easier to read for humans to read instead of having to browse a bunch of individual tiny files. Once individual pieces of the documentation grow big enough to warrant their own file (> 100 lines) they move to the Layers' folder as a single markdown file.
 
 A document that outgrows about 100 lines moves into its own file in the layer folder (`L3-modules/<name>.md`).
-- **Glossary** (optional) — Domain language. Should probably be read by all agents.
-- **ADRs** — Historical decision records. Read when asking "why not X?"
 
 Each layer is independently useful. No layer requires a lower layer to make sense.
 
@@ -137,11 +139,14 @@ And it can also export them as HTML and markdown.
 A light and a dark style are included - apply your own projects' components and style for taste!
 
 
-![The Lua sample pyramid in the viewer, metal skin|335](images/viewer-pyramid-metal.png)![[viewer-pyramid-light.png|346]]
+<img src="images/viewer-pyramid-metal.png" alt="The Lua sample pyramid in the viewer, metal skin" width="335"> <img src="images/viewer-pyramid-light.png" alt="A sample pyramid in the viewer, light skin" width="346">
 
 Two finished examples are in [`samples/`](samples/README.md) (I've ran an [included brownfield analysis step](./skills/code-module-deep-dive/SKILL.md)  on the Lua interpreter and a recent NetHack commit (best game ever?!)), ready to open in the viewer.  
 
 They were written in a single session from one snapshot of each project; a pyramid that grows with your project should end up richer.
+
+**Live demos**, with a skin switcher: [NetHack](https://dornhardt.com/pyramid/nethack/) and [Lua](https://dornhardt.com/pyramid/lua/).
+
 ## Advantages of the documentation pyramid
 
 Agents need to be able to derive the appropriate context for their tasks while working on a software product. And they need to be able to construct this fresh for every new session.
@@ -154,7 +159,7 @@ So this is where these two meet - as a well-kept, concise and helpful documentat
 
 The idea is reminiscent of a few things:
 - **a zoomed out vs. a detailed view**, if you look from the top of the pyramid down.
-- **a progressively loaded image file** (eg. **JPEG or wavelet compression**) * (think JPEG or wavelet compression): each layer further down reveals more detail, so you can zoom in strategically on the areas that matter.
+- **a progressively loaded image file** (eg. **JPEG or wavelet compression**): each layer further down reveals more detail, so you can zoom in strategically on the areas that matter.
 
 The planner, or the agent itself, decides which parts of the documentation, in what detail, help with the current task.
 
@@ -270,9 +275,6 @@ The routing table in `index.md` is generated: `tools/refresh-pyramid.js` (one fi
 5. Fill it from the code and from your existing docs. Greenfield? Start small, it fills up as you go.
 
 The full, step-by-step instructions (written for agents, fine for humans too) are in **[INSTALL.md](INSTALL.md)**.
-
-
-### Viewing the pyramid
 
 
 ## FAQ
