@@ -11,6 +11,16 @@ Two example documentation pyramids, so you can see what the format looks like on
 node viewer.js serve samples/lua --skin metal      # in a clone of the viewer repository
 ```
 
+## HTML versions
+
+[`html/`](html) holds static exports of both samples, in the light and the metal skin, each with the pyramid view and the tree view (`lua-light`, `lua-metal`, `nethack-light`, `nethack-metal`). Each folder opens from its `index.html`.
+
+GitHub shows an HTML file in a repository as source text, not as a page. To look at an export, download the repository (or just that folder) and open `index.html` in a browser; it needs no server. Regenerate them after a change with the viewer:
+
+```
+node viewer.js export samples/nethack samples/html/nethack-metal --view both --skin metal
+```
+
 ## How they were made
 
 An AI agent installed the pyramid into a snapshot of each project by following [INSTALL.md](../INSTALL.md), the regular first pass. Then one agent per module dug into the code with the `code-module-deep-dive` skill, and a technical writer agent integrated what was worth keeping (see the optional deep dive in INSTALL.md).

@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L3 Modules - Documentation pyramid</title>
+<link rel="stylesheet" href="../skins/pv-base.css">
+<link rel="stylesheet" href="../skins/metal.css">
+</head>
+<body class="view-tree" data-skin="metal">
+<a class="skip-link" href="#pv-main">Skip to content</a>
+<header class="site-header">
+<nav aria-label="Site" class="site-nav">
+<a class="site-name" href="index.html">Documentation pyramid</a>
+<a class="view-switch" href="../index.html">Pyramid view</a>
+</nav>
+</header>
+<div class="layout">
+<nav class="tree" aria-label="Document index">
+<details class="tree-toggle">
+<summary>Document index</summary>
+<ul class="tree-layers">
+<li class="tree-layer"><p class="layer-label"><a href="L1-vision.html">L1 Vision</a></p>
+<ul class="tree-headings">
+<li><a href="L1-vision.html#what-is-nethack">What is NetHack?</a></li>
+<li><a href="L1-vision.html#who-is-it-for">Who is it for?</a></li>
+<li><a href="L1-vision.html#core-concepts">Core concepts</a></li>
+<li><a href="L1-vision.html#success">Success</a></li>
+<li><a href="L1-vision.html#direction">Direction</a></li>
+<li><a href="L1-vision.html#non-goals">Non-goals</a></li>
+</ul></li>
+<li class="tree-layer"><p class="layer-label"><a href="L2-architecture.html">L2 Architecture</a></p>
+<ul class="tree-headings">
+<li><a href="L2-architecture.html#tech-stack">Tech stack</a></li>
+<li><a href="L2-architecture.html#project-structure">Project structure</a></li>
+<li><a href="L2-architecture.html#subsystems">Subsystems</a></li>
+<li><a href="L2-architecture.html#data-flow">Data flow</a></li>
+<li><a href="L2-architecture.html#data-model">Data model</a></li>
+<li><a href="L2-architecture.html#recurring-patterns">Recurring patterns</a></li>
+<li><a href="L2-architecture.html#state-and-persistence">State and persistence</a></li>
+<li><a href="L2-architecture.html#configuration-layers">Configuration layers</a></li>
+<li><a href="L2-architecture.html#extension-points">Extension points</a></li>
+<li><a href="L2-architecture.html#trust-and-safety-boundaries">Trust and safety boundaries</a></li>
+<li><a href="L2-architecture.html#outside-interfaces">Outside interfaces</a></li>
+</ul></li>
+<li class="tree-layer"><p class="layer-label"><a href="L3-modules.html" aria-current="page">L3 Modules</a></p>
+<ul class="tree-headings">
+<li><a href="L3-modules.html#game-loop-and-startup">Game loop and startup</a>
+<ul class="tree-subheadings">
+<li><a href="L3-modules.html#startup">Startup</a></li>
+<li><a href="L3-modules.html#time">Time</a></li>
+<li><a href="L3-modules.html#traps-in-the-loop">Traps in the loop</a></li>
+</ul></li>
+<li><a href="L3-modules.html#global-state">Global state</a>
+<ul class="tree-subheadings">
+<li><a href="L3-modules.html#saving-is-per-field">Saving is per field</a></li>
+<li><a href="L3-modules.html#initialisation">Initialisation</a></li>
+<li><a href="L3-modules.html#traps-in-global-state">Traps in global state</a></li>
+</ul></li>
+<li><a href="L3-modules.html#commands-and-options">Commands and options</a>
+<ul class="tree-subheadings">
+<li><a href="L3-modules.html#commands">Commands</a></li>
+<li><a href="L3-modules.html#options">Options</a></li>
+<li><a href="L3-modules.html#traps-in-commands-and-options">Traps in commands and options</a></li>
+</ul></li>
+<li><a href="L3-modules.html#hero-and-actions">Hero and actions</a>
+<ul class="tree-subheadings">
+<li><a href="L3-modules.html#the-hero-is-two-structures">The hero is two structures</a></li>
+<li><a href="L3-modules.html#design">Design</a></li>
+<li><a href="L3-modules.html#traps-in-hero-code">Traps in hero code</a></li>
+</ul></li>
+<li><a href="L3-modules.html#level-generation-and-dungeon">Level generation and dungeon</a>
+<ul class="tree-subheadings">
+<li><a href="L3-modules.html#which-generator-runs">Which generator runs</a></li>
+<li><a href="L3-modules.html#dungeon-placement">Dungeon placement</a></li>
+<li><a href="L3-modules.html#ordinary-levels">Ordinary levels</a></li>
+<li><a href="L3-modules.html#themed-rooms">Themed rooms</a></li>
+<li><a href="L3-modules.html#special-levels">Special levels</a></li>
+</ul></li>
+<li><a href="L3-modules.html#lua-integration">Lua integration</a>
+<ul class="tree-subheadings">
+<li><a href="L3-modules.html#states">States</a></li>
+<li><a href="L3-modules.html#sandbox">Sandbox</a></li>
+<li><a href="L3-modules.html#traps-in-lua-integration">Traps in Lua integration</a></li>
+</ul></li>
+<li><a href="L3-modules.html#monsters">Monsters</a>
+<ul class="tree-subheadings">
+<li><a href="L3-modules.html#where-a-monster-is">Where a monster is</a></li>
+<li><a href="L3-modules.html#rules-the-code-defends">Rules the code defends</a></li>
+<li><a href="L3-modules.html#adding-a-species">Adding a species</a></li>
+</ul></li>
+<li><a href="L3-modules.html#objects">Objects</a>
+<ul class="tree-subheadings">
+<li><a href="L3-modules.html#the-kind-table">The kind table</a></li>
+<li><a href="L3-modules.html#live-items">Live items</a></li>
+</ul></li>
+<li><a href="L3-modules.html#display-and-vision">Display and vision</a>
+<ul class="tree-subheadings">
+<li><a href="L3-modules.html#display">Display</a></li>
+<li><a href="L3-modules.html#vision">Vision</a></li>
+</ul></li>
+<li><a href="L3-modules.html#window-ports">Window ports</a>
+<ul class="tree-subheadings">
+<li><a href="L3-modules.html#the-function-table">The function table</a></li>
+<li><a href="L3-modules.html#selection-and-hangup">Selection and hangup</a></li>
+<li><a href="L3-modules.html#chain-and-shim">Chain and shim</a></li>
+</ul></li>
+<li><a href="L3-modules.html#save-and-restore">Save and restore</a>
+<ul class="tree-subheadings">
+<li><a href="L3-modules.html#format">Format</a></li>
+<li><a href="L3-modules.html#version-checks">Version checks</a></li>
+<li><a href="L3-modules.html#saving-and-the-running-game">Saving and the running game</a></li>
+<li><a href="L3-modules.html#traps-in-save-and-restore">Traps in save and restore</a></li>
+</ul></li>
+<li><a href="L3-modules.html#platform-layers-and-build">Platform layers and build</a>
+<ul class="tree-subheadings">
+<li><a href="L3-modules.html#unix-makefiles">Unix Makefiles</a></li>
+<li><a href="L3-modules.html#makedefs-and-data">makedefs and data</a></li>
+<li><a href="L3-modules.html#the-mains">The mains</a></li>
+</ul></li>
+<li><a href="L3-modules.html#sound">Sound</a>
+<ul class="tree-subheadings">
+<li><a href="L3-modules.html#how-events-work">How events work</a></li>
+<li><a href="L3-modules.html#selecting-a-library">Selecting a library</a></li>
+<li><a href="L3-modules.html#traps-in-sound">Traps in sound</a></li>
+</ul></li>
+</ul></li>
+<li class="tree-layer"><p class="layer-label"><a href="L4-operations.html">L4 Operations</a></p>
+<ul class="tree-headings">
+<li><a href="L4-operations.html#git-workflow">Git workflow</a></li>
+<li><a href="L4-operations.html#setup">Setup</a></li>
+<li><a href="L4-operations.html#testing">Testing</a></li>
+<li><a href="L4-operations.html#debugging">Debugging</a></li>
+<li><a href="L4-operations.html#change-recipes">Change recipes</a></li>
+<li><a href="L4-operations.html#deployment">Deployment</a></li>
+</ul></li>
+</ul>
+</details>
+</nav>
+<main id="pv-main" class="content content-paper">
+<article class="doc">
+<h1 id="l3-modules">L3 Modules</h1>
+<h2 id="game-loop-and-startup">Game loop and startup</h2>
+<p>The game loop and startup code set up a game, then run turns forever in <code>moveloop()</code>.</p>
+<p>It lives in <code>src/allmain.c</code>. <code>main()</code> is not here: each platform layer has its own (<code>sys/unix/unixmain.c</code>, <code>sys/windows/windmain.c</code>, <code>sys/libnh/libnhmain.c</code>, <code>sys/share/pcmain.c</code>, <code>sys/vms/vmsmain.c</code>, <code>sys/mac68k/macmain.c</code>). They share only <code>early_init()</code> and <code>moveloop(resuming)</code>; startup code added to one main is not in the others. <code>unixmain.c</code> and <code>libnhmain.c</code> carry copies of the same startup block, kept in step by hand.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>src/allmain.c</code></td>
+<td><code>early_init</code>, <code>newgame</code>, <code>welcome</code>, <code>moveloop</code>, <code>moveloop_core</code></td>
+</tr>
+<tr>
+<td><code>sys/unix/unixmain.c</code></td>
+<td>Unix <code>main()</code> and argument handling</td>
+</tr>
+<tr>
+<td><code>src/end.c</code></td>
+<td>game over, scoring, disclosure</td>
+</tr>
+</tbody>
+</table>
+<h3 id="startup">Startup</h3>
+<p><code>main()</code> parses early options, takes the lock file (<code>getlock()</code>), starts the window port and the data library, then tries <code>dorecover()</code> first and calls <code>newgame()</code> only if nothing was restored. Role selection can rename the hero; the save and lock files are named after the hero, so <code>unixmain.c</code> jumps back to the label <code>attempt_restore</code> (a <code>goto</code>) to try again.</p>
+<p><code>newgame()</code> order is stated in comments and enforced by nothing: <code>init_objects()</code> before <code>u_init()</code>, <code>role_init()</code> before <code>init_dungeons()</code>, <code>u_init()</code> and <code>init_artifacts()</code>, <code>init_dungeons()</code> before <code>u_init()</code> so that starting tins and eggs do not get odd monsters. A reorder compiles and misbehaves.</p>
+<h3 id="time">Time</h3>
+<p><code>moveloop_core()</code> is one pass, not one turn. Its first half pays for the action already taken: monsters move, and only when hero and monsters are all out of movement does a new turn start. Its second half refreshes the screen and reads the next command (<code>rhack(0)</code>). It is called from <code>moveloop()</code> and from the Lua binding <code>nh.doturn()</code> (<code>doc/lua.adoc</code>); the source gives no reason for the split.</p>
+<p>Three time scales nest, each with a banner comment in <code>src/allmain.c</code>:</p>
+<ul>
+<li>Turn (&quot;once-per-turn&quot;): <code>svm.moves</code> rises once all movement is spent. The name is misleading; it counts turns. The counter is capped at 1,000,000,000 (&quot;The dungeon capitulates&quot;).</li>
+<li>Hero action (&quot;once-per-hero-took-time&quot;): <code>u.umovement -= NORMAL_SPEED</code>. A fast hero acts several times per turn. <code>gh.hero_seq</code> identifies one action and is recomputed on restore.</li>
+<li>Player input (&quot;once-per-player-input&quot;): runs even when no time passed.</li>
+</ul>
+<p>Put a new effect in the block that matches the scale it needs.</p>
+<p>Speed is movement points: <code>u_calc_moveamt()</code> for the hero, <code>mcalcmove()</code> in <code>src/mon.c</code> for monsters. An actor moves while it has at least <code>NORMAL_SPEED</code> (12). Monster speed is rounded to a multiple of 12 at random, so there is no predictable free turn and no &quot;melee kiting&quot;. The comments in <code>src/mon.c</code> list the guarantees to keep: shopkeepers are not outsped by a normal-speed player, and a normal-speed player cannot open a gap when fleeing a normal-speed monster. Hero speed uses another scheme: intrinsic Fast adds a move on 1 of 3 turns, Very fast on 2 of 3.</p>
+<h3 id="traps-in-the-loop">Traps in the loop</h3>
+<ul>
+<li><code>svc.context.move</code> is the gate for time. <code>parse()</code> sets it before every command; a command that takes no time must clear it. Forgetting gives monsters a free turn; clearing wrongly gives the hero free actions.</li>
+<li>Occupations and counted commands return from <code>moveloop_core()</code> early, without calling <code>rhack()</code>. Code added at the end of the function does not run on those passes.</li>
+<li><code>mvl_wtcap</code> and <code>mvl_change</code> are file-level statics that survive between passes and are not saved. A delayed polymorph pending at save time is probably lost (unverified).</li>
+<li>With <code>SAFERHANGUP</code>, <code>hangup()</code> only counts; the loop ends the game itself at a safe point (<code>end_of_input()</code>).</li>
+<li><code>moveloop_preamble(resuming)</code> differs for new and restored games: a new game gets <code>u.umovement = NORMAL_SPEED</code>, a restore reads engravings and fixes shop damage. Luck changes for the moon phase and Friday the 13th apply to both.</li>
+</ul>
+<h2 id="global-state">Global state</h2>
+<p>Global state lives in <code>include/decl.h</code> and <code>src/decl.c</code>, in groups by first letter of the name.</p>
+<p>Most game state is grouped in structures named after a letter: <code>ga.</code>, <code>gb.</code>, ... <code>gz.</code> for engine state &quot;that does not need to be persisted upon game exit&quot;, and <code>svb.</code>, <code>svc.</code>, ... <code>svy.</code> for state that belongs to a saved game. Examples: <code>svc.context</code> (game context), <code>svl.level</code> (current level), <code>svd.dungeons</code>. The letter is the first letter of the member name, by convention; it is not a subsystem boundary (<code>gc</code> holds command, colour, crash, pickup and sound state side by side). The comment <code>/* pickup.c */</code> inside each struct names the owner.</p>
+<p>Not everything is in a group. The hero <code>u</code>, <code>flags</code>, <code>iflags</code>, <code>a11y</code>, <code>disp</code>, <code>program_state</code>, <code>level_status</code>, the worn-item pointers (<code>uwep</code>, <code>uarm</code>, ...) and the <code>WIN_*</code> window ids are plain globals. <code>flags</code> is declared in <code>include/flag.h</code>, not <code>decl.h</code>.</p>
+<h3 id="saving-is-per-field">Saving is per field</h3>
+<p>The group prefix saves nothing. <code>savegamestate()</code> in <code>src/save.c</code> writes a list of named fields (<code>Sfo_long(&amp;svm.moves)</code>, <code>Sfo_context_info(&amp;svc.context)</code>, ...), and other <code>sv*</code> members are written by their own modules (<code>src/dungeon.c</code>, <code>src/timeout.c</code>, <code>src/rumors.c</code>, <code>src/o_init.c</code>, <code>src/region.c</code>). A new <code>sv*</code> field with no matching <code>Sfo_</code>/<code>Sfi_</code> pair is silently not saved. The reverse also holds: some <code>g*</code> members are saved through their own routines (<code>gi.invent</code>, <code>gm.migrating_objs</code>, <code>gm.migrating_mons</code>, <code>gg.gamelog</code>).</p>
+<h3 id="initialisation">Initialisation</h3>
+<p><code>decl_globals_init()</code> assigns each group from a <code>static const</code> template (<code>g_init_X</code>, <code>init_svX</code>). Initialisers are positional, so field order must match <code>decl.h</code>. For the <code>g</code> groups a check catches a misaligned list: every <code>g*</code> struct ends in <code>boolean havestate</code>, the template must set it <code>TRUE</code>, and <code>MAGICCHECK</code> exits with &quot;decl_globals_init: %s.havestate not True.&quot; The <code>sv*</code> structs have no such check.</p>
+<h3 id="traps-in-global-state">Traps in global state</h3>
+<ul>
+<li><code>gh.havestate</code> has a second meaning in <code>savestateinlock()</code> (<code>src/save.c</code>): &quot;a full checkpoint was written last time&quot;. Do not clear it for other reasons.</li>
+<li><code>decl.h</code> still declares <code>extern char tune[6]</code>, but the object is <code>svt.tune</code>. Using <code>tune</code> is a link error.</li>
+<li><code>src/restore.c</code> and <code>util/sfctool</code> compile the same code with <code>-DSFCTOOL</code>; a change to <code>savegamestate()</code> or <code>restgamestate()</code> must also build in that reduced mode.</li>
+</ul>
+<h2 id="commands-and-options">Commands and options</h2>
+<p>Commands turn keystrokes into game actions, and options let players change behaviour.</p>
+<p>Commands are in <code>src/cmd.c</code> (about 5,700 lines, also key binding, repeat, <code>getdir()</code>, <code>#travel</code> and the <code>#</code> menu). Wizard-mode commands are in <code>src/wizcmds.c</code>, information commands in <code>src/insight.c</code>, position prompts in <code>src/getpos.c</code>. Options are defined in <code>include/optlist.h</code> and parsed in <code>src/options.c</code> (over 10,000 lines). <code>src/cfgfiles.c</code> reads the config file: it dispatches every statement (<code>OPTIONS</code>, <code>BIND</code>, <code>MSGTYPE</code>, <code>MENUCOLOR</code>, <code>SYMBOLS</code>, ...) and passes only <code>OPTIONS</code> lines to <code>parseoptions()</code>.</p>
+<h3 id="commands">Commands</h3>
+<p><code>extcmdlist[]</code> is the table of commands: name, description, handler, flags and the text shown while a counted command runs. Its key column is only the default. <code>commands_init()</code> copies the keys into a runtime list, <code>gc.Cmd.cmdbinds</code>, and <code>rhack()</code> finds a typed key there (<code>cmdbind_get</code>). <code>BIND=</code> lines, the key-binding option, <code>number_pad</code> and <code>rest_on_space</code> all edit that list while the game runs. So a key does not tell you the table row, and a row does not tell you its key.</p>
+<p><code>rhack()</code> reads no key itself. It pops the command queue first and calls <code>parse()</code> (count and <code>readchar()</code>) only if the queue is empty.</p>
+<p>Handlers return <code>ECMD_OK</code>, <code>ECMD_TIME</code>, <code>ECMD_CANCEL</code> or <code>ECMD_FAIL</code>. Only <code>rhack()</code> turns <code>ECMD_TIME</code> into game time; a handler that forgets it costs no time. <code>ECMD_CANCEL</code> and <code>ECMD_FAIL</code> wipe the queued commands. Table flags are checked in different places:</p>
+<ul>
+<li><code>IFBURIED</code>, <code>WIZMODECMD</code>, <code>NOFUZZERCMD</code>: <code>can_do_extcmd()</code>.</li>
+<li><code>CMD_M_PREFIX</code>, <code>CMD_gGF_PREFIX</code>: <code>rhack()</code> refuses a prefix key in front of a command without the bit.</li>
+<li><code>AUTOCOMPLETE</code>: set by hand, because a completable name makes shorter prefixes ambiguous (<code>#exploremode</code> is left out so <code>#e</code> still means <code>#enhance</code>).</li>
+<li><code>GENERALCMD</code>: grouping for the key list only. Despite a comment in <code>include/func_tab.h</code>, it does not mean &quot;takes no time&quot;.</li>
+</ul>
+<p><code>NOFUZZERCMD</code> marks anything that blocks, exits or does file I/O (<code>#quit</code>, <code>#save</code>, <code>#shell</code>, the loaders). The debug fuzzer feeds random keys and refuses flagged commands; a new command that exits or waits on a human needs the flag. Options have the equivalent <code>set_wiznofuz</code>.</p>
+<p>Repeat (<code>^A</code>) replays commands, not keystrokes. Two queues exist (<code>CQ_CANNED</code>, <code>CQ_REPEAT</code>, <code>include/hack.h</code>). Every command appends its handler to <code>CQ_REPEAT</code>, and prompts append the key they read. <code>CQ_CANNED</code> lets code act &quot;as if the player typed&quot; a command (apply from the inventory menu, autodig, Lua key input).</p>
+<h3 id="options">Options</h3>
+<p><code>optlist.h</code> has no code. <code>src/options.c</code> includes it three times with different macros (<code>NHOPT_PROTO</code>, <code>NHOPT_ENUM</code>, <code>NHOPT_PARSE</code>). Entry kinds: <code>NHOPTB</code> boolean, <code>NHOPTC</code> compound, <code>NHOPTP</code> prefix family, <code>NHOPTO</code> other. To add an option, follow the steps in <code>doc/options.txt</code>:</p>
+<ul>
+<li>A non-boolean option needs an <code>optfn_&lt;name&gt;()</code> function, or the build fails. A boolean needs a variable (<code>addr</code>); side effects go in the <code>switch</code> blocks of <code>optfn_boolean</code>.</li>
+<li>Put the variable in <code>flags</code> (saved; a change may need <code>EDITLEVEL</code> in <code>include/patchlevel.h</code> raised, see <code>include/flag.h</code>) or <code>iflags</code> (not saved).</li>
+<li>Update the short help (the <code>descr</code> string, <code>option_help()</code>), <code>dat/opthelp</code> and the Guidebooks (<code>doc/Guidebook.mn</code>, <code>.tex</code>, <code>.txt</code>). No tool checks this (unverified).</li>
+</ul>
+<p>The config file, the <code>NETHACKOPTIONS</code> variable, the command line and the <code>O</code> menu all go through <code>parseoptions()</code>. The menu builds a string like <code>name:value</code> and calls it. Each option function must work in four request modes (<code>do_init</code>, <code>do_set</code>, <code>get_val</code>, <code>do_handler</code>) and in startup and play. <code>go.opt_phase</code> (built-in, sysconf, RC file, environment, command line, play) records who set a value last.</p>
+<h3 id="traps-in-commands-and-options">Traps in commands and options</h3>
+<ul>
+<li>Abbreviations are computed at startup (<code>determine_ambiguities()</code>): the shortest unique prefix, at least 3 characters. A new option that shares a prefix raises the minimum for the old one, and a user's <code>OPTIONS=autop</code> can stop working. <code>parseoptions()</code> strips a leading <code>no</code> or <code>!</code>, so no option name may start with <code>no</code>.</li>
+<li>Comma lists are processed right to left. <code>windowtype</code> must be handled before interface options, which is why it is first in <code>optlist.h</code>.</li>
+<li><code>#saveoptions</code> rewrites the whole RC file and drops comments, ordering and anything it cannot write. It is marked experimental in the code.</li>
+<li><code>number_pad</code> ends in <code>reset_commands(FALSE)</code>, which rebinds movement keys and backs up what was bound to them.</li>
+<li>The <code>run</code> and <code>rush</code> words differ by route. The table names <code>G</code> <code>#run</code> (<code>context.run = 3</code>) and <code>g</code> <code>#rush</code> (2); the direction keys are the other way round (Shift is <code>#run&lt;dir&gt;</code>, mode 1; Ctrl is <code>#rush&lt;dir&gt;</code>, mode 3). The comment in <code>include/context.h</code> is out of date.</li>
+<li>A Lua callback <code>cmd_before</code> can veto a command by name (<code>can_do_extcmd()</code>); renaming a command escapes a Lua blacklist, and the veto prints no message of its own.</li>
+<li><code>mention_decor</code> is applied late on purpose, after the tutorial question, by re-reading the RC file with every other option switched off (<code>rcfile_only_this_option</code>).</li>
+<li>Unverified: whether the sysconf file is read twice on a normal Unix start (<code>initoptions_init()</code> and <code>initoptions()</code> both contain the read).</li>
+</ul>
+<h2 id="hero-and-actions">Hero and actions</h2>
+<p>Hero code covers movement, fighting, items in use, skills, spells and religion.</p>
+<p>Spread over many files: movement and terrain in <code>src/hack.c</code>, melee in <code>src/uhitm.c</code>, throwing in <code>src/dothrow.c</code>, kicking in <code>src/dokick.c</code>, eating in <code>src/eat.c</code>, wearing in <code>src/do_wear.c</code>, equipment slots and properties in <code>src/worn.c</code>, wielding in <code>src/wield.c</code>, applying tools in <code>src/apply.c</code>, reading in <code>src/read.c</code>, potions in <code>src/potion.c</code>, zapping in <code>src/zap.c</code>, spells in <code>src/spell.c</code>, prayer in <code>src/pray.c</code>, polymorph in <code>src/polyself.c</code>, riding in <code>src/steed.c</code>, ball and chain in <code>src/ball.c</code>, theft in <code>src/steal.c</code>. Roles and races: <code>src/role.c</code>, starting equipment: <code>src/u_init.c</code>, attributes: <code>src/attrib.c</code>, experience: <code>src/exper.c</code>. Shops (<code>src/shk.c</code>), temples (<code>src/priest.c</code>) and the quest (<code>src/quest.c</code>, text in <code>dat/quest.lua</code>, read by <code>src/questpgr.c</code>) react to the hero's actions.</p>
+<h3 id="the-hero-is-two-structures">The hero is two structures</h3>
+<p>The hero is <code>struct you</code> (<code>include/you.h</code>), global <code>u</code>, and also a <code>struct monst</code>, <code>gy.youmonst</code>. Shared monster routines (attack effects, armour, light, hiding) are called with <code>&amp;gy.youmonst</code>. Role and race are <code>gu.urole</code> and <code>gu.urace</code>. While polymorphed (<code>Upolyd</code>) hit points are <code>u.mh</code> and <code>u.mhmax</code>, not <code>u.uhp</code>. Movement points are in <code>u.umovement</code>, deliberately not in <code>youmonst.movement</code>. The split is known to be unfinished (<code>umonst</code> in <code>you.h</code>).</p>
+<h3 id="design">Design</h3>
+<ul>
+<li>Direction and target travel through globals, not arguments: <code>u.dx</code>, <code>u.dy</code>, <code>u.dz</code> and <code>gb.bhitpos</code>. <code>do_attack()</code> states &quot;u.dx and u.dy must be set&quot;. A caller that reuses an attack routine without setting them (<code>src/dig.c</code> does) attacks the wrong square.</li>
+<li>A multi-turn action is <code>nomul(-n)</code> plus one global completion function, <code>ga.afternmv</code>. There is room for exactly one. Other code finds out what the hero is busy with by comparing <code>afternmv</code> to a function (<code>do_wear.c</code>, <code>weight_cap()</code> in <code>hack.c</code>). Anything that interrupts must clear it first (<code>stop_donning()</code>, <code>cancel_don()</code>, <code>steal.c</code>). <code>unmul()</code> clears it before the call because the function may set a new one.</li>
+<li>Armour is slotted at the start of donning (<code>setworn()</code>) but its effects wait for <code>Armor_on()</code> at the end. Levitation boots need a special case in <code>weight_cap()</code>; an interrupted donning has its own cleanup.</li>
+<li><code>setworn()</code> and <code>setnotworn()</code> are the only writers of the slot pointers and of <code>u.uprops[p].extrinsic</code>, a bit set of the slots that grant a property. Writing <code>u.uprops</code> directly breaks the invariants that the <code>sanity_check</code> option reports as &quot;Worn-slot insanity&quot;. <code>w_blocks()</code> allows one blocking item per property.</li>
+<li><code>domove_core()</code> is an ordered chain of early refusals (luggage, swallowed, ice, confusion, trap avoidance, sticky monster, attack, iron bars, web, steed, rooted, <code>test_move</code>, ball and chain). The order decides which refusals cost time (<code>svc.context.move = 0</code> makes a step free). Moving a check across another changes that. The position changes in two steps: tentatively, then <code>u_on_newpos()</code> once a pet swap is known to work.</li>
+<li><code>overexertion()</code> (hunger, HP loss when heavily encumbered) is charged in <code>do_attack()</code>, after <code>attack_checks()</code>, so declining to hit a peaceful costs nothing. Kicks, throws and spells do not pay it.</li>
+<li>Safe-pet protection is in <code>do_attack()</code>. Moving into a pet or peaceful monster swaps places unless a listed exception holds (Punished, a 1 in 7 roll, a long worm tail, hero in rock, pet in a tended shop). It is off while blind, confused, hallucinating or stunned. Stormbringer ignores it.</li>
+<li>One attack-effect table serves three directions. The <code>mhitm_ad_*</code> handlers in <code>src/uhitm.c</code> take <code>(magr, mattk, mdef, mhm)</code> and branch on hero attacks monster, monster attacks hero, monster attacks monster. <code>mhitu.c</code> and <code>mhitm.c</code> call <code>mhitm_adtyping()</code>. Editing one handler changes all three. <code>gazemm()</code> passes a NULL result struct to <code>mhitm_ad_blnd</code>.</li>
+<li>Hit processing is split so that the message is chosen before damage is applied (<code>struct _hitmon_data</code> in <code>you.h</code>). <code>first_weapon_hit()</code> must run before <code>xkilled()</code> to keep the gamelog in order, and <code>hmon()</code> may destroy the weapon, so callers save what they need first.</li>
+<li>Skill numbers in <code>include/skills.h</code> are an ordered contract: positive for hand-to-hand weapons and launchers, negative for ammunition, ranges tested with <code>&lt;=</code>, and <code>weapon.c</code> and <code>oc_subtyp</code> depend on the order. No compile-time check was found (unverified).</li>
+<li>Attribute training (<code>exercise()</code>, <code>exerchk()</code> in <code>src/attrib.c</code>) is statistical: it runs every 800 to 999 turns, halves the stored value each time and covers only Str, Con, Dex and Wis. Adding or removing an <code>exercise()</code> call changes growth over thousands of turns without a local symptom.</li>
+<li>Starting inventory is created after the first level (<code>u_init_inventory_attrs()</code> called from <code>allmain.c</code>) and may be rerolled by the <code>reroll</code> option, so it must be idempotent. Once-only effects are in <code>u_init_skills_discoveries()</code>. <code>ini_inv</code> relies on object-class creation order to avoid polymorph plus polymorph control.</li>
+<li>Prayer sets <code>u.uinvulnerable</code> for the three turns of <code>nomul(-3)</code> only when the outcome is good and the hero is not in Gehennom. <code>nomul()</code> normally clears the flag; the early return when <code>multi &lt; nval</code> keeps it alive (inferred). Trouble priorities are the order of checks in <code>in_trouble()</code>, &quot;keep that code and these values synchronized&quot;. A sacrifice cannot raise Luck above the offering's value (balance rule, <code>src/pray.c</code>).</li>
+<li>Spell memory is a countdown from <code>KEEN</code> (20000 turns) in <code>src/spell.c</code>; the status thresholds are fractions of it.</li>
+</ul>
+<h3 id="traps-in-hero-code">Traps in hero code</h3>
+<ul>
+<li><code>restore_attrib()</code> in <code>src/attrib.c</code> is dead code; do not use it as a model for timed attribute loss.</li>
+<li><code>src/uhitm.c</code> (6,447 lines) and <code>src/trap.c</code> (7,221 lines) are both larger than <code>src/shk.c</code> (6,147).</li>
+<li>The kick, throw, apply, eat, read, zap and potion code was not read for the deep dive. Treat its rules as unverified.</li>
+</ul>
+<h2 id="level-generation-and-dungeon">Level generation and dungeon</h2>
+<p>Levels are generated at first visit, by random code in <code>src/mklev.c</code> or from a Lua script.</p>
+<p>The dungeon's shape (branches, depth ranges, special level positions) is <code>dat/dungeon.lua</code>, read once per game by <code>init_dungeons()</code> in <code>src/dungeon.c</code> and then saved. Special levels are built by their Lua scripts through <code>src/sp_lev.c</code>; ordinary levels from rooms. Timers (<code>src/timeout.c</code>), light sources (<code>src/light.c</code>) and gas regions (<code>src/region.c</code>) are per-level state. <code>src/stairs.c</code> holds the stairway list; branch placement is <code>place_branch()</code> in <code>src/mklev.c</code>.</p>
+<h3 id="which-generator-runs">Which generator runs</h3>
+<p><code>makelevel()</code> in <code>src/mklev.c</code> tries, in order:</p>
+<ol>
+<li>A level in the special-level chain, except the Rogue level, goes to <code>makemaz(slev-&gt;proto)</code>.</li>
+<li>A dungeon with a <code>protofile</code> (Vlad's Tower) goes to <code>makemaz(&quot;&quot;)</code>, with the level number appended (<code>tower1</code>).</li>
+<li>A dungeon with a <code>lvlfill</code> (Mines, Gehennom fillers) goes to <code>makemaz(fill_lvl)</code>.</li>
+<li>Quest levels build a filler name from the role (<code>&lt;role&gt;-fila</code> or <code>-filb</code>).</li>
+<li>Gehennom, and 80 percent of main-dungeon levels below Medusa, go to <code>makemaz(&quot;&quot;)</code> (unverified for the whole range).</li>
+<li>Otherwise the room-and-corridor code runs. The Rogue level takes this path too, via <code>makeroguerooms()</code>.</li>
+</ol>
+<p>Despite its name, <code>makemaz()</code> in <code>src/mkmaze.c</code> is the loader for every scripted level: it builds the file name, calls <code>load_special()</code>, and makes a random maze only if the script fails to load. A level with <code>nlevels</code> variants gets <code>-N</code> appended (<code>minetn-3</code>). In wizard mode <code>SPLEVTYPE</code> forces a variant, and a level <code>chance</code> (only <code>bigrm</code>, 40) is ignored, so wizard games always have the big room. A dungeon-level <code>chance</code> is implemented in <code>init_dungeon_dungeons()</code> but no shipped dungeon sets it.</p>
+<h3 id="dungeon-placement">Dungeon placement</h3>
+<p><code>init_dungeons()</code> rolls each dungeon's length, then <code>place_level()</code> places every special level by recursive backtracking inside its base/range window (negative <code>base</code> counts from the bottom). If nothing fits, <code>panic(&quot;init_dungeon:  couldn't place levels&quot;)</code>: an edit to <code>dat/dungeon.lua</code> windows can make every new game fail at start.</p>
+<p><code>level_map[]</code> in <code>src/dungeon.c</code> maps Lua level names to C globals (<code>oracle_level</code>, <code>stronghold_level</code>, ...) behind <code>Is_medusa_level()</code>, <code>Is_stronghold()</code> and similar. A level added only to <code>dat/dungeon.lua</code> is placed and generated but has no C identity until it is added there.</p>
+<p>Three numbers are not the same: <code>ledger_no()</code> is a game-wide running number (level files, bones, save); <code>depth()</code> is <code>depth_start + dlevel - 1</code>; <code>level_difficulty()</code> adds a correction in &quot;builds-up&quot; branches (Sokoban, Vlad's Tower) and uses the deepest level reached when the hero carries the Amulet. Monster and special-level code should use <code>level_difficulty()</code>.</p>
+<h3 id="ordinary-levels">Ordinary levels</h3>
+<p>The order in <code>makelevel()</code> is load-bearing: rooms, <code>sort_rooms()</code>, stairs, corridors, niches, vault, at most one special room, branch, fill.</p>
+<ul>
+<li><code>sort_rooms()</code> orders rooms left to right because <code>makecorridors()</code> joins room N to N+1. It rewrites <code>roomno</code>, so room numbers stored before the sort go stale.</li>
+<li>Special rooms are chosen after corridors: <code>mkshop()</code> needs a room with exactly one door and no stairs. <code>do_mkroom()</code> and <code>mkzoo()</code> only set the type; stocking happens at the end through <code>fill_special_room()</code> in <code>src/sp_lev.c</code>.</li>
+<li>Rooms are placed from a list of free rectangles (<code>src/rect.c</code>). The functions that size and test a room, <code>create_room()</code> and <code>check_room()</code>, and the corridor digger <code>dig_corridor()</code> live in <code>src/sp_lev.c</code>, not <code>mklev.c</code>.</li>
+<li>Corridors: pass 1 joins a to a+1, pass 2 joins a to a+2 if not yet connected, pass 3 joins any disconnected pair. Pass 1 to 3 guarantee connectivity. A fourth pass adds dead ends and boulder corridors on purpose. <code>mklev_sanity_check()</code> reports &quot;room %i not connected?&quot; when <code>sanity_check</code> is on.</li>
+<li>The Fort Ludios branch is created lazily by <code>mk_knox_portal()</code>, from a vault on a main-dungeon level deeper than 10 and above Medusa, with a 1 in 3 roll (always in wizard mode). A game can have no way to Ludios.</li>
+<li><code>bound_digging()</code> makes the outer walls non-diggable and non-phaseable, once, at the end. <code>mineralize()</code> seeds gold and gems only into stone with stone on all eight sides, and mostly not on special levels.</li>
+<li><code>topologize()</code> stamps <code>roomno</code> and shared-wall bits at the end; it skips rooms already stamped.</li>
+<li><code>mklev()</code> reseeds the random number generator before and after a level (<code>reseed_random</code>), but only when the seed source is unguessable. The aim: a level's look must not let a player predict later random numbers.</li>
+</ul>
+<h3 id="themed-rooms">Themed rooms</h3>
+<p><code>dat/themerms.lua</code> uses the same <code>des.*</code> Lua API as special levels. While <code>gi.in_mk_themerooms</code> is set, the meaning changes: rooms default to unfilled, a room or map that does not fit sets <code>gt.themeroom_failed</code> instead of shifting, and later <code>des.room</code> and <code>des.map</code> calls return early. Failure is a flag, not an error, so a <code>des.*</code> change that works for special levels can silently break themed rooms. <code>makerooms()</code> gives up after 10 failed attempts.</p>
+<p>The hooks run in a fixed order: <code>pre_themerooms_generate</code>, <code>themerooms_generate</code> (repeated), <code>post_themerooms_generate</code>, corridors and filling, <code>post_level_generate</code>, then a whole-map <code>wallification</code>. Rooms added in <code>post_level_generate</code> are not joined by corridors.</p>
+<p>Each dungeon branch has one persistent Lua state, <code>gl.luathemes[dnum]</code> (see Lua integration). Scripts must reset their own variables. A failed load writes <code>'\0'</code> into <code>svd.dungeons[dnum].themerms</code>, which disables themed rooms for that branch for the rest of the game.</p>
+<h3 id="special-levels">Special levels</h3>
+<ul>
+<li>After a script runs, <code>load_special()</code> flips the level at random unless the script says <code>noflip</code>, <code>noflipx</code> or <code>noflipy</code> in <code>des.level_flags</code>. Anything that stores absolute coordinates (C fixups, <code>lregion</code> data, level-specific code) must go through the same transform. Castle, Oracle and many fillers set <code>noflip</code>.</li>
+<li><code>fixup_special()</code> in <code>src/mkmaze.c</code> is a patch list for &quot;what the level compiler cannot handle&quot; (the compiler is gone; Lua replaced it): Medusa statues, <code>baalz_fixup</code>, graveyard flags, <code>check_ransacked()</code> for orc-raided Mine Town (&quot;only works as long as orctown is minetn-1&quot;).</li>
+<li><code>ensure_way_out()</code> is opt-in through the <code>inaccessibles</code> flag and marked for rewrite. Only <code>minetn-6.lua</code> uses it. There is no general connectivity guarantee for scripted levels.</li>
+<li>Caves come from a script, <code>des.level_init({ style = &quot;mines&quot; })</code>, which runs <code>mkmap()</code> through <code>splev_initlev()</code>. The same call requests a random maze, a swamp or Rogue-style rooms.</li>
+</ul>
+<h2 id="lua-integration">Lua integration</h2>
+<p>Lua scripts drive level creation, the dungeon layout and some game events, inside a sandbox.</p>
+<p>The interpreter is vendored in <code>nhlua/lua/</code> (Lua 5.5.1, updated with <code>nhlua/nhlua-update.sh</code>, no NetHack edits). The glue is <code>src/nhlua.c</code> (the <code>nh</code> function table, sandbox, <code>nh.variable</code>, <code>nh.callback</code>), <code>src/nhlobj.c</code> (object bindings) and <code>src/nhlsel.c</code> (selections). Level-building functions (<code>des.*</code>) are in <code>src/sp_lev.c</code>. The reference for script authors is <code>doc/lua.adoc</code>. The scripts in <code>dat/</code> include two library files loaded into every state: <code>dat/nhlib.lua</code> and <code>dat/nhcore.lua</code>.</p>
+<h3 id="states">States</h3>
+<p>Every interpreter is made by <code>nhl_init(&amp;sbi)</code>. All callers pass the same policy (<code>NHL_SB_SAFE</code>, 1 MiB memory, 1,048,576 steps per call), written out again in each caller (<code>src/mklev.c</code>, <code>src/dungeon.c</code>, <code>src/questpgr.c</code>, <code>src/sp_lev.c</code>, <code>src/wizcmds.c</code>). There is no shared constant.</p>
+<ul>
+<li><code>gl.luacore</code>: one state for the whole game, loads <code>dat/nhcore.lua</code>, holds the saved variables and runs callbacks.</li>
+<li><code>gl.luathemes[dnum]</code>: one per dungeon branch, kept between levels.</li>
+<li>A throw-away state per special level, and one in <code>init_dungeons()</code> for <code>dat/dungeon.lua</code>.</li>
+<li>A cached quest state, made at the first quest text.</li>
+<li>A <code>#wizloadlua</code> state with a 16 MiB budget.</li>
+</ul>
+<h3 id="sandbox">Sandbox</h3>
+<p>The sandbox opens a whole Lua library and then sets unwanted functions to nil. <code>NHL_SB_SAFE</code> allows only the safe base functions (<code>ipairs next pairs pcall select tonumber tostring type xpcall</code>) and <code>coroutine</code>, <code>table</code>, <code>string</code>, <code>math</code>, <code>utf8</code>. It does not include <code>error</code>, <code>assert</code>, <code>setmetatable</code> and friends, <code>collectgarbage</code>, <code>load</code>, <code>dofile</code>, <code>io</code>, <code>os</code>, <code>package</code> (so no <code>require</code>) or <code>debug</code>; <code>print</code> and <code>warn</code> are always removed. Scripts are written in that subset.</p>
+<ul>
+<li>The step limit counts blocks of <code>NHL_SB_STEPSIZE</code> (1000) instructions. Running out always panics (&quot;Lua time exceeded&quot;), whatever <code>NHLpa_*</code> the caller chose, because the game state may be corrupt. Running out of memory is an ordinary Lua error and does follow the caller's choice.</li>
+<li><code>NHL_SANDBOX</code> off in <code>include/config.h</code> removes more than the library filter: the step limit, the version check and the stripping, so <code>io</code>, <code>os</code> and <code>debug</code> are open. Only the memory limit stays. Never do it in a build that loads untrusted scripts.</li>
+<li>The version is pinned to exactly 5.5 (<code>NHL_MIN_VERSION_NUM_EXPECTED</code> and <code>NHL_MAX_VERSION_NUM_EXPECTED</code>, both 505). Another version panics with &quot;sandbox doesn't know this Lua version&quot;. A Lua upgrade means checking the <code>ct_*</code> function tables and both constants together.</li>
+<li>Script errors are fatal by policy. Nearly every call into Lua uses <code>NHLpa_panic</code> (the <code>lspo_*</code> callbacks, theme hooks, <code>nhcore</code> calls, callbacks, restore). <code>NHLpa_impossible</code> is used for loading a file, <code>pre_themerooms_generate</code>, the selection iterator and saving variables. A script is part of the program.</li>
+</ul>
+<h3 id="traps-in-lua-integration">Traps in Lua integration</h3>
+<ul>
+<li>A nested <code>nhl_pcall</code> on the same state refills the step budget and leaves a stale <code>jmp_buf</code>. <code>setjmp(nud-&gt;jb)</code> and the counter are per state, and level scripts call back into Lua on the same state (<code>des.room({ contents = function() ... end })</code>, <code>l_selection_iterate</code>). The limit is therefore per nested call, and an overrun in the outer script jumps into a finished stack frame (undefined behaviour). Derived from the code, not run.</li>
+<li><code>dat/nhlib.lua</code> is loaded into every state. It replaces <code>math.random</code> with the game's <code>rn2</code>, so scripts share the game's random stream, and it shuffles the global <code>align</code> table at load. Creating a state therefore consumes random numbers, and the lazily created quest state makes that point depend on play. The comment in <code>nhlL_openlibs</code> saying <code>math.random</code> uses Lua's own generator is out of date.</li>
+<li>The only Lua data in a save file is <code>nh_lua_variables</code> in <code>luacore</code>. It is saved as Lua source text (<code>get_variables_string</code>) and run on restore inside the sandbox, which is why the save file counts as trusted input. <code>nh.variable</code> accepts string, nil, boolean, number and table; a non-integer number is probably stored as 0 (unverified). Theme states, the quest state and script globals are lost on save.</li>
+<li>Callbacks are stored twice and only one copy is saved. <code>nh.callback</code> records the name in <code>nh_lua_variables._CB_&lt;list&gt;</code> (saved) and counts in <code>nhcb_counts[]</code> (not saved). After a restore, the counts are 0 and the callbacks never run. This is harmless today only because the one user, the tutorial, cannot be saved. Callbacks are found by name in <code>luacore</code>'s globals, so they must be defined in <code>nhlib.lua</code> or <code>nhcore.lua</code>.</li>
+<li><code>nhl_loadlua()</code> reads scripts through <code>dlb</code> in 8 KB chunks; a line of 8 KB or more fails the load.</li>
+<li>The file-access hooks (<code>io.open</code> with pattern checks, <code>luapat</code>) are dead code under <code>#ifdef notyet</code>, and the block refers to <code>NHL_SB_PACKAGE</code>, which is not defined. The example <code>mk_dgl_extrainfo</code> in <code>dat/nhcore.lua</code> calls <code>io.open</code> and would fail in the sandbox.</li>
+</ul>
+<h2 id="monsters">Monsters</h2>
+<p>Monsters are a table of species plus linked lists of live creatures.</p>
+<p>The species struct is <code>struct permonst</code> (<code>include/permonst.h</code>); the data is <code>include/monsters.h</code>, built into <code>mons[]</code> by <code>src/monst.c</code>. Live monsters are <code>struct monst</code> (<code>include/monst.h</code>). Creation is <code>src/makemon.c</code>, the mover <code>movemon()</code> and death in <code>src/mon.c</code>, per-monster decisions <code>src/monmove.c</code>, attack loops and hit rolls against the hero <code>src/mhitu.c</code> and monster against monster <code>src/mhitm.c</code>, ranged attacks <code>src/mthrowu.c</code>, item use <code>src/muse.c</code>, spellcasting <code>src/mcastu.c</code>, pets <code>src/dog.c</code> and <code>src/dogmove.c</code>, helpers <code>src/mondata.c</code>. Special cases have their own files: shopkeepers and priests (<code>src/shk.c</code>, <code>src/priest.c</code>), the Wizard of Yendor (<code>src/wizard.c</code>), vault guards (<code>src/vault.c</code>), player-monsters (<code>src/mplayer.c</code>), minions (<code>src/minion.c</code>), lycanthropes (<code>src/were.c</code>), long worms (<code>src/worm.c</code>), theft (<code>src/steal.c</code>).</p>
+<h3 id="where-a-monster-is">Where a monster is</h3>
+<p>A monster is in exactly one of three places: on the level (<code>fmon</code>, which is <code>svl.level.monlist</code>, and <code>svl.level.monsters[x][y]</code>), migrating (<code>gm.migrating_mons</code>, <code>MON_MIGRATING</code>) or travelling with the hero (<code>gm.mydogs</code>). <code>mon_sanity_check()</code> enforces it through <code>mstate</code> and <code>mx</code>.</p>
+<ul>
+<li>Death does not free. <code>mondead()</code> calls <code>m_detach()</code>, which sets <code>mhp = 0</code> and counts the monster in <code>iflags.purge_monsters</code>; <code>dmonsfree()</code> frees it later and calls <code>impossible()</code> if the counts differ. Code that walks the list must test <code>DEADMONSTER()</code>.</li>
+<li>Vault guards are the exception: a dead or departed guard stays at <code>&lt;0,0&gt;</code> (<code>PARKEDMONSTER</code>) until his corridor is gone. Treating <code>mx == 0</code> as &quot;invalid&quot; breaks guards.</li>
+<li>While a monster migrates, <code>migrate_to_level()</code> reuses fields as a message to <code>mon_arrive()</code>: <code>mux,muy</code> are the destination, <code>mtrack[0..2]</code> arrival data, <code>wormno</code> the tail length. Do not read them as hero position or history.</li>
+<li>Levels that are not occupied are not simulated. <code>mon_catchup_elapsed_time()</code> in <code>src/dog.c</code> pays back the elapsed time on return. A new per-turn timer field on <code>struct monst</code> that is not added there freezes while the hero is away.</li>
+</ul>
+<h3 id="rules-the-code-defends">Rules the code defends</h3>
+<ul>
+<li><code>mons[]</code> is a runtime copy of <code>mons_init[]</code>, made by <code>monst_globals_init()</code>. Nothing writes to it any more (the only writers are inside <code>#if 0</code>), so treat it as read-only. Per-game variation happens at use time: <code>getmattk()</code> in <code>src/mhitu.c</code> rewrites the attack on a copy before each use (seduction substitutes, no two disease attacks in one turn, cooldown degrades to a 1d6 claw, cancelled attackers turn physical). Code that reads <code>mons[x].mattk[i]</code> directly sees the unsubstituted attack.</li>
+<li>The damage of an attack type is in <code>src/uhitm.c</code>: <code>hitmu()</code> and <code>mattackm</code>/<code>hitmm</code> build a <code>struct mhitm_data</code> and call <code>mhitm_adtyping()</code>, which dispatches to one <code>mhitm_ad_&lt;type&gt;()</code> with three branches inside (hero attacks, hero is hit, monster against monster). A new damage type, or a change to fire or drain, is made in all three branches of one function. <code>mhm.done</code> ends the attack early.</li>
+<li>Speed is randomly rounded to multiples of 12 in <code>mcalcmove()</code>; see Game loop and startup for the guarantees. <code>worm.c</code> calls it with <code>FALSE</code>, which skips the randomisation.</li>
+<li>Extinction counts births, not deaths. <code>propagate()</code> raises <code>svm.mvitals[].born</code> (a <code>uchar</code>) and sets <code>G_EXTINCT</code> at <code>mbirth_limit()</code>; uniques are extinct as soon as they are made. <code>unmakemon()</code> undoes a rejected creation and refuses to decrement at 255. <code>mvitals[].died</code> also divides experience for later kills.</li>
+<li>Monsters know the hero's position only approximately: <code>mux,muy</code> is &quot;where the monster thinks you are&quot;. <code>dochug()</code> calls <code>set_apparxy()</code> before the monster decides, because <code>inrange</code>, <code>nearby</code> and <code>scared</code> come from it. <code>onscary()</code> uses the real position unless the monster is blind or the hero invisible.</li>
+<li><code>dochug()</code> has four phases: pre-movement, special actions (<code>tactics</code>, <code>find_defensive</code>, <code>find_misc</code>), <code>m_move</code>, standard attacks. A monster that moved can still attack in the same turn if it has a ranged or weapon attack; the hero cannot. The code comment asks whether that is fair.</li>
+<li>Monsters play by weaker rules (<code>src/muse.c</code>): they read scrolls only when they can see, and innate teleportation is refused on purpose (&quot;you could never catch them&quot;). A first attack-wand shot always misses.</li>
+<li>A pet is a <code>struct monst</code> with <code>mtame &gt; 0</code> and <code>EDOG(mon)</code> in <code>mextra</code>. <code>mextra</code> also carries <code>egd</code>, <code>epri</code>, <code>eshk</code>, <code>emin</code>. Flags <code>isshk</code>, <code>isgd</code>, <code>ispriest</code>, <code>isminion</code> mirror which pointer is set. <code>include/mextra.h</code> has an 11-step recipe for a new extension; skipping <code>copy_mextra</code>, <code>savemon</code> or <code>restmon</code> corrupts clones and saves.</li>
+</ul>
+<h3 id="adding-a-species">Adding a species</h3>
+<ul>
+<li><code>include/monsters.h</code> is read three ways (the <code>PM_</code> enum, the table, an enum dump). Rule 1 of its header holds: a class is contiguous. Rule 2 (ascending strength) no longer does; <code>init_mongen_order()</code> sorts by class and difficulty at first use. Entries from <code>PM_LONG_WORM_TAIL</code> on are never generated randomly.</li>
+<li>Dragons are order-bound: gray first, yellow last, the same order as dragon scale mail and scales in <code>include/objects.h</code>, and shimmering follows silver for <code>tilemap</code>. Reordering is not a local change.</li>
+<li><code>difficulty</code> is filled in by hand. Generation uses it in three unrelated formulas: <code>rndmonst_adj()</code> (zlevel/6 up to (zlevel + hero level)/2), <code>mkclass_aligned()</code> (<code>level_difficulty() &gt;&gt; 1</code>, sometimes accepting a stronger candidate) and <code>adj_lev()</code> for the created monster's level. Changing one does not change the others.</li>
+</ul>
+<h2 id="objects">Objects</h2>
+<p>Objects are a table of kinds plus live items held in several chains.</p>
+<p>The kind table is <code>src/objects.c</code>, built from <code>include/objects.h</code>; live items are <code>struct obj</code> (<code>include/obj.h</code>). Creation is <code>src/mkobj.c</code>, random appearances are shuffled in <code>src/o_init.c</code> (which also holds discoveries and per-level gem odds), names in <code>src/objnam.c</code>, the inventory and stack merging in <code>src/invent.c</code>, picking up in <code>src/pickup.c</code>, deletion bookkeeping in <code>obfree</code> (<code>src/shk.c</code>), Lua references in <code>src/nhlobj.c</code>, artifacts in <code>src/artifact.c</code> with data in <code>include/artilist.h</code>.</p>
+<h3 id="the-kind-table">The kind table</h3>
+<ul>
+<li><code>objects.h</code> is included four ways: the <code>otyp</code> enum (<code>OBJECTS_ENUM</code>, <code>include/objclass.h</code>), <code>OBJECTS_DESCR_INIT</code> and <code>OBJECTS_INIT</code> (<code>src/objects.c</code>) and an enum dump (<code>DUMP_ENUMS</code>, <code>src/earlyarg.c</code>). The index of a kind is its position in the file; inserting or reordering shifts every later <code>otyp</code> and changes the meaning of old saves. <code>OBJECT()</code> has 15 parameters; a new field is packed into <code>BITS()</code>.</li>
+<li><code>objects[]</code> is writable, shuffled per game and saved (<code>savenames</code> in <code>src/o_init.c</code>). Do not treat <code>oc_prob</code>, <code>oc_descr_idx</code>, <code>oc_color</code>, <code>oc_material</code> or <code>oc_name_known</code> as constants.</li>
+<li>Order is checked at startup: kinds must be in ascending <code>oc_class</code> order (<code>init_objects</code> panics &quot;not in order!&quot;), slot 0 is the strange object, slots 1 to 17 are generic per-class dummies, and the array ends with a NULL-named fencepost.</li>
+<li>Which kinds swap appearances is written by name in <code>obj_shuffle_range</code> (<code>src/o_init.c</code>). Amulets, scrolls and spellbooks shuffle only up to the first non-magic or unique entry (the fake Amulet of Yendor must come before the real one); gloves keep IRON as <code>CLR_BROWN</code>. A helmet, glove, cloak or boot added outside the named end points is silently left out of the shuffle. No check found (unverified by full-tree search).</li>
+<li><code>oinit()</code> runs on level creation and arrival and calls <code>setgemprobs()</code>, so gem odds depend on depth. <code>mkobj</code> rolls against <code>go.oclass_prob_totals</code>; anything else that changes <code>oc_prob</code> must update the class totals. <code>mkobj</code> picks the class from a table per setting (<code>mkobjprobs</code>, <code>rogueprobs</code>, <code>hellprobs</code>).</li>
+</ul>
+<h3 id="live-items">Live items</h3>
+<ul>
+<li>An object is in exactly one place, named by <code>obj-&gt;where</code> (ten states in <code>include/obj.h</code>: floor, contained, inventory, monster inventory, migrating, buried, on a bill, and so on), each with its own chain. <code>obj_extract_self</code> is the single exit from any chain; moving an object is extract, then add. <code>obj_state_names[]</code> in <code>src/mkobj.c</code> and <code>NOBJ_STATES</code> must stay in step with the states.</li>
+<li>Deletion is deferred. Do not call <code>dealloc_obj</code> directly; use <code>delobj()</code> then <code>obfree()</code>, which fix shop bills, leashes and contents. <code>dealloc_obj</code> parks the object on <code>go.objs_deleted</code>, or leaves it to Lua's garbage collector if Lua holds a reference (<code>lua_ref_cnt</code>). <code>dobjsfree()</code> frees it from the main loop. A freed object is overwritten with <code>cg.zeroobj</code> so use-after-free shows up as a panic.</li>
+<li>Fields are overloaded. <code>spe</code> has about fifteen meanings by type; <code>corpsenm</code>, <code>usecount</code>, <code>oeroded</code>, <code>owornmask</code> and <code>omid</code> serve several purposes each. <code>splitobj</code> and <code>bill_dummy_object</code> copy the whole struct, then reset a hand-picked list (<code>oextra</code>, <code>timed</code>, <code>lamplit</code>, <code>owornmask</code>, <code>lua_ref_cnt</code>, <code>pickup_prev</code>). A new field that must not be inherited goes into both.</li>
+<li><code>include/obj.h</code> ends with an 11-step checklist for a new <code>oextra</code> structure (<code>init_oextra</code>, <code>size_obj</code> in <code>src/cmd.c</code>, <code>dealloc_oextra</code>, <code>copy_oextra</code>, <code>restobj</code>, <code>saveobj</code>). Missing a step leaks the data, loses it on split or on save.</li>
+<li><code>mergable()</code> in <code>src/invent.c</code> is the only definition of &quot;same stack&quot; (about 25 properties). Candles merge only if <code>age/25</code> matches; hatching eggs, reviving corpses and lit oil never merge; knowledge bits matter only while Blind or Hallucinating. The <code>nomerge</code> bit keeps prize items (Mines, Sokoban) apart until picked up.</li>
+<li><code>next_ident()</code> adds <code>rnd(2)</code>, not 1, on purpose: with <code>#adjust</code> a player could otherwise learn the low id bit of the next object and wish for one that behaves well.</li>
+<li>Name strings (<code>xname</code>, <code>doname</code>) come from a ring of 12 buffers (<code>NUMOBUF</code>, <code>src/objnam.c</code>). A pointer is valid for the next 11 naming calls only.</li>
+<li>Artifact existence is a second registry: <code>artiexist[]</code> in <code>src/artifact.c</code> (saved) stops a second copy. When an artifact object is destroyed, call <code>artifact_exists(obj, name, FALSE, ...)</code> to &quot;un-create&quot; it, as <code>src/mkobj.c</code> does for monster inventories; otherwise it can never be generated again. <code>include/artilist.h</code> is compiled four ways like <code>objects.h</code>.</li>
+</ul>
+<h2 id="display-and-vision">Display and vision</h2>
+<p>Display decides what character or tile each map square shows; vision decides what the hero can see.</p>
+<p>The design is stated at the top of <code>src/display.c</code>: vision decides what can be seen, display decides what is shown, and the window port decides how to draw it. The core never writes characters; it writes glyph integers.</p>
+<p>Files: <code>src/display.c</code> (what is shown; the hero's memory), <code>src/vision.c</code> (line of sight, lit squares), <code>src/light.c</code> (light sources), <code>src/glyphs.c</code> (glyph names and player customisation of symbols and colours), <code>src/drawing.c</code> (default tables), <code>src/symbols.c</code> (loading and switching symbol sets), <code>src/coloratt.c</code>, <code>src/utf8map.c</code>; the selectable symbol sets are in <code>dat/symbols</code>. A glyph is an integer for one thing to draw (<code>include/display.h</code>). Symbol definitions are one macro list, <code>include/defsym.h</code>, included with different macros for the enums, the config parser, the default tables and the tile names.</p>
+<h3 id="display">Display</h3>
+<ul>
+<li>The hero's memory is one glyph per square, <code>levl[x][y].glyph</code> in <code>struct rm</code> (<code>include/rm.h</code>), next to <code>typ</code> (what is really there). Monsters are never in it; they &quot;float above&quot;. Exceptions: the remembered unseen-monster glyph, and mimics, which overwrite the memory with their fake appearance on purpose (<code>display_monster()</code> does the mimic check first).</li>
+<li>Use <code>newsym()</code> to update a square; it follows the in-sight rules. The <code>map_background/object/trap/engraving/invisible</code> functions change memory permanently (&quot;sticky&quot;) and are not for temporary effects. Temporary effects use <code>show_glyph()</code> or <code>tmp_at()</code>. Never call <code>print_glyph()</code> directly. All of this is a convention; nothing enforces it.</li>
+<li><code>show_glyph()</code> writes to a third screen, <code>gg.gbuf</code>, and only <code>flush_screen()</code> calls <code>print_glyph()</code>, for changed cells. The screen can lag the game until a flush. <code>flush_screen(-1)</code> toggles delayed flushing and is not a flush. A static flag stops the loop flush, <code>print_glyph</code>, <code>impossible</code>, <code>pline</code>, flush.</li>
+<li><code>waslit</code> is set from <code>lev-&gt;lit</code>, not <code>templit</code>, to avoid the &quot;light pool&quot; problem. The out-of-sight darkening in <code>newsym()</code> must stay there and not move into <code>back_to_glyph()</code>.</li>
+<li>Walls are drawn from the directions the hero has seen them (<code>seenv</code>) and the wall mode. <code>wall_angle()</code> turns type, <code>wall_info</code> and <code>seenv</code> into a symbol; a changed <code>seenv</code> forces a <code>newsym()</code>. The source says: take pen and paper. Wrong states (a door flag left on a wall) end in <code>impossible()</code>.</li>
+<li>The glyph enum (<code>glyph_offsets</code> in <code>include/display.h</code>) is ordered: <code>reset_glyphmap()</code> and <code>show_glyph()</code> walk the families top down and say so. Inserting a family elsewhere gives wrong symbols without an error. <code>struct rm</code> is saved whole, so reordering also changes old saves; <code>EDITLEVEL</code> in <code>include/patchlevel.h</code> exists for that (inferred).</li>
+<li><code>glyphmap[]</code> (glyph to symbol, colour, flags) is rebuilt by <code>reset_glyphmap(trigger)</code> on level change (the Rogue level has its own symbols), symbol change, option change, accessibility change and new game. A feature that changes appearance and does not call it shows up late.</li>
+<li>Adding or removing a <code>defsyms</code> entry needs the same change in <code>altlabels[]</code> in <code>win/share/tilemap.c</code>; that pairing is not generated.</li>
+</ul>
+<h3 id="vision">Vision</h3>
+<ul>
+<li>Vision is recomputed lazily. <code>gv.vision_full_recalc</code> is set by <code>block_point</code>, <code>unblock_point</code> and light changes, and cleared in <code>vision_recalc()</code>. <code>pline()</code> runs the recompute first, so a message describes what the hero sees now. Code that changes terrain or light without those calls leaves <code>cansee()</code> stale.</li>
+<li><code>vision_recalc(control)</code>: 0 normal, 2 &quot;see nothing, then <code>newsym()</code> everything&quot; (used by <code>docrt()</code>, <code>goto_level</code>, swallowing). Value 1 is documented as adjacent recalculation but is unimplemented and treated as 0, though some callers pass it.</li>
+<li>Two line-of-sight systems exist and can disagree. The main one is &quot;Algorithm C&quot; over <code>viz_clear[][]</code>. The second, <code>clear_path()</code> (a Bresenham walk), serves monsters (<code>m_cansee</code>) and light sources away from the hero. <code>COULD_SEE</code> means &quot;an unobstructed line exists&quot;, not &quot;the hero sees&quot;: it is computed even when the hero is blind, because monsters use it (<code>m_canseeu()</code>).</li>
+<li>Vision code indexes <code>[y][x]</code>; everything else uses <code>[x][y]</code> (a banner at the switch in <code>src/vision.c</code>). <code>block_point(x,y)</code> swaps on the way in. A swapped call works on some positions and fails on others.</li>
+<li><code>viz_clear[][]</code> is a cache of <code>does_block()</code> (walls, closed doors, trees, clouds, boulders, mimics, gas regions). Whatever changes these must call <code>block_point</code>, <code>unblock_point</code> or <code>recalc_block_point</code>. The wizard-mode <code>levl_sanity_check()</code> compares both.</li>
+<li>Light sources are recomputed in full on every vision recalc, on purpose: no extra memory, no tracking of movement. A moving lamp only needs <code>vision_full_recalc</code>. The polymorphed hero relies on <code>youmonst.m_id</code> staying 1 and <code>mx</code> staying 0.</li>
+<li>A save made with a stale <code>EDITLEVEL</code> once left <code>light_base</code> circular (comment in <code>src/light.c</code>). Changing the saved shape of light sources, timers or <code>struct rm</code> without bumping <code>EDITLEVEL</code> risks it.</li>
+<li><code>UNBUFFERED_GLYPHINFO</code> is defined nowhere in <code>include/</code>, <code>src/</code>, <code>win/</code> or <code>sys/</code>, and its branch in <code>row_refresh()</code> would not compile. Treat it as dead.</li>
+</ul>
+<h2 id="window-ports">Window ports</h2>
+<p>A window port is a user interface: it implements one table of functions that the core calls to draw.</p>
+<p>The table is <code>struct window_procs</code> (<code>include/winprocs.h</code>), copied by value into the global <code>windowprocs</code>. <code>src/windows.c</code> lists the ports compiled in (<code>winchoices[]</code>), and <code>choose_windows()</code> selects one by name, case-insensitively. The contract is <code>doc/window.txt</code>; its header date is old and it still says to edit <code>makedefs.c</code> for <code>window_opts</code>, which now lives in <code>src/mdlib.c</code>.</p>
+<p>Ports: <code>win/tty</code> (default), <code>win/curses</code>, <code>win/Qt</code>, <code>win/X11</code>, <code>win/win32</code> (the name to type for <code>windowtype</code> is <code>mswin</code>) and <code>win/gem</code> (Atari, kept but not for current platforms). <code>win/macosx</code> is not a port: it holds AppleScripts and a recover script; on macOS the game uses tty, curses, X11 or Qt. <code>outdated/win</code> holds ports no longer maintained. Which ports are built is a build option: <code>WANT_WIN_*</code> in the Unix and macOS hints files, and other switches on Windows.</p>
+<h3 id="the-function-table">The function table</h3>
+<ul>
+<li><code>struct chain_procs</code> repeats every member with a leading <code>CARGS</code> parameter, and the comment &quot;this MUST match chain_procs&quot; is the only guard. Port tables use positional initialisers, so order matters, and a swapped pair of same-typed pointers compiles. Adding a member means editing <code>window_procs</code>, <code>chain_procs</code>, the macro list, <code>hup_procs</code>, <code>chainin_procs</code>, <code>chainout_procs</code>, <code>win/chain/wc_trace.c</code> and every port table.</li>
+<li><code>add_menu()</code>, <code>select_menu()</code> and <code>getlin()</code> are real functions in <code>src/windows.c</code> (and <code>yn_function</code> in <code>src/cmd.c</code>) that do common work, then call the port. <code>add_menu</code> applies menu colours; <code>select_menu</code> and <code>getlin</code> disable status redraws while they run; <code>getlin</code> first drains the command queue and, if queued keys exist, never calls the port. A port that calls its own <code>tty_add_menu</code> directly skips this.</li>
+<li>Status has two paths, chosen by <code>VIA_WINDOWPORT()</code>, which tests the capability bits <code>WC2_HILITE_STATUS</code> and <code>WC2_FLUSH_STATUS</code>. With them, <code>bot()</code> pushes <code>status_update()</code> calls per field; without them, the core writes two preformatted lines to an <code>NHW_STATUS</code> window, which <code>doc/window.txt</code> says will be phased out. <code>genl_status_update</code> sets <code>WC2_FLUSH_STATUS</code> at run time.</li>
+<li>Glyphs travel inside strings as <code>\GXXXXNNNN</code>, written by <code>encglyph()</code> with the per-game number <code>svc.context.rndencode</code>, so that player-supplied text such as pet names is not decoded by accident. Never hard-code the prefix.</li>
+<li><code>wincap</code> has no free bits; <code>wincap2</code> has about 12. <code>doc/window.txt</code> (&quot;Adding a new wincap option&quot;) gives the procedure.</li>
+<li>The <code>genl_*</code> helpers are the default implementations (<code>genl_putmixed</code>, <code>genl_status_*</code>, <code>genl_getmsghistory</code>). Their comments are the only spec for message history (called oldest first, a null pointer ends it) and menu inversion (<code>menuitem_invert_test</code>).</li>
+<li>The port is not fully behind the table. The core branches on <code>WINDOWPORT(x)</code> (an enum, <code>wp_ids</code>) in <code>invent.c</code>, <code>files.c</code>, <code>options.c</code>, <code>wizcmds.c</code>, <code>report.c</code> and <code>earlyarg.c</code>. A new port needs a <code>wp_</code> id.</li>
+</ul>
+<h3 id="selection-and-hangup">Selection and hangup</h3>
+<ul>
+<li><code>choose_windows()</code> skips names starting with <code>+</code> (chain processors) or <code>-</code> (chain ends), so they cannot be chosen. On a miss it first installs <code>def_raw_print</code> and <code>def_wait_synch</code>, because early config-error code calls them. It may run several times; each port's init routine undoes the last choice on <code>WININIT_UNDO</code>. <code>windowtype</code> is honoured only before <code>iflags.window_inited</code>.</li>
+<li>Hangup replaces the whole table with <code>hup_procs</code>: outputs do nothing, input returns ESC. Two old routines are kept on purpose: the previous <code>exit_nhwindows</code> (called later by <code>hup_exit_nhwindows</code>) and the previous <code>getmsghistory</code>, which the save needs.</li>
+<li>The dumplog redirect (<code>dump_open_log</code>, <code>dump_redirect</code> in <code>src/windows.c</code>, used by <code>src/end.c</code>) swaps nine slots and restores with a whole-struct copy. Any slot changed in between, such as a hangup, is undone (inferred).</li>
+</ul>
+<h3 id="chain-and-shim">Chain and shim</h3>
+<ul>
+<li><code>win/chain</code> is not a port and cannot be chosen with <code>windowtype</code>. Processors are named <code>+trace</code> and set through the sysconf-only option <code>windowchain</code>; <code>commit_windowchain()</code> inserts <code>-chainin</code> at the head and <code>-chainout</code> at the tail. The only processor is <code>+trace</code>, which writes <code>tlog.&lt;pid&gt;</code>. <code>WINDOWPORT(tty)</code> is probably false under a chain (inferred).</li>
+<li><code>WINCHAIN</code> is off in <code>include/config.h</code> and the platform mains call <code>commit_windowchain()</code> only under <code>#ifdef WINCHAIN</code>. <code>sys/unix/README.hints</code> documents <code>WANT_WINCHAIN=1</code>, which no file uses; the hints use <code>WANT_WIN_CHAIN</code>, which only adds object files. Enabling the chain means editing <code>config.h</code>.</li>
+<li><code>win/shim</code> forwards every window call to one registered callback and is the default for the library and WebAssembly builds (<code>sys/unix/hints/include/cross-pre2.501</code>, <code>multiw-2.501</code>; contract in <code>sys/libnh/README.md</code>). With no callback every call returns 0.</li>
+<li>Known defects in <code>win/chain</code>: <code>trace_procs_init</code> calls <code>setvbuf</code> before the null check on <code>fopen</code>, and some tables use <code>#ifdef MAC</code> where <code>window_procs</code> uses <code>MAC68K</code>.</li>
+</ul>
+<h2 id="save-and-restore">Save and restore</h2>
+<p>Saving writes the global state, the hero and every level; restoring reads them back in order.</p>
+<p><code>src/save.c</code> writes, <code>src/restore.c</code> reads, in matching pairs (<code>savemon</code>/<code>restmon</code>, <code>saveobj</code>/<code>restobj</code>, and so on). Underneath, <code>src/sfbase.c</code> dispatches and <code>src/sfstruct.c</code> writes raw struct dumps. Bones files (<code>src/bones.c</code>) store the level where a hero died; <code>no_bones_level()</code> says which levels never get one. The high-score list is <code>src/topten.c</code>.</p>
+<h3 id="format">Format</h3>
+<ul>
+<li>The game always writes the <code>historical</code> format, a raw dump of C structs. There is no build switch and no run-time option (<code>src/files.c</code> hard-codes it). <code>exportascii</code> exists only in the separate <code>sfctool</code> utility, an offline step for moving a save between platforms that run the exact same version. The generated <code>sfdata.c</code> and <code>sfproto.h</code> (from <code>util/sftags.c</code>, which reads a ctags file) are built only for <code>sfctool</code> (<code>sys/unix/Makefile.utl</code>).</li>
+<li>The stream is untagged and strictly ordered. The name strings passed to <code>Sfo_*</code>/<code>Sfi_*</code> are ignored by the game binary. A write without the matching read shifts every later field and shows up far away as nonsense or &quot;Read N instead of M bytes&quot;. <code>saveobj()</code> and <code>restobj()</code> must mirror each other, including the optional <code>oextra</code> parts.</li>
+<li>File order: format byte, critical-size list, version info, player name, current level, game state, then every other level preceded by its ledger number. Restore reads the current level, the game state and the other levels, writes the others back as level files (<code>restlevelfile()</code>), rewinds, and reads the current level a second time. The first read happens before the dungeon table exists (see <code>save_bubbles()</code>).</li>
+<li><code>program_state.restoring</code> (<code>REST_GSTATE</code>, <code>REST_LEVELS</code>, <code>REST_CURRENT_LEVEL</code>) changes what <code>getlev()</code> and <code>savelev_core()</code> do: catch-up for time away and the level timestamp depend on it. Level code that runs during restore must not assume <code>u.uz</code> is valid.</li>
+<li>Time values are saved relative to the current turn (<code>moves_to_relative_time()</code>), and each level carries its own timestamp. A new turn-valued field saved as an absolute number is wrong the next time the level loads.</li>
+<li>Pointers are never saved. Context pointers (<code>victual.piece</code>, <code>tin.tin</code>, ...) are cleared and their ids kept; <code>u.ustuck</code> and <code>u.usteed</code> are rebuilt from <code>ustuck_mid</code> and <code>usteed_mid</code> in <code>getlev()</code>; worn items by <code>setworn()</code> after the inventory is read. A new pointer field in a saved struct needs an id-based fixup, or it restores a wild pointer.</li>
+<li>The date-dependent luck changes (full moon, Friday the 13th) are undone in <code>dosave0()</code> and re-applied at start-up. Keep the pair symmetric.</li>
+<li>Lua state is saved as a text blob: <code>save_luadata()</code> stores only the <code>nh_lua_variables</code> table (see Lua integration).</li>
+<li>Which globals are saved is decided field by field; see Global state.</li>
+</ul>
+<h3 id="version-checks">Version checks</h3>
+<p><code>validate()</code> and <code>uptodate()</code> in <code>src/version.c</code> read the critical-size list and <code>struct version_info</code> before any data is trusted. <code>check_version()</code> rejects the file if the version is outside <code>[VERSION_COMPATIBILITY, current]</code> or if the feature bits or the structure entity count differ. Different data models are rejected, not converted. <code>include/patchlevel.h</code> holds only the constants: <code>EDITLEVEL</code>, <code>VERSION_COMPATIBILITY</code>, <code>SAVEFILE_REVISION_LEVEL</code>. The authors' rule: any incompatible change to saved data (<code>struct context</code>, <code>struct flag</code>, <code>struct rm</code>, glyph numbering, the light list) needs <code>EDITLEVEL</code> raised, which invalidates old saves and bones.</p>
+<p><code>include/revision.h</code> documents a 14-step &quot;uplift&quot; for reading old saves through a copy of a changed struct (<code>src/revision.c</code>). It is prepared, not exercised: <code>SAVEFILE_REVISION_LEVEL</code> is 0 and the demo code is example-only.</p>
+<h3 id="saving-and-the-running-game">Saving and the running game</h3>
+<ul>
+<li>Saving destroys the running game. <code>dosave0()</code> sets the mode <code>WRITING | FREEING</code>: each <code>save*chn()</code> routine writes an item and frees it, and <code>dosave()</code> ends the process. A failure halfway cannot be rolled back. The same routines also run with <code>COUNTING</code>, plain <code>WRITING</code> (checkpoints, bones) or <code>FREEING</code> alone, selected by <code>update_file()</code> and <code>release_data()</code>. A new save routine that always frees, or always writes, breaks one mode.</li>
+<li>A save is deleted when restored, except in wizard and explore mode (<code>dorecover()</code>). A failed restore deletes it too. <code>CHECK_SAVE_UID</code> (default on) refuses a save that is &quot;not yours&quot; for normal players.</li>
+<li>The head of the save (pid, level number, name) is written unbuffered on purpose, so that <code>util/recover.c</code> and external tools can read it; the same holds for the bones info before the level data. Changing the order or encoding of the head breaks them without a compile error.</li>
+<li>With <code>INSURANCE</code> (default) and the <code>checkpoint</code> option, <code>save_currentstate()</code> writes the current level and the whole game state into the level-0 lock file; <code>recover</code> rebuilds a save from the level files. <code>gh.havestate</code> makes turning checkpoints off rewrite level 0 once.</li>
+<li>Bones use the level writer and reader with a &quot;ghostly&quot; flag (ids remapped, movement zeroed, peacefulness re-rolled, stairs and branch links repaired). A change to the level format affects saves, checkpoints and bones.</li>
+</ul>
+<h3 id="traps-in-save-and-restore">Traps in save and restore</h3>
+<ul>
+<li>A truncated save is only partly guarded. In the level loop a short read ends the restore cleanly at a level boundary; inside a level the remaining reads continue (<code>sfstruct_read_error()</code> is empty). Struct contents are not range-checked. Inferred from the code, not run.</li>
+<li>The real checks are header validation, the pid and level-number check in <code>getlev()</code> (&quot;This game is void&quot;, <code>trickery()</code>) and the UID check.</li>
+</ul>
+<h2 id="platform-layers-and-build">Platform layers and build</h2>
+<p>The <code>sys/</code> folders and the build tools in <code>util/</code> adapt one source tree to many systems.</p>
+<p><code>sys/unix</code> has the Makefile templates (<code>Makefile.top</code>, <code>.src</code>, <code>.dat</code>, <code>.doc</code>, <code>.utl</code>, <code>.check</code>), <code>setup.sh</code> and the hints files. <code>sys/windows</code> has two build systems for the same tree: <code>GNUmakefile</code> (MinGW) and <code>Makefile.nmake</code> plus <code>vs/NetHack.sln</code> (Visual C). It builds the console and the graphical program. <code>sys/share</code> holds code several systems use, such as the regex implementations. <code>sys/libnh</code> is the library build. <code>outdated/</code> (repository root) holds retired systems, but <code>sys/amiga</code>, <code>sys/atari</code>, <code>sys/mac68k</code>, <code>sys/msdos</code> and <code>sys/vms</code> are still in <code>sys/</code>, and four of them have cross-compile targets (<code>cross-pre1.501</code>). Being in <code>sys/</code> does not mean natively supported.</p>
+<h3 id="unix-makefiles">Unix Makefiles</h3>
+<ul>
+<li><code>setup.sh</code> calls <code>mkmkfile.sh</code> once per Makefile (top, dat, doc, src, util). <code>mkmkfile.sh</code> writes the hints file's <code>#-PRE</code> part, the template, then the <code>#-POST</code> part. A line starting <code>#-INCLUDE name</code> in a hints file is replaced by <code>hints/include/name</code>; it is executed, not a comment. Edits to a generated <code>Makefile</code> are lost at the next <code>setup.sh</code>: change the template or the hints file. Run the scripts from <code>sys/unix</code>.</li>
+<li><code>Makefile.check</code> (via <code>PRECHECK</code> in <code>linux.501</code> and <code>macOS.501</code>) only reports &quot;Attention: &lt;file&gt; is older than ...&quot;; it neither stops the build nor reruns <code>setup.sh</code>. <code>HINTSINCLNAMES</code> is edited by hand when a new <code>hints/include/*.501</code> file is added.</li>
+<li>The hints family is larger than <code>sys/unix/README.hints</code> says. <code>bsd.501</code> (&quot;legacy&quot;, &quot;use at your own risk&quot;, BSD make syntax) and <code>linux-minimal</code> do not use the shared includes or the stale-Makefile check, so a change to the shared includes does not reach them.</li>
+<li>Top-level parallel make is off on purpose (<code>.NOTPARALLEL:</code> in <code>Makefile.top</code>), because several targets each start a sub-make that builds host <code>makedefs</code> and would overwrite each other.</li>
+<li>Hints for WebAssembly and the library: <code>cd sys/unix</code>, <code>./setup.sh hints/macOS.501</code>, then <code>make WANT_LIBNH=1 all</code> or <code>make CROSS_TO_WASM=1 all</code>. <code>sys/libnh/README.md</code> still names <code>sys/lib</code> and <code>hints/wasm</code>, which do not exist.</li>
+</ul>
+<h3 id="makedefs-and-data">makedefs and data</h3>
+<ul>
+<li><code>util/makedefs.c</code> makes the data files: <code>data</code> (from <code>dat/data.base</code>), <code>rumors</code>, <code>oracles</code>, <code>epitaph</code>, <code>engrave</code>, <code>bogusmon</code>, <code>options</code>. It no longer makes <code>onames.h</code> and <code>pm.h</code>, and nothing includes them. <code>makedefs -v</code> still writes <code>include/date.h</code> for reference only. <code>doc/makedefs.txt</code> is out of date against <code>do_makedefs()</code> in the code (it lists <code>-m</code> and <code>-q</code> where the code uses <code>-v</code> and <code>-r</code>); trust the code.</li>
+<li>Version, build date and git hash come from <code>src/date.c</code>, filled at run time. <code>date.o</code> is deliberately built last and kept out of the object lists, so it is rebuilt after any other object (<code>HOBJ</code> in <code>Makefile.src</code>, <code>COREOBJS</code> in the <code>GNUmakefile</code>). Adding it to a list builds fine and ships a stale build time.</li>
+<li><code>makedefs</code> links <code>monst.o</code>, <code>objects.o</code>, <code>alloc.o</code>, <code>date.o</code> and <code>panic.o</code>, and <code>#include</code>s <code>src/mdlib.c</code> directly. These objects must be built first (<code>FIRSTOBJ</code>), and the rules for <code>monst.o</code> and <code>objects.o</code> delete the <code>makedefs</code> binary to force a relink. In a cross-compile they exist twice, for HOST and TARGET, and must not share names or directories.</li>
+<li><code>util/dlb_main.c</code> packs <code>dat/</code> files into <code>nhdat</code> only when <code>DLB</code> is defined: off in <code>include/config.h</code>, on in the Linux, macOS and cross hints. After the build, <code>check-dlb</code> in <code>Makefile.top</code> greps <code>dat/options</code> for &quot;librarian&quot;, written by <code>makedefs -v</code> from <code>src/mdlib.c</code>. The install layout therefore follows what the compiled <code>makedefs</code> believes. Changing <code>-DDLB</code> without rebuilding <code>makedefs</code> and <code>dat/options</code> installs the wrong layout.</li>
+<li>Declared principle (<code>Cross-compiling</code> A4, <code>Porting</code> 5.4): the build must not produce files that depend on word size, byte order or struct layout. Levels, dungeon and quest text are Lua read at run time; makedefs outputs are text. A binary, layout-dependent build output breaks cross builds without breaking a native one.</li>
+</ul>
+<h3 id="the-mains">The mains</h3>
+<p>There is no shared <code>main()</code>. Each platform main parses its own options, then calls <code>early_init()</code> first and <code>moveloop()</code> last; see Game loop and startup. <code>early_init()</code> in <code>src/allmain.c</code> runs <code>decl_globals_init</code>, <code>objects_globals_init</code>, <code>monst_globals_init</code>, <code>sys_early_init()</code> and <code>runtime_info_init</code>. <code>sys/libnh/libnhmain.c</code> copies much of <code>unixmain.c</code>.</p>
+<h2 id="sound">Sound</h2>
+<p>Sound libraries are optional plug-ins that play effects and music for game events.</p>
+<p>Two unrelated things share the word. <code>src/sounds.c</code> is mostly (about 1,500 of 2,200 lines) the game's in-world noises: <code>dosounds()</code> (&quot;You hear...&quot; for fountains, vaults, temples), monster noises, and the <code>#chat</code> and <code>#tiphat</code> commands. They work with no library. The plug-in interface starts at the library registry (<code>soundprocs</code>) near line 1,700. The interface is <code>include/sndprocs.h</code>, described in <code>doc/sound.txt</code> (partly wrong, see below). Libraries are in <code>sound/</code>: FMOD, <code>windsound</code>, <code>macsound</code>, <code>mac68ksound</code>. Qt's sound code is in <code>win/Qt/qt_bind.cpp</code> and <code>qt_bind.h</code>; <code>sound/qtsound/</code> holds only a README. <code>sound/wav</code> holds sample files, stored uuencoded (<code>*.uu</code>) and listed in <code>SNDWAVS</code> in <code>sys/unix/hints/include/multisnd2-pre.501</code>.</p>
+<h3 id="how-events-work">How events work</h3>
+<ul>
+<li>Events are raised by macros in <code>include/sndprocs.h</code> (<code>Soundeffect</code>, <code>Hero_playnotes</code>, <code>SoundAchievement</code>, <code>SoundSpeak</code>, <code>SetVoice</code>, <code>Play_usersound</code>), called from many files. With no <code>SND_LIB_*</code> define they expand to nothing, so arguments are not evaluated in a no-sound build and a variable used only as a sound argument needs <code>SOUNDLIBONLY</code> to avoid an unused warning.</li>
+<li>Every event passes a gate: <code>iflags.sounds</code>, then <code>!Deaf</code>, then the function pointer exists, then the library's <code>sound_triggers</code> bit is set. A library leaves bits clear for functions it leaves empty. FMOD and Qt claim only <code>SOUND_TRIGGER_USERSOUNDS</code>.</li>
+<li>Deafness is the hero's, achievements are the player's: <code>Soundeffect</code> and <code>Hero_playnotes</code> are suppressed when <code>Deaf</code>, <code>SoundAchievement</code> is not. The macro you pick decides whether a deaf hero gets the event.</li>
+<li>Sound effects are one X-macro list, <code>include/seffects.h</code>, giving the id <code>se_&lt;name&gt;</code> and the file name <code>se_&lt;name&gt;.wav</code>. Adding one means a line there, a <code>Soundeffect(se_x, vol)</code> call and a wav file in <code>SNDWAVS</code>. Id 0 (<code>se_zero_invalid</code>) is reserved.</li>
+<li>Speech compiles in only with <code>-DSND_SPEECH</code> (<code>WANT_SPEECH=1</code>). <code>SetVoice()</code> before a <code>pline</code> sets the speaker in the global <code>gv.voice</code>; forgetting it speaks the next line with the previous voice (inferred).</li>
+</ul>
+<h3 id="selecting-a-library">Selecting a library</h3>
+<ul>
+<li>A library exists only if the build defined <code>SND_LIB_&lt;NAME&gt;</code> (hints files, <code>SNDCFLAGS</code>). There is no run-time discovery. The Unix main hints only macsound; the Windows main prefers FMOD over windsound. CI builds macsound only (<code>WANT_MACSOUND=1</code>); the others are not built in CI.</li>
+<li>Activation has two phases. <code>assign_soundlib()</code> records a hint; <code>activate_chosen_soundlib()</code>, called from <code>init_sound_disp_gamewindows()</code>, copies the table into <code>soundprocs</code> and initialises it. The later hint wins, which matters for Qt, whose sound is part of its window port. The <code>soundlib</code> option only sets the hint, so it takes effect at the next start; an unknown name silently falls back to <code>nosound</code>.</li>
+<li><code>enum soundlib_ids</code> is also the index into <code>soundlib_choices[]</code> in <code>src/sounds.c</code>. The two lists must match; a mismatch selects the wrong table without a compile error. Adding a library touches the enum, the <code>SND_LIB_INTEGRATED</code> list, the extern and <code>soundlib_choices</code> entry, <code>soundlib_opts[]</code> in <code>src/mdlib.c</code> and the build files (<code>doc/sound.txt</code> section VII).</li>
+<li>The name builders (<code>get_sound_effect_filename</code>, <code>base_soundname_to_filename</code>) return NULL on any doubt; callers must handle it. The first exists only under <code>SND_SOUNDEFFECTS_AUTOMAP</code>, user sounds (regex on message text) only under <code>USER_SOUNDS</code>.</li>
+</ul>
+<h3 id="traps-in-sound">Traps in sound</h3>
+<ul>
+<li><code>SoundeffectEvenIfDeaf</code> tests the pointer backwards (<code>&amp;&amp; !soundprocs.sound_soundeffect</code>), so with a real library it does nothing. No caller exists yet.</li>
+<li><code>sound_ambience</code> argument order differs between <code>include/sndprocs.h</code> (<code>ambience_action, ambienceid, proximity</code>) and <code>doc/sound.txt</code> and FMOD (<code>ambienceid, action, proximity</code>). Nothing calls it.</li>
+<li><code>doc/sound.txt</code> drifts from the code: it says four trigger types (six exist), names <code>sa2_levelup</code> (the enum has <code>sa2_xplevelup</code>) and <code>iflags.voice</code> (it is <code>voices</code>), puts Qt code in <code>sound/</code>, points to <code>macOS.500</code> (the file is <code>macOS.501</code>), and its sample skeleton does not compile. <code>sndprocs.h</code> declares <code>struct sound_procs sndprocs</code>, which is never defined; the variable is <code>soundprocs</code>.</li>
+</ul>
+
+</article>
+</main>
+</div>
+</body>
+</html>

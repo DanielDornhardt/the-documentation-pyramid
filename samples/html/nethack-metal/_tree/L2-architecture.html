@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L2 Architecture - Documentation pyramid</title>
+<link rel="stylesheet" href="../skins/pv-base.css">
+<link rel="stylesheet" href="../skins/metal.css">
+</head>
+<body class="view-tree" data-skin="metal">
+<a class="skip-link" href="#pv-main">Skip to content</a>
+<header class="site-header">
+<nav aria-label="Site" class="site-nav">
+<a class="site-name" href="index.html">Documentation pyramid</a>
+<a class="view-switch" href="../index.html">Pyramid view</a>
+</nav>
+</header>
+<div class="layout">
+<nav class="tree" aria-label="Document index">
+<details class="tree-toggle">
+<summary>Document index</summary>
+<ul class="tree-layers">
+<li class="tree-layer"><p class="layer-label"><a href="L1-vision.html">L1 Vision</a></p>
+<ul class="tree-headings">
+<li><a href="L1-vision.html#what-is-nethack">What is NetHack?</a></li>
+<li><a href="L1-vision.html#who-is-it-for">Who is it for?</a></li>
+<li><a href="L1-vision.html#core-concepts">Core concepts</a></li>
+<li><a href="L1-vision.html#success">Success</a></li>
+<li><a href="L1-vision.html#direction">Direction</a></li>
+<li><a href="L1-vision.html#non-goals">Non-goals</a></li>
+</ul></li>
+<li class="tree-layer"><p class="layer-label"><a href="L2-architecture.html" aria-current="page">L2 Architecture</a></p>
+<ul class="tree-headings">
+<li><a href="L2-architecture.html#tech-stack">Tech stack</a></li>
+<li><a href="L2-architecture.html#project-structure">Project structure</a></li>
+<li><a href="L2-architecture.html#subsystems">Subsystems</a></li>
+<li><a href="L2-architecture.html#data-flow">Data flow</a>
+<ul class="tree-subheadings">
+<li><a href="L2-architecture.html#scenario">Scenario</a></li>
+</ul></li>
+<li><a href="L2-architecture.html#data-model">Data model</a></li>
+<li><a href="L2-architecture.html#recurring-patterns">Recurring patterns</a></li>
+<li><a href="L2-architecture.html#state-and-persistence">State and persistence</a></li>
+<li><a href="L2-architecture.html#configuration-layers">Configuration layers</a></li>
+<li><a href="L2-architecture.html#extension-points">Extension points</a></li>
+<li><a href="L2-architecture.html#trust-and-safety-boundaries">Trust and safety boundaries</a></li>
+<li><a href="L2-architecture.html#outside-interfaces">Outside interfaces</a></li>
+</ul></li>
+<li class="tree-layer"><p class="layer-label"><a href="L3-modules.html">L3 Modules</a></p>
+<ul class="tree-headings">
+<li><a href="L3-modules.html#game-loop-and-startup">Game loop and startup</a></li>
+<li><a href="L3-modules.html#global-state">Global state</a></li>
+<li><a href="L3-modules.html#commands-and-options">Commands and options</a></li>
+<li><a href="L3-modules.html#hero-and-actions">Hero and actions</a></li>
+<li><a href="L3-modules.html#level-generation-and-dungeon">Level generation and dungeon</a></li>
+<li><a href="L3-modules.html#lua-integration">Lua integration</a></li>
+<li><a href="L3-modules.html#monsters">Monsters</a></li>
+<li><a href="L3-modules.html#objects">Objects</a></li>
+<li><a href="L3-modules.html#display-and-vision">Display and vision</a></li>
+<li><a href="L3-modules.html#window-ports">Window ports</a></li>
+<li><a href="L3-modules.html#save-and-restore">Save and restore</a></li>
+<li><a href="L3-modules.html#platform-layers-and-build">Platform layers and build</a></li>
+<li><a href="L3-modules.html#sound">Sound</a></li>
+</ul></li>
+<li class="tree-layer"><p class="layer-label"><a href="L4-operations.html">L4 Operations</a></p>
+<ul class="tree-headings">
+<li><a href="L4-operations.html#git-workflow">Git workflow</a></li>
+<li><a href="L4-operations.html#setup">Setup</a></li>
+<li><a href="L4-operations.html#testing">Testing</a></li>
+<li><a href="L4-operations.html#debugging">Debugging</a></li>
+<li><a href="L4-operations.html#change-recipes">Change recipes</a></li>
+<li><a href="L4-operations.html#deployment">Deployment</a></li>
+</ul></li>
+</ul>
+</details>
+</nav>
+<main id="pv-main" class="content content-paper">
+<article class="doc">
+<h1 id="l2-architecture">L2 Architecture</h1>
+<h2 id="tech-stack">Tech stack</h2>
+<p>C99, a little C++ for platform libraries, and an embedded Lua 5.5 interpreter.</p>
+<ul>
+<li>C99 for the game (<code>include/cstd.h</code>, <code>README</code>): one portable code base. 4-space indentation, 78 columns (<code>DEVEL/code_style.txt</code>).</li>
+<li>C++ only where a platform library needs it, for example <code>sys/share/cppregex.cpp</code> and <code>win/Qt/</code>.</li>
+<li>Lua, vendored in <code>nhlua/lua/</code>: levels, dungeon layout, themed rooms and quest text are data scripts, replacing the old yacc/lex compilers (<code>README</code>).</li>
+<li>Make with a &quot;hints&quot; system for Unix (<code>sys/unix/</code>); GNUmakefile, nmake and Visual Studio files on Windows (<code>sys/windows/</code>).</li>
+<li>Optional libraries: curses, X11, Qt for windows; FMOD and platform sound libraries (<code>sound/</code>).</li>
+</ul>
+<h2 id="project-structure">Project structure</h2>
+<p>Shared code is in <code>src/</code> and <code>include/</code>; platform code is in <code>sys/</code> and <code>win/</code>.</p>
+<pre><code>nethack/
+  src/        game code shared by all platforms (about 130 C files)
+  include/    headers: hack.h is the common one, extern.h the prototypes
+  dat/        data and Lua scripts: levels, dungeon.lua, quest.lua, help text
+  util/       build-time tools: makedefs, dlb_main, recover, sfctool, tile tools
+  sys/        operating-system layers: unix, windows, msdos, amiga, vms, libnh, share
+  win/        window ports: tty, curses, Qt, X11, win32, chain, shim
+  sound/      sound libraries
+  nhlua/      the vendored Lua source and its update script
+  doc/        Guidebook, man pages, fixes lists, window.txt, sound.txt, lua.adoc
+  DEVEL/      git setup and developer notes for contributors
+  test/       Lua test scripts run inside the game in wizard mode
+  outdated/   retired ports kept for reference
+  submodules/ PDCurses sources (git submodules, empty in a plain snapshot)
+</code></pre>
+<h2 id="subsystems">Subsystems</h2>
+<p>The game has these major parts; the L3 module of the same name describes each.</p>
+<ul>
+<li>Game loop and startup: <code>src/allmain.c</code>; <code>main()</code> lives in the platform layer (<code>sys/unix/unixmain.c</code>).</li>
+<li>Global state: <code>src/decl.c</code> and <code>include/decl.h</code>.</li>
+<li>Commands and options: <code>src/cmd.c</code>, <code>src/options.c</code>, <code>src/cfgfiles.c</code>.</li>
+<li>Hero and actions: movement, combat, items in use, <code>src/hack.c</code>, <code>src/uhitm.c</code>, <code>src/worn.c</code>, <code>src/invent.c</code>.</li>
+<li>Monsters: <code>src/mon.c</code>, <code>src/monmove.c</code>, <code>src/mhitu.c</code>, <code>src/makemon.c</code>, <code>include/monsters.h</code>, pets in <code>src/dog*.c</code>.</li>
+<li>Objects: <code>src/objects.c</code>, <code>include/objects.h</code>, <code>src/mkobj.c</code>, <code>src/objnam.c</code>.</li>
+<li>Level generation and dungeon: <code>src/mklev.c</code>, <code>src/sp_lev.c</code>, <code>src/dungeon.c</code>.</li>
+<li>Lua integration: <code>src/nhlua.c</code>, <code>src/nhlobj.c</code>, <code>src/nhlsel.c</code>.</li>
+<li>Display and vision: <code>src/display.c</code>, <code>src/vision.c</code>, <code>src/light.c</code>, <code>src/glyphs.c</code>.</li>
+<li>Window ports: <code>src/windows.c</code>, <code>include/winprocs.h</code>, <code>win/</code>.</li>
+<li>Save and restore: <code>src/save.c</code>, <code>src/restore.c</code>, <code>src/sfstruct.c</code>, <code>src/sfbase.c</code>, <code>src/bones.c</code>.</li>
+<li>Platform layers and build: <code>sys/</code>, <code>util/</code>, <code>dat/Makefile</code> generation.</li>
+<li>Sound: <code>src/sounds.c</code>, <code>include/sndprocs.h</code>, <code>sound/</code>.</li>
+</ul>
+<pre><code> sys/&lt;os&gt;/ main()  ---&gt;  allmain.c: early_init, newgame or dorecover, moveloop
+                                |
+        +-----------------------+------------------------+
+        |                       |                        |
+   cmd.c commands          monsters (mon.c)         level (mklev.c, sp_lev.c)
+   hack.c hero moves       monmove.c, mhitu.c       dungeon.c, Lua scripts (dat/)
+        |                       |                        |
+        +-----------+-----------+------------------------+
+                    |
+              display.c, vision.c   (glyphs for what the hero sees)
+                    |
+              windowprocs table   ---&gt; win/tty | curses | Qt | X11 | win32 ...
+                                         (win/chain wraps it; win/shim for libnh)
+</code></pre>
+<h2 id="data-flow">Data flow</h2>
+<p>Keys become commands, commands change state, and state flows back out as glyphs and messages.</p>
+<ol>
+<li><code>rhack()</code> in <code>src/cmd.c</code> takes the next command from the command queue, or else from <code>parse()</code>, which reads a key through <code>readchar</code> and the window port.</li>
+<li><code>rhack()</code> finds the key in a runtime binding list (<code>gc.Cmd.cmdbinds</code>), which maps it to a row of the command table, and calls the handler.</li>
+<li>A handler that uses time returns <code>ECMD_TIME</code>, which makes <code>rhack()</code> set <code>svc.context.move</code>. On the next pass, <code>moveloop_core()</code> in <code>src/allmain.c</code> first pays for that action: monsters move and timers run (<code>src/timeout.c</code>). Then it reads the next command.</li>
+<li>Changes call <code>newsym()</code> (<code>src/display.c</code>); <code>vision_recalc()</code> (<code>src/vision.c</code>) decides what the hero can see.</li>
+<li>Glyphs and messages (<code>pline</code>, <code>src/pline.c</code>) go through <code>windowprocs</code> to the active window port.</li>
+</ol>
+<p>One call of <code>moveloop_core()</code> is one pass, not one turn: the time of the previous action, then one input. A turn ends only when the hero and every monster are out of movement points. See the L3 module &quot;Game loop and startup&quot;.</p>
+<h3 id="scenario">Scenario</h3>
+<p>One example: the hero moves one square east in the tty interface.</p>
+<ol>
+<li><code>unixmain.c</code> has already called <code>moveloop()</code>, which calls <code>moveloop_core()</code> repeatedly.</li>
+<li><code>rhack()</code> maps <code>l</code> to the move handler; <code>domove()</code> in <code>src/hack.c</code> checks for monsters and terrain.</li>
+<li>The hero's position changes, <code>vision_recalc()</code> runs, <code>newsym()</code> marks changed squares.</li>
+<li><code>flush_screen()</code> makes the tty port print the changed squares; monsters then move.</li>
+</ol>
+<h2 id="data-model">Data model</h2>
+<p>A few big structures: the hero, the current level, monster and object chains, the dungeon table.</p>
+<ul>
+<li><code>struct you</code> (<code>u</code>, <code>include/you.h</code>): the hero. The hero is also a <code>struct monst</code>, <code>gy.youmonst</code>, which shared monster code receives.</li>
+<li>The map <code>levl[x][y]</code> (<code>include/rm.h</code>) and the current level record <code>svl.level</code> (<code>include/decl.h</code>): an 80 by 21 grid (<code>COLNO</code>, <code>ROWNO</code> in <code>include/global.h</code>) with object lists per square.</li>
+<li><code>struct monst</code> (<code>include/monst.h</code>) and <code>struct obj</code> (<code>include/obj.h</code>): linked lists. A monster is on the level, migrating or travelling with the hero; an object is in one of ten places named by <code>obj-&gt;where</code>. Per-type data is <code>permonst</code> (<code>include/permonst.h</code>, data in <code>include/monsters.h</code>) and <code>objclass</code> (<code>include/objclass.h</code>, data in <code>include/objects.h</code>). Both tables are runtime copies; <code>objects[]</code> is rewritten per game and saved.</li>
+<li><code>svd.dungeons</code> and the level ledger (<code>include/dungeon.h</code>, <code>src/dungeon.c</code>): which dungeons exist and how deep.</li>
+<li>Globals: <code>g*</code> structures hold engine state, <code>sv*</code> structures state that belongs to a saved game (<code>include/decl.h</code>). The prefix saves nothing: every saved field is written by hand. The hero <code>u</code>, <code>flags</code> and <code>iflags</code> are plain globals outside both.</li>
+</ul>
+<h2 id="recurring-patterns">Recurring patterns</h2>
+<p>Four habits explain why a small change often has side effects.</p>
+<ul>
+<li>One header, several expansions (X-macros): <code>include/objects.h</code>, <code>include/monsters.h</code>, <code>include/optlist.h</code>, <code>include/defsym.h</code>, <code>include/seffects.h</code> and <code>include/artilist.h</code> are each included several times with different macros. Entry order is the numbering.</li>
+<li>Tables mirrored by hand: <code>struct window_procs</code> and <code>struct chain_procs</code>, <code>soundlib_choices[]</code> and <code>enum soundlib_ids</code>, <code>defsyms</code> and <code>altlabels[]</code>, the save and restore routines. The compiler does not catch a mismatch.</li>
+<li>Orders written in comments: <code>newgame()</code> start-up order, the glyph enum, skill numbers, dragons, <code>makelevel()</code> steps. Nothing enforces them.</li>
+<li>State passed in globals: hero direction (<code>u.dx</code>), attack position (<code>gb.bhitpos</code>), the pending action (<code>ga.afternmv</code>), the speaker (<code>gv.voice</code>).</li>
+</ul>
+<p>Each L3 module lists the traps that apply to it.</p>
+<h2 id="state-and-persistence">State and persistence</h2>
+<p>A save holds the <code>sv*</code> globals, the hero, the dungeons and every visited level.</p>
+<ul>
+<li>The game always writes the <code>historical</code> format, a raw dump of C structs. <code>exportascii</code> exists only in the offline utility <code>sfctool</code>.</li>
+<li>While the game runs, each level that was left is written to a level file (<code>create_levelfile</code> in <code>src/files.c</code>); saving gathers them (<code>src/save.c</code>) and restoring splits them out again (<code>src/restore.c</code>). Saving frees the running game, and a save is deleted when restored (except in wizard and explore mode).</li>
+<li>Not saved: window state and most <code>g*</code> globals, though a few <code>g*</code> members are saved by their own routines (inventory, migrating monsters). The only Lua data saved is the <code>nh_lua_variables</code> table.</li>
+<li>Time values are saved relative to the current turn. A change to a saved structure needs <code>EDITLEVEL</code> in <code>include/patchlevel.h</code> raised.</li>
+</ul>
+<h2 id="configuration-layers">Configuration layers</h2>
+<p>Behaviour is set at build time, by a system file, and by the player's file.</p>
+<ul>
+<li>Build time: <code>include/config.h</code>, <code>include/unixconf.h</code> and the like, overridden by <code>sys/unix/hints/</code> variables such as <code>WANT_WIN_CURSES=1</code>.</li>
+<li>System: the <code>sysconf</code> file (shared settings, wizard-mode user list, limits), read by <code>src/sys.c</code> and <code>src/cfgfiles.c</code>.</li>
+<li>Player: <code>.nethackrc</code> or equivalent, read in <code>src/cfgfiles.c</code>, which hands <code>OPTIONS=</code> lines to <code>src/options.c</code>; the in-game <code>O</code> command uses the same parser.</li>
+<li>Environment variables and command-line flags such as <code>-D</code>, <code>-X</code>, <code>-u</code> (<code>doc/nethack.txt</code>). <code>NETHACKOPTIONS</code> may hold options or name a file.</li>
+<li>Order of precedence, last wins: built-in default, sysconf, RC file, <code>NETHACKOPTIONS</code>, command line, then play (<code>enum option_phases</code>, <code>include/global.h</code>).</li>
+</ul>
+<h2 id="extension-points">Extension points</h2>
+<p>New window systems, sound libraries and Lua scripts plug in without touching the core.</p>
+<ul>
+<li>Window port: fill a <code>struct window_procs</code> (<code>include/winprocs.h</code>), described in <code>doc/window.txt</code>. Two other tables must mirror it by hand.</li>
+<li>Sound library: fill a sound-procs table (<code>include/sndprocs.h</code>), described in <code>doc/sound.txt</code>, which is partly out of date. Adding one touches about five places.</li>
+<li>Lua: a script API under the <code>nh</code> and <code>des</code> tables (<code>doc/lua.adoc</code>).</li>
+<li>Regular expressions: one of three interchangeable files in <code>sys/share/</code> (<code>DEVEL/code_features.txt</code>).</li>
+</ul>
+<h2 id="trust-and-safety-boundaries">Trust and safety boundaries</h2>
+<p>Lua scripts run in a sandbox; save and bones files are trusted input, with some checks.</p>
+<ul>
+<li>The sandbox (<code>NHL_SANDBOX</code> in <code>include/config.h</code>, <code>nhl_sandbox_info</code> in <code>include/global.h</code>) removes risky Lua libraries (no <code>io</code>, <code>os</code>, <code>package</code>, <code>debug</code>, <code>load</code>) and limits memory and instruction counts. Running out of instructions always panics.</li>
+<li>A script error is fatal by policy: nearly every call into Lua panics on failure. Treat a script as part of the program.</li>
+<li>Wizard mode (<code>-D</code>) is gated by the <code>WIZARDS</code> list in <code>sysconf</code> where SYSCF is enabled.</li>
+<li>A save file carries Lua source text that is run on restore (inside the sandbox). Restore checks the version, feature bits, structure sizes and the owner (<code>CHECK_SAVE_UID</code>, default on); struct contents are not range-checked, and a truncated save inside a level is only partly guarded.</li>
+</ul>
+<h2 id="outside-interfaces">Outside interfaces</h2>
+<p>The game has a command line, config files, data files and an optional library build.</p>
+<ul>
+<li>CLI flags in <code>doc/nethack.txt</code>; utilities <code>recover</code> (rebuild a crashed game, needs <code>INSURANCE</code> in <code>include/config.h</code>) and <code>sfctool</code> (convert the save file format), both in <code>util/</code>.</li>
+<li>File formats: save, bones, level files, record and logfile, the <code>dlb</code> data library (<code>util/dlb_main.c</code>).</li>
+<li>Library build: <code>sys/libnh/</code> produces <code>libnethack.a</code> or a WebAssembly module for other programs.</li>
+</ul>
+
+</article>
+</main>
+</div>
+</body>
+</html>

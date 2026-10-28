@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L2 Architecture - Documentation pyramid</title>
+<link rel="stylesheet" href="skins/pv-base.css">
+<link rel="stylesheet" href="skins/light.css">
+</head>
+<body class="view-pyramid" data-skin="light">
+<a class="skip-link" href="#pv-main">Skip to content</a>
+<header class="site-header">
+<nav aria-label="Site" class="site-nav">
+<a class="site-name" href="index.html">Documentation pyramid</a>
+<a class="view-switch" href="_tree/L2-architecture.html">Tree view</a>
+</nav>
+</header>
+<div class="layout">
+<main id="pv-main" class="content content-paper">
+<article class="doc">
+<nav class="page-toc" aria-label="On this page">
+<p class="toc-label">On this page</p>
+<ul>
+<li class="toc-level-2"><a href="#tech-stack">Tech stack</a></li>
+<li class="toc-level-2"><a href="#project-structure">Project structure</a></li>
+<li class="toc-level-2"><a href="#subsystems">Subsystems</a></li>
+<li class="toc-level-2"><a href="#data-flow">Data flow</a></li>
+<li class="toc-level-3"><a href="#scenario">Scenario</a></li>
+<li class="toc-level-2"><a href="#data-model">Data model</a></li>
+<li class="toc-level-2"><a href="#key-decisions">Key decisions</a></li>
+</ul>
+</nav>
+<h1 id="l2-architecture">L2 Architecture</h1>
+<h2 id="tech-stack">Tech stack</h2>
+<p>Portable ISO C (C99 by default, C89 optional), built with a plain makefile and gcc.</p>
+<ul>
+<li>C99 or C89: the makefile uses <code>-std=c99 -DLUA_USE_LINUX</code>; <code>onelua.c</code> shows C89 and Linux builds.</li>
+<li>POSIX hooks: <code>LUA_USE_POSIX</code>, <code>LUA_USE_DLOPEN</code> and <code>LUA_USE_READLINE</code> switch on platform features in <code>luaconf.h</code>.</li>
+<li>Lua itself: the test suite in <code>testes/</code> and the manual converter <code>manual/2html</code> are Lua scripts.</li>
+<li>No external libraries: only the C library, <code>-lm</code>, and <code>-ldl</code> for dynamic loading on Linux.</li>
+</ul>
+<h2 id="project-structure">Project structure</h2>
+<p>All source files sit flat in the repository root; there is no <code>src/</code> folder.</p>
+<pre><code>lua/
+  l*.c l*.h      core (VM, compiler, GC), libraries, C API
+  lua.c          stand-alone interpreter
+  onelua.c       whole interpreter as one translation unit
+  luaconf.h      build-time configuration
+  makefile       developer's makefile (not the release one)
+  all            script: build, then run the whole suite
+  testes/        test suite (Lua scripts, plus C libraries in testes/libs/)
+  manual/        reference manual source (manual.of) and HTML converter (2html)
+  docs/          these documents
+</code></pre>
+<h2 id="subsystems">Subsystems</h2>
+<p>The interpreter has about nine parts, listed here from the outside in; each has a module in L3.</p>
+<pre><code> lua.c  ---&gt;  standard libraries  ---&gt;  C API + auxiliary library
+ (host)       (lbaselib, ...)           (lapi, lauxlib)
+                                              |
+        compiler  ---&gt;  virtual machine  &lt;--- calls, stack, errors
+        (llex, lparser, lcode)   (lvm)        (ldo, ldebug, lfunc, lstate)
+                                              |
+                       objects, tables, strings   &lt;---&gt;   garbage collector
+                       (lobject, ltable, lstring, lmem)   (lgc)
+</code></pre>
+<ul>
+<li>Compiler: turns source text into a function prototype (<code>Proto</code>).</li>
+<li>Virtual machine: runs the bytecode in <code>lvm.c</code>.</li>
+<li>Calls, stack and errors: <code>ldo.c</code> and friends move control between Lua and C.</li>
+<li>Objects, tables and strings: the value representation and the two big data structures.</li>
+<li>Garbage collector: <code>lgc.c</code>, driven by allocation and by <code>lua_gc</code>.</li>
+<li>C API and auxiliary library: the only supported way for C code to use the core.</li>
+<li>Standard libraries: base, string, table, math, io, os, coroutine, utf8, debug, package.</li>
+<li>Bytecode dump and load: <code>ldump.c</code>, <code>lundump.c</code>.</li>
+<li>Stand-alone interpreter: <code>lua.c</code>.</li>
+<li>Test suite: <code>testes/</code>, plus the special test build around <code>ltests.c</code>.</li>
+</ul>
+<h2 id="data-flow">Data flow</h2>
+<p>Source text becomes a closure; running it calls back into the C API and the libraries.</p>
+<pre><code>source text / precompiled chunk
+   |  lzio (buffered reader)
+   v
+llex -&gt; lparser + lcode  (one pass, no syntax tree)  -&gt; Proto (bytecode, constants, line info)
+   |                                                     |  or ldump/lundump for binary chunks
+   v
+LClosure  -&gt; ldo (call, stack) -&gt; lvm (execute) -&gt; calls C functions via lapi
+                                       |
+                              ltable / lstring / ltm (metamethods) / lgc
+</code></pre>
+<h3 id="scenario">Scenario</h3>
+<p><code>lua script.lua</code> runs one file.</p>
+<ol>
+<li><code>lua.c</code> creates a state with <code>luaL_newstate</code>, opens the libraries (<code>luaL_openlibs</code>, <code>linit.c</code>) and handles options and <code>LUA_INIT</code>.</li>
+<li><code>luaL_loadfile</code> reads the file through <code>lzio</code>, and <code>luaD_protectedparser</code> compiles it into a closure.</li>
+<li><code>lua_pcall</code> runs the closure through <code>luaD_pcall</code> and <code>luaD_callnoyield</code>: <code>luaD_precall</code> pushes a <code>CallInfo</code> and <code>luaV_execute</code> runs the instructions.</li>
+<li>An error anywhere calls the message handler (<code>msghandler</code> in <code>lua.c</code>, which builds a traceback), then unwinds with <code>luaD_throw</code> to the protected call; <code>lua.c</code> prints the message.</li>
+</ol>
+<h2 id="data-model">Data model</h2>
+<p>Every value is a <code>TValue</code>: a type tag plus a payload.</p>
+<pre><code>global_State (one per VM) --- registry (Table), string table, GC lists, metatables for basic types
+   |
+lua_State (one per thread) --- stack, CallInfo list, open upvalues, hooks
+   |
+Collectable objects: TString, Table, LClosure/CClosure, UpVal, Udata, Proto, lua_State
+</code></pre>
+<p>The payload is a number, a light pointer or a pointer to a collectable object. Inside a table's array part the payload and the tag are stored apart, so an array slot is not a <code>TValue</code>.</p>
+<p><code>Proto</code> holds code, constants, upvalue descriptions and debug information; an <code>LClosure</code> is a <code>Proto</code> plus its <code>UpVal</code>s. See <code>lobject.h</code> and <code>lstate.h</code>.</p>
+<h2 id="key-decisions">Key decisions</h2>
+<p>No decision records exist for this snapshot. The source states a few principles in comments; they shape most changes. Details are in L3.</p>
+<ul>
+<li>Single pass, no syntax tree: the parser emits code while it reads.</li>
+<li>Fast path first, metamethod second: each arithmetic opcode is paired with a fallback opcode.</li>
+<li>The C stack is disposable: a yield or error unwinds it, and the <code>CallInfo</code> chain holds the state.</li>
+<li>Enum order is load-bearing: opcodes, operators and metamethod events are converted by arithmetic, marked with <code>ORDER</code> tags in the source.</li>
+<li>Write barriers are the caller's job: the collector invariant is kept at each write site.</li>
+</ul>
+<p>Design comments in the source can be stale; the table-size rule at the top of <code>ltable.c</code> is one (L3, Objects, tables and strings).</p>
+
+</article>
+</main>
+</div>
+</body>
+</html>

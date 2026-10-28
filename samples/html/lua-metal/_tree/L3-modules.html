@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L3 Modules - Documentation pyramid</title>
+<link rel="stylesheet" href="../skins/pv-base.css">
+<link rel="stylesheet" href="../skins/metal.css">
+</head>
+<body class="view-tree" data-skin="metal">
+<a class="skip-link" href="#pv-main">Skip to content</a>
+<header class="site-header">
+<nav aria-label="Site" class="site-nav">
+<a class="site-name" href="index.html">Documentation pyramid</a>
+<a class="view-switch" href="../index.html">Pyramid view</a>
+</nav>
+</header>
+<div class="layout">
+<nav class="tree" aria-label="Document index">
+<details class="tree-toggle">
+<summary>Document index</summary>
+<ul class="tree-layers">
+<li class="tree-layer"><p class="layer-label"><a href="L1-vision.html">L1 Vision</a></p>
+<ul class="tree-headings">
+<li><a href="L1-vision.html#what-is-this-repository">What is this repository?</a></li>
+<li><a href="L1-vision.html#who-is-it-for">Who is it for?</a></li>
+<li><a href="L1-vision.html#core-concepts">Core concepts</a></li>
+<li><a href="L1-vision.html#success">Success</a></li>
+<li><a href="L1-vision.html#direction">Direction</a></li>
+<li><a href="L1-vision.html#non-goals">Non-goals</a></li>
+</ul></li>
+<li class="tree-layer"><p class="layer-label"><a href="L2-architecture.html">L2 Architecture</a></p>
+<ul class="tree-headings">
+<li><a href="L2-architecture.html#tech-stack">Tech stack</a></li>
+<li><a href="L2-architecture.html#project-structure">Project structure</a></li>
+<li><a href="L2-architecture.html#subsystems">Subsystems</a></li>
+<li><a href="L2-architecture.html#data-flow">Data flow</a></li>
+<li><a href="L2-architecture.html#data-model">Data model</a></li>
+<li><a href="L2-architecture.html#key-decisions">Key decisions</a></li>
+</ul></li>
+<li class="tree-layer"><p class="layer-label"><a href="L3-modules.html" aria-current="page">L3 Modules</a></p>
+<ul class="tree-headings">
+<li><a href="L3-modules.html#compiler">Compiler</a>
+<ul class="tree-subheadings">
+<li><a href="L3-modules.html#things-to-know">Things to know</a></li>
+</ul></li>
+<li><a href="L3-modules.html#virtual-machine">Virtual machine</a>
+<ul class="tree-subheadings">
+<li><a href="L3-modules.html#things-to-know-1">Things to know</a></li>
+</ul></li>
+<li><a href="L3-modules.html#calls-stack-and-errors">Calls, stack and errors</a>
+<ul class="tree-subheadings">
+<li><a href="L3-modules.html#things-to-know-2">Things to know</a></li>
+</ul></li>
+<li><a href="L3-modules.html#objects-tables-and-strings">Objects, tables and strings</a>
+<ul class="tree-subheadings">
+<li><a href="L3-modules.html#things-to-know-3">Things to know</a></li>
+</ul></li>
+<li><a href="L3-modules.html#garbage-collector">Garbage collector</a>
+<ul class="tree-subheadings">
+<li><a href="L3-modules.html#things-to-know-4">Things to know</a></li>
+</ul></li>
+<li><a href="L3-modules.html#c-api-and-auxiliary-library">C API and auxiliary library</a>
+<ul class="tree-subheadings">
+<li><a href="L3-modules.html#things-to-know-5">Things to know</a></li>
+</ul></li>
+<li><a href="L3-modules.html#standard-libraries">Standard libraries</a>
+<ul class="tree-subheadings">
+<li><a href="L3-modules.html#things-to-know-6">Things to know</a></li>
+</ul></li>
+<li><a href="L3-modules.html#bytecode-dump-and-load">Bytecode dump and load</a>
+<ul class="tree-subheadings">
+<li><a href="L3-modules.html#things-to-know-7">Things to know</a></li>
+</ul></li>
+<li><a href="L3-modules.html#stand-alone-interpreter">Stand-alone interpreter</a>
+<ul class="tree-subheadings">
+<li><a href="L3-modules.html#things-to-know-8">Things to know</a></li>
+</ul></li>
+<li><a href="L3-modules.html#test-suite">Test suite</a>
+<ul class="tree-subheadings">
+<li><a href="L3-modules.html#things-to-know-9">Things to know</a></li>
+</ul></li>
+<li><a href="L3-modules.html#reference-manual-sources">Reference manual sources</a>
+<ul class="tree-subheadings">
+<li><a href="L3-modules.html#things-to-know-10">Things to know</a></li>
+</ul></li>
+</ul></li>
+<li class="tree-layer"><p class="layer-label"><a href="L4-operations.html">L4 Operations</a></p>
+<ul class="tree-headings">
+<li><a href="L4-operations.html#build">Build</a></li>
+<li><a href="L4-operations.html#run">Run</a></li>
+<li><a href="L4-operations.html#testing">Testing</a></li>
+<li><a href="L4-operations.html#debugging">Debugging</a></li>
+<li><a href="L4-operations.html#change-recipes">Change recipes</a></li>
+<li><a href="L4-operations.html#release">Release</a></li>
+</ul></li>
+</ul>
+</details>
+</nav>
+<main id="pv-main" class="content content-paper">
+<article class="doc">
+<h1 id="l3-modules">L3 Modules</h1>
+<h2 id="compiler">Compiler</h2>
+<p>The compiler turns source text into a function prototype in one pass, without a syntax tree.</p>
+<p>It lives in <code>llex.c</code> (tokens), <code>lparser.c</code> (grammar, scopes, variables), <code>lcode.c</code> (instruction emission and register allocation) and <code>lzio.c</code> (buffered input, also used by the binary loader). The parser calls <code>luaK_*</code> functions while it reads. An expression is an <code>expdesc</code>: a description of where its value is or can be put, so code is emitted only when the context needs it (<code>a + 1</code> becomes <code>OP_ADDI</code>, <code>t.x</code> becomes <code>OP_GETFIELD</code>). The source gives no stated reason for the single-pass design.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>llex.c</code>, <code>llex.h</code></td>
+<td>Lexer, reserved words, <code>LexState</code></td>
+</tr>
+<tr>
+<td><code>lparser.c</code>, <code>lparser.h</code></td>
+<td>Statements, expressions, <code>FuncState</code>, <code>expdesc</code>, <code>global</code> declarations</td>
+</tr>
+<tr>
+<td><code>lcode.c</code>, <code>lcode.h</code></td>
+<td>Emits instructions, folds constants, patches jumps</td>
+</tr>
+<tr>
+<td><code>lzio.c</code>, <code>lzio.h</code></td>
+<td><code>ZIO</code> reader and <code>Mbuffer</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="things-to-know">Things to know</h3>
+<ul>
+<li>Boolean logic is jump lists: the <code>t</code> and <code>f</code> fields of an <code>expdesc</code> chain unresolved jumps through the jump instructions themselves.</li>
+<li>Code is rewritten after emission. Peephole edits of the previous instruction are legal only through <code>previousinstruction</code> and after <code>luaK_getlabel</code> at jump targets. <code>luaK_finish</code> runs at the end of each function and fixes returns, vararg opcodes and jump chains, so the opcode stream is not final before it.</li>
+<li>The scanner makes every name and string unique, and the parser compares names by pointer. Create names only through <code>luaX_newstring</code>. The same table anchors compiler objects against the collector.</li>
+<li>Constant folding refuses NaN, zero results and operations that could raise an error. The constant cache (<code>kcache</code>) can hold duplicates by design.</li>
+<li><code>local x &lt;const&gt; = &lt;constant&gt;</code> takes no register and has no debug entry, so registers and variables are not one-to-one.</li>
+<li><code>global</code> is not a reserved word in a default build (<code>LUA_COMPAT_GLOBAL</code> is 1 in <code>luaconf.h</code>). The test header <code>ltests.h</code> sets it to 0, so a change to the lookahead rule is invisible to the test build.</li>
+<li>Nesting depth shares the C-call counter (<code>LUAI_MAXCCALLS</code>, 200). &quot;C stack overflow&quot; is a run-time error without a &quot;near&quot; part. Other fixed limits: 200 locals, 255 registers, 255 upvalues.</li>
+</ul>
+<p>Trap: operator, opcode, metamethod event and token enums are converted by arithmetic on their order. Each place carries a tag; run <code>grep &quot;ORDER &quot; *.c *.h</code> before changing one (<code>ORDER OPR</code>, <code>ORDER OP</code>, <code>ORDER TM</code>, <code>ORDER RESERVED</code>). A new test opcode also needs the T bit in <code>luaP_opmodes</code> (<code>lopcodes.c</code>), because every test must be followed by a jump. Release builds have no asserts to catch a mistake.</p>
+<h2 id="virtual-machine">Virtual machine</h2>
+<p>The virtual machine executes register-based bytecode in <code>luaV_execute</code>.</p>
+<p>It lives in <code>lvm.c</code>, with the instruction set in <code>lopcodes.h</code>/<code>lopcodes.c</code> and the dispatch table in <code>ljumptab.h</code>. Instructions are 32-bit words with a 7-bit opcode and the formats <code>iABC</code>, <code>ivABC</code>, <code>iABx</code>, <code>iAsBx</code>, <code>iAx</code> and <code>isJ</code>, drawn at the top of <code>lopcodes.h</code>. On gcc-compatible compilers the loop dispatches with computed gotos (<code>LUA_USE_JUMPTABLE</code>); otherwise it uses a <code>switch</code>. The test build forces the <code>switch</code>, so a wrong <code>ljumptab.h</code> entry shows only in a normal build.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lvm.c</code>, <code>lvm.h</code></td>
+<td>Main loop, arithmetic, comparison, concatenation, <code>for</code> loops, table get/set slow paths, <code>luaV_finishOp</code></td>
+</tr>
+<tr>
+<td><code>lopcodes.c</code>, <code>lopcodes.h</code>, <code>lopnames.h</code></td>
+<td>Opcode list, formats, argument limits, mode table <code>luaP_opmodes</code></td>
+</tr>
+<tr>
+<td><code>ljumptab.h</code></td>
+<td>Computed-goto table, included only inside <code>lvm.c</code></td>
+</tr>
+<tr>
+<td><code>ltm.c</code>, <code>ltm.h</code></td>
+<td>Tag methods (metamethods), type names, vararg handling</td>
+</tr>
+</tbody>
+</table>
+<h3 id="things-to-know-1">Things to know</h3>
+<ul>
+<li>A Lua-to-Lua call does not recurse in C: <code>OP_CALL</code> switches frames inside the same <code>luaV_execute</code>. A new C frame (<code>CIST_FRESH</code>) starts only when C code enters the VM, and metamethod calls do count against the C-call limit.</li>
+<li>The loop keeps <code>pc</code>, <code>base</code>, <code>k</code> and <code>trap</code> in locals. Wrap anything that can raise errors, grow the stack or change hooks in the matching macro (<code>Protect</code>, <code>halfProtect</code>, <code>ProtectNT</code>); after a stack reallocation <code>base</code> is refreshed through <code>trap</code>.</li>
+<li>Every arithmetic and bitwise opcode is followed by an <code>OP_MMBIN*</code>; success skips it with <code>pc++</code>, and the slow path finds its target by reading <code>pc - 2</code>. Comparison and test opcodes run the next jump inline and trust that it is one.</li>
+<li>The VM does no string-to-number coercion in arithmetic; the string library supplies it through the string metatable (<code>lstrlib.c</code>). Bitwise operations on strings get none.</li>
+<li>An opcode that can yield inside a metamethod needs a case in <code>luaV_finishOp</code>, which completes it when a coroutine resumes.</li>
+<li>The &quot;uses top&quot; bit of <code>luaP_opmodes</code> is read at run time by hooks (<code>luaG_traceexec</code>), not only by tests. A wrong bit works until a hook is set.</li>
+<li>Immediate shifts have a surprising operand order: <code>OP_SHLI</code> is <code>sC &lt;&lt; R[B]</code>.</li>
+<li>The <code>lopcodes.h</code> comments for the generic <code>for</code> opcodes (<code>OP_TFORPREP</code>, <code>OP_TFORCALL</code>, <code>OP_TFORLOOP</code>) are stale; the comments in <code>lvm.c</code> are right.</li>
+<li>Only six metamethod events (up to <code>TM_EQ</code>) are cached as absent in <code>Table.flags</code>; every store path must call <code>invalidateTMcache</code>.</li>
+</ul>
+<p>Trap: opcode order lives in <code>lopcodes.h</code>, <code>lopcodes.c</code> (<code>luaP_opmodes</code>), <code>ljumptab.h</code> and, through arithmetic on the order, <code>lcode.c</code>. A mismatch in <code>ljumptab.h</code> or <code>luaP_opmodes</code> breaks execution or hooks. <code>lopnames.h</code> only names opcodes in test listings.</p>
+<h2 id="calls-stack-and-errors">Calls, stack and errors</h2>
+<p>This module moves control between Lua functions, C functions, coroutines and error handlers.</p>
+<p>Code is in <code>ldo.c</code> (calls, protected calls, resume and yield, stack growth, hook dispatch, result moving, closing on error, protected parsing), <code>lstate.c</code> (states, threads, the <code>CallInfo</code> list), <code>lfunc.c</code> (closures, upvalues, to-be-closed variables) and <code>ldebug.c</code> (<code>lua_sethook</code>, line info, tracing, error messages with variable names). Errors are C exceptions: <code>luaD_throw</code> jumps with <code>longjmp</code>, or throws a C++ exception when compiled as C++ without <code>LUA_USE_LONGJMP</code>. A yield unwinds the same way, and resumption continues through the <code>CallInfo</code> chain and continuation functions (<code>lua_KFunction</code>), not through the C stack. Yielding across a C function without a continuation is refused.</p>
+<h3 id="things-to-know-2">Things to know</h3>
+<ul>
+<li>A <code>pcall</code> in a yieldable coroutine has no <code>setjmp</code> of its own: it sets <code>CIST_YPCALL</code> and relies on <code>lua_resume</code>'s protection. Elsewhere <code>luaD_pcall</code> is used. Two recovery paths exist for one Lua function.</li>
+<li><code>L-&gt;nCcalls</code> holds two counters: C recursion (low 16 bits) and non-yieldable calls (high 16 bits). A longjmp skips decrements, so <code>luaD_rawrunprotected</code> restores it. The parser uses the same counter.</li>
+<li>Overflow handling keeps spare room: after a stack overflow the stack may exceed <code>LUAI_MAXSTACK</code> by <code>STACKERRSPACE</code>; a second overflow raises &quot;error in error handling&quot; (<code>luaD_errerr</code>).</li>
+<li>The message handler runs at the throw site, before unwinding, and only for run-time errors. Memory and syntax errors skip it. Memory errors avoid allocating.</li>
+<li>Stack reallocation converts every stack pointer (<code>relstack</code>, <code>correctstack</code>). Raw <code>StkId</code> values are stale after anything that can grow the stack; keep offsets (<code>savestack</code>) or use <code>checkstackp</code>. The test build uses the non-strict address mode (<code>LUAI_STRICT_ADDRESS 0</code>), a default build the strict one.</li>
+<li>In frames with hidden varargs <code>ci-&gt;func</code> is moved up; <code>OP_RETURN</code>, <code>rethook</code> and <code>luaD_pretailcall</code> move it back. Hooks and debug code see the moved value.</li>
+<li>Result counts, <code>__call</code> hop counts and the saved error status are packed into <code>callstatus</code>. A change to result adjustment touches <code>moveresults</code>, <code>OP_RETURN0</code>/<code>OP_RETURN1</code> in <code>lvm.c</code> and the return rewriting in <code>lcode.c</code>.</li>
+<li>To-be-closed variables form a list stored in the stack slots. An error in a <code>__close</code> method replaces the current error.</li>
+<li>A yield inside a debug hook does not throw from <code>lua_yieldk</code>; <code>luaG_traceexec</code> throws it later.</li>
+<li>The <code>CallInfo</code> list keeps free entries after <code>L-&gt;ci</code>; they count toward the thread's memory size.</li>
+<li><code>luaG_runerror</code> adds &quot;source:line:&quot; only for Lua frames; C functions use <code>luaL_where</code>.</li>
+</ul>
+<p>Trap: the Lua stack is reallocated when it grows. A new function that calls anything while holding a stack pointer must save and restore it.</p>
+<h2 id="objects-tables-and-strings">Objects, tables and strings</h2>
+<p>This module defines how values are represented and how tables and strings work.</p>
+<p><code>lobject.h</code> holds the <code>TValue</code> tagged union, the type tags and variants, <code>Proto</code>, closures and the <code>Table</code> and <code>Node</code> structs; <code>lobject.c</code> has number conversion and <code>luaO_pushvfstring</code>. <code>ltable.c</code> implements the array part and a chained scatter hash part with Brent's variation. <code>lstring.c</code> interns short strings (up to <code>LUAI_MAXSHORTLEN</code>, 40 bytes) in one string table; long strings are hashed lazily. <code>lmem.c</code> wraps the user-supplied allocator and runs an emergency collection when an allocation fails.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lobject.c</code>, <code>lobject.h</code></td>
+<td>Value and object definitions, <code>luaO_*</code> helpers</td>
+</tr>
+<tr>
+<td><code>ltable.c</code>, <code>ltable.h</code></td>
+<td>Tables: array part, hash part, rehash</td>
+</tr>
+<tr>
+<td><code>lstring.c</code>, <code>lstring.h</code></td>
+<td>String creation, interning, the <code>luaS_new</code> cache, external strings, userdata</td>
+</tr>
+<tr>
+<td><code>lmem.c</code>, <code>lmem.h</code></td>
+<td>Allocation wrappers, size-overflow checks, GC debt accounting</td>
+</tr>
+<tr>
+<td><code>llimits.h</code></td>
+<td>Internal types (<code>lu_byte</code>, <code>l_uint32</code>), casts, assertions</td>
+</tr>
+</tbody>
+</table>
+<h3 id="things-to-know-3">Things to know</h3>
+<ul>
+<li>The array part is not an array of <code>TValue</code>: values grow downward and one-byte tags upward from <code>t-&gt;array</code>, with the <code>#t</code> length hint between them. Use the access macros (<code>getArrTag</code>, <code>getArrVal</code>), never <code>t-&gt;array[i]</code>.</li>
+<li>The array size rule in the header comment of <code>ltable.c</code> (&quot;more than half used&quot;) is stale. The code (<code>computesizes</code>, <code>arrayXhash</code>) accepts a size when about a third of its slots are used. Trust the code.</li>
+<li>Nil has three kinds in a slot: nil, empty and absent key. Deleted keys stay in the node as dead keys until the collector clears them, so <code>next</code> keeps working.</li>
+<li>Setting is two-phase (<code>luaH_pset*</code>, then <code>luaH_finishset</code>). The caller owns the write barrier and the metamethod cache; <code>luaH_set</code> does neither.</li>
+<li>The <code>flags</code> byte caches absent metamethods and shares the byte with the dummy-node bit.</li>
+<li><code>#t</code> is a border search with a hint, not a stored length. A resize allocates the hash part first and then the array, and keeps the old table until both succeed.</li>
+<li>Float keys are normalised; nil and NaN keys are rejected at the set, not at lookup.</li>
+<li>Equal short strings are the same object, except short external strings (<code>lua_pushexternalstring</code>) until <code>luaS_normstr</code> interns them. A dead short string that is not yet swept is revived on lookup. The string table shrinks only in the collector, never in an emergency collection.</li>
+<li>The hash seed is a required argument of <code>lua_newstate</code>; it defeats adversarial keys.</li>
+</ul>
+<p>Trap: code that writes to a table that may be a metatable must call <code>invalidateTMcache</code>, and any store of a collectable value into a table needs <code>luaC_barrierback</code>.</p>
+<h2 id="garbage-collector">Garbage collector</h2>
+<p>The collector frees unreachable objects with an incremental or a generational mark-and-sweep.</p>
+<p>It lives in <code>lgc.c</code> and <code>lgc.h</code>. It runs when allocation debt reaches zero (<code>luaC_step</code>, via <code>luaC_condGC</code>), when <code>lua_gc</code> asks, and when an allocation fails (emergency collection, <code>lmem.c</code>). The library creates a state in incremental mode; the <code>lua</code> command switches to generational. Objects are white, gray or black. There are two whites that swap at the end of the atomic phase, so &quot;dead&quot; is a colour. A black object may not point to a white one, so a write into a black object needs a barrier: forward (<code>luaC_barrier</code>) for closures, prototypes and userdata, back (<code>luaC_barrierback</code>) for tables. Threads have no barrier and are re-traversed in the atomic phase.</p>
+<h3 id="things-to-know-4">Things to know</h3>
+<ul>
+<li>The invariant is suspended during sweep on purpose; the barrier then repaints or does nothing.</li>
+<li>Generational mode keeps an age ladder (<code>G_NEW</code> to <code>G_OLD</code>, <code>G_TOUCHED1/2</code>) and cuts the <code>allgc</code> and <code>finobj</code> lists with pointers (<code>survival</code>, <code>old1</code>, <code>reallyold</code>). Anything that unlinks an object from <code>allgc</code> must fix them, as <code>luaC_checkfinalizer</code> and <code>udata2finalize</code> do.</li>
+<li>The order inside the atomic phase decides finalizer semantics: weak values drop objects being finalized, weak keys keep them. Do not reorder it. Ephemerons converge by repeated traversal.</li>
+<li>Weak tables use the gray lists <code>weak</code>, <code>allweak</code> and <code>ephemeron</code>. Finalizers use the object lists <code>finobj</code> and <code>tobefnz</code> and the sweep states <code>GCSswpfinobj</code>, <code>GCSswptobefnz</code> and <code>GCScallfin</code>. Strings are never weak.</li>
+<li><code>__gc</code> takes effect only if it is in the metatable when <code>setmetatable</code> is called. Finalizers run with the collector stopped, and a failing one becomes a warning. They do not run in emergency collections.</li>
+<li>Emergency collection never runs inside the collector (<code>gcstopem</code>), so GC code must not allocate.</li>
+<li>The six tuning values (<code>LUAI_GCPAUSE</code>, <code>LUAI_GCMUL</code> and four more in <code>lgc.h</code>) are read once in <code>lua_newstate</code>; afterwards only <code>lua_gc(LUA_GCPARAM)</code> changes them.</li>
+<li>Shutdown order matters: <code>luaC_freeallobjects</code> runs pending finalizers, then frees <code>allgc</code>, then <code>fixedgc</code>. Permanent objects (reserved words, metamethod names) live in <code>fixedgc</code> via <code>luaC_fix</code>.</li>
+</ul>
+<p>Trap: a new collectable object type needs a case in <code>objsize</code>, <code>getgclist</code>, <code>reallymarkobject</code>, <code>propagatemark</code> and <code>freeobj</code> (each asserts on unknown types). Sweeping is generic. A barrier is needed at every write site, not per type. <code>HARDMEMTESTS</code> forces a full collection at every collection point, which finds unanchored values; it is not shown to find a missing barrier.</p>
+<h2 id="c-api-and-auxiliary-library">C API and auxiliary library</h2>
+<p>The C API is the stack-based interface through which C code, including the libraries, uses the core.</p>
+<p><code>lua.h</code> is the public header, <code>lapi.c</code> implements it, and <code>luaconf.h</code> configures types and limits. <code>lauxlib.c</code> and <code>lauxlib.h</code> build the higher-level <code>luaL_*</code> helpers on top. The file states its own rule: it uses only the official API. <code>luaL_newstate</code> also installs the panic function, the warning system and the hash seed (<code>luaL_makeseed</code>). Values are addressed by stack index, with pseudo-indices for the registry and for upvalues.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lua.h</code>, <code>lapi.c</code>, <code>lapi.h</code></td>
+<td>Public API and its implementation</td>
+</tr>
+<tr>
+<td><code>luaconf.h</code></td>
+<td>Number types, paths, platform switches, compatibility flags</td>
+</tr>
+<tr>
+<td><code>lauxlib.c</code>, <code>lauxlib.h</code></td>
+<td>Auxiliary library, <code>luaL_Buffer</code>, references, error helpers</td>
+</tr>
+<tr>
+<td><code>lprefix.h</code></td>
+<td>Feature-test macros included first by every <code>.c</code> file</td>
+</tr>
+</tbody>
+</table>
+<h3 id="things-to-know-5">Things to know</h3>
+<ul>
+<li>A default build validates nothing. <code>api_check</code> is active only with <code>LUA_USE_APICHECK</code> (it uses <code>assert</code>, so <code>NDEBUG</code> turns it off) or in a <code>LUAI_ASSERT</code> build.</li>
+<li>Stack-index checks are split between two functions with different strictness. Some stack operations are restricted while to-be-closed slots are pending.</li>
+<li><code>luaL_Buffer</code> keeps one hidden stack slot and becomes a to-be-closed userdata when it grows. <code>luaL_pushresult</code> hands the buffer over without copying.</li>
+<li>References: <code>t[1]</code> is the free-list head, so registry slot 1 is reserved.</li>
+<li><code>luaL_argerror</code> adjusts the argument number for method calls.</li>
+</ul>
+<p>Trap: <code>luaconf.h</code> changes the ABI (number types, <code>LUA_32BITS</code>); the core and every C library must be built with the same one. Only number sizes and the version are checked automatically at load time.</p>
+<h2 id="standard-libraries">Standard libraries</h2>
+<p>The standard libraries are one C file each, registered through <code>linit.c</code>.</p>
+<p><code>lbaselib.c</code>, <code>lstrlib.c</code> (strings, patterns, <code>string.pack</code>), <code>ltablib.c</code>, <code>lmathlib.c</code>, <code>liolib.c</code>, <code>loslib.c</code>, <code>lcorolib.c</code>, <code>lutf8lib.c</code>, <code>ldblib.c</code> and <code>loadlib.c</code> (the <code>package</code> library and <code>require</code>). They use the public API and <code>lauxlib</code>, and also the internal <code>llimits.h</code> (casts, branch hints, <code>lua_assert</code>); copy that header too when using one as an example. Libraries are selected by a bit mask whose order is the table order in <code>linit.c</code>.</p>
+<h3 id="things-to-know-6">Things to know</h3>
+<ul>
+<li><code>require</code> loops over <code>package.searchers</code>: preload, Lua path, C path, C root. The C-root searcher loads submodules from one shared library.</li>
+<li>Loaded C libraries sit in the registry table <code>_CLIBS</code>, mapped to a light userdata and to an external &quot;library string&quot; whose deallocator unloads the library. A module name with a hyphen opens the function named after the part before the hyphen.</li>
+<li>Search paths: the versioned variable (<code>LUA_PATH_5_5</code>, <code>LUA_CPATH_5_5</code>) wins over the plain one; <code>;;</code> expands to the default from <code>luaconf.h</code>; <code>-E</code> ignores the environment.</li>
+<li><code>table.sort</code> has an &quot;invalid order function&quot; error and a randomised pivot. The table library accepts table-like objects through metamethods.</li>
+<li><code>load</code> and <code>loadfile</code> refuse the mode letter <code>B</code>. <code>getmetatable</code> honours <code>__metatable</code>; the <code>debug</code> functions do not.</li>
+<li><code>math.random</code> is xoshiro256**. The <code>math</code> compatibility functions need <code>LUA_COMPAT_MATHLIB</code>. <code>table.create</code> is new in this tree.</li>
+<li><code>utf8</code> is strict by default, with a lax mode up to 31 bits. <code>string.pack</code> derives alignment from a struct probe.</li>
+<li><code>coroutine.close</code> of the running coroutine closes it from inside and does not return.</li>
+</ul>
+<p>Trap: the C-library loader depends on platform macros (<code>LUA_USE_DLOPEN</code>, <code>LUA_DL_DLL</code>, or none; <code>LUA_USE_LINUX</code> sets the first). Without a loader, <code>require</code> of C modules fails at run time with &quot;dynamic libraries not enabled&quot;, not at build time.</p>
+<h2 id="bytecode-dump-and-load">Bytecode dump and load</h2>
+<p>This module writes and reads precompiled chunks, used by <code>string.dump</code>, <code>lua_dump</code> and <code>load</code>.</p>
+<p><code>ldump.c</code> writes a <code>Proto</code> and <code>lundump.c</code> reads it back. The loader checks a header first: signature, <code>LUAC_VERSION</code>, <code>LUAC_FORMAT</code>, <code>LUAC_DATA</code>, the sizes of <code>int</code>, <code>Instruction</code>, <code>lua_Integer</code> and <code>lua_Number</code>, and the test values <code>LUAC_INT</code>, <code>LUAC_INST</code> and <code>LUAC_NUM</code> (<code>lundump.h</code>). That catches a different version, byte order or type size. It does not catch a different opcode set or <code>Proto</code> layout of the same version and format. The tree has no <code>luac</code> program; <code>string.dump</code> (a wrapper over <code>lua_dump</code>, with a <code>strip</code> option) produces chunks.</p>
+<h3 id="things-to-know-7">Things to know</h3>
+<ul>
+<li>Strings are deduplicated through an implicit index, so dump order and load order are one contract.</li>
+<li>There is no bytecode verifier. The loader trusts the chunk, so a crafted chunk can crash the VM.</li>
+<li>Fixed-buffer mode (<code>B</code>) makes the loaded function point into the caller's memory.</li>
+<li>Loading is ordered for error safety and collector anchoring. Integers use varints and zig-zag, floats are raw.</li>
+<li>Debug block sizes are always written, even when stripped.</li>
+</ul>
+<p>Trap: changing the instruction set or the <code>Proto</code> fields without changing the dumper and the loader together leaves old chunks loading into wrong code. <code>LUAC_VERSION</code> is computed from the Lua version and is not a counter; bump <code>LUAC_FORMAT</code> when the layout changes.</p>
+<h2 id="stand-alone-interpreter">Stand-alone interpreter</h2>
+<p>The stand-alone interpreter is the <code>lua</code> command: option handling, a REPL and script execution.</p>
+<p><code>lua.c</code> creates the state, switches the collector to generational mode, opens the libraries, handles the options (<code>-e</code>, <code>-i</code>, <code>-l</code>, <code>-v</code>, <code>-E</code>, <code>-W</code>, <code>--</code>, <code>-</code>), runs the init variable, runs the script with the <code>arg</code> table, and prints errors with a traceback. <code>main</code> does almost nothing; <code>pmain</code> runs in protected mode. <code>onelua.c</code> includes every other <code>.c</code> file, so the whole interpreter builds as one translation unit; its header comment has the working command lines (<code>gcc -O2 -std=c99 -o lua onelua.c -lm</code>, plus <code>-DLUA_USE_LINUX -Wl,-E ... -ldl</code> on Linux). <code>luac.c</code> is not in this tree, so <code>MAKE_LUAC</code> is unusable.</p>
+<h3 id="things-to-know-8">Things to know</h3>
+<ul>
+<li>Startup order is fixed. <code>LUA_INIT_5_5</code> is tried first and <code>LUA_INIT</code> is the fallback; only one runs. A value starting with <code>@</code> is a file name. <code>-E</code> ignores both.</li>
+<li>Options are parsed in two passes; the first runs no Lua. <code>-l name=module</code> is accepted, and a <code>-version</code> suffix is stripped when there is no <code>=</code>.</li>
+<li>Every chunk runs through <code>docall</code> with a message handler (<code>msghandler</code>) that builds the traceback before unwinding.</li>
+<li>A signal handler never touches the Lua state; it installs a hook, so Ctrl-C arrives as the error &quot;interrupted!&quot;.</li>
+<li>The REPL first tries <code>return &lt;line&gt;;</code> and continues a line only on an &quot;&lt;eof&gt;&quot; error. Locals do not survive a line.</li>
+<li>Readline is optional three ways: linked (<code>LUA_USE_READLINE</code>), loaded at run time with <code>dlopen</code> (<code>LUA_READLINELIB</code>, set by <code>LUA_USE_LINUX</code>), or absent, when the REPL falls back to <code>fgets</code>.</li>
+</ul>
+<p>Trap: <code>onelua.c</code> lists the source files by name; a new <code>.c</code> file must be added there as well as to the makefile.</p>
+<h2 id="test-suite">Test suite</h2>
+<p>The test suite is Lua scripts in <code>testes/</code>, driven by <code>all.lua</code>, plus an internal test build.</p>
+<p>Most <code>testes/*.lua</code> files cover one area (<code>api.lua</code>, <code>gc.lua</code>, <code>coroutine.lua</code>, <code>strings.lua</code>). Exceptions: <code>all.lua</code> is the driver, <code>tracegc.lua</code> and <code>bwcoercion.lua</code> are helpers, and <code>heavy.lua</code> is a manual script that <code>all.lua</code> never runs. The C-side tests need the internal test library: <code>ltests.c</code> is compiled only with <code>LUA_DEBUG</code>, and <code>ltests.h</code> defines it, arriving through <code>-DLUA_USER_H='&quot;ltests.h&quot;'</code> from the <code>TESTS</code> variable in the makefile (commented out by default). The root script <code>all</code> runs the whole suite.</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>testes/all.lua</code></td>
+<td>Driver; honours <code>_soft</code>, <code>_port</code>, <code>_nomsg</code> and <code>_U</code></td>
+</tr>
+<tr>
+<td><code>ltests.c</code>, <code>ltests.h</code></td>
+<td>Internal test library and a different build configuration</td>
+</tr>
+<tr>
+<td><code>testes/libs/</code></td>
+<td>Linux-style C libraries and a makefile for <code>package</code> tests</td>
+</tr>
+</tbody>
+</table>
+<h3 id="things-to-know-9">Things to know</h3>
+<ul>
+<li>The test build is a different Lua, not only the same code with asserts: it disables the jump table, reserves <code>global</code>, shrinks limits (<code>LUAI_MAXCCALLS</code> 180, <code>LUAL_BUFFERSIZE</code> 23), uses the non-strict stack address mode, and replaces the allocator, panic handler, warning function and state creation. The global table <code>T</code> exposes this to scripts, and <code>MEMLIMIT</code> in the environment caps memory.</li>
+<li><code>all.lua</code> runs most files as <code>string.dump</code> bytecode, so the suite also exercises <code>ldump.c</code> and <code>lundump.c</code>. Running one file alone skips that path.</li>
+<li>Some files return magic values the driver asserts (<code>attrib.lua</code> 27, <code>locals.lua</code> 5, <code>events.lua</code> 12, <code>verybig.lua</code> 10). Do not edit their last lines or add an early <code>return</code>.</li>
+<li>End-of-run checks fail away from their cause: no global <code>debug</code>, same C-stack level, all globals erased, then collections.</li>
+<li><code>tracegc.lua</code> prints a dot per collection and is switched off around stack-overflow tests.</li>
+<li>Run from <code>testes/</code> with <code>../lua</code> and a small C stack (<code>ulimit -S -s 1100</code>). In <code>testes/libs/makefile</code> the <code>lib2-v2.so</code> rule lists <code>lib21.c</code> but compiles <code>lib22.c</code>, so editing <code>lib22.c</code> does not trigger a rebuild. <code>testes/packtests</code> has a hand-kept file list.</li>
+</ul>
+<p>Trap: a green run can mean little. A plain build skips <code>api.lua</code>, <code>code.lua</code>, <code>memerr.lua</code> and parts of about fourteen other files; it announces this and warns at the end, but still prints &quot;final OK&quot;. A <code>_VERSION</code> other than &quot;Lua 5.5&quot; ends <code>all.lua</code> with exit status 0, so <code>all</code> also prints &quot;final OK&quot; without running a test.</p>
+<h2 id="reference-manual-sources">Reference manual sources</h2>
+<p>The manual sources are <code>manual/manual.of</code> and <code>manual/2html</code>, the script that turns them into HTML.</p>
+<p><code>manual.of</code> is the reference manual in the <code>.of</code> markup: nine chapters from the language and the C API to the standard libraries, the stand-alone interpreter, incompatibilities and the complete syntax. <code>2html</code> is a Lua script that reads stdin and writes stdout (one optional argument, <code>port</code>, for the Portuguese variant) and exits 0 on most errors. Its output <code>manual/manual.html</code> is ignored by git and needs <code>lua.css</code>, <code>manual.css</code> and <code>logo.gif</code>, which are not in the repository.</p>
+<h3 id="things-to-know-10">Things to know</h3>
+<ul>
+<li>The markup is a home-made macro language in which blank lines are syntax. Cross-references resolve in two passes.</li>
+<li>Each API entry carries a machine-shaped stack-effect tag that the converter reformats.</li>
+<li>Nothing links the manual to the code or the tests.</li>
+<li>The manual and the code disagree on the default collector mode: the introduction says generational, the code creates incremental states and only <code>lua.c</code> switches (<code>lstate.c</code>, <code>lua.c</code>).</li>
+</ul>
+<p>The manual is the closest thing to a specification here, but no file in the snapshot says that a disagreement with the code is a bug. That is this pyramid's working rule.</p>
+
+</article>
+</main>
+</div>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L4 Operations - Documentation pyramid</title>
+<link rel="stylesheet" href="../skins/pv-base.css">
+<link rel="stylesheet" href="../skins/metal.css">
+</head>
+<body class="view-tree" data-skin="metal">
+<a class="skip-link" href="#pv-main">Skip to content</a>
+<header class="site-header">
+<nav aria-label="Site" class="site-nav">
+<a class="site-name" href="index.html">Documentation pyramid</a>
+<a class="view-switch" href="../index.html">Pyramid view</a>
+</nav>
+</header>
+<div class="layout">
+<nav class="tree" aria-label="Document index">
+<details class="tree-toggle">
+<summary>Document index</summary>
+<ul class="tree-layers">
+<li class="tree-layer"><p class="layer-label"><a href="L1-vision.html">L1 Vision</a></p>
+<ul class="tree-headings">
+<li><a href="L1-vision.html#what-is-this-repository">What is this repository?</a></li>
+<li><a href="L1-vision.html#who-is-it-for">Who is it for?</a></li>
+<li><a href="L1-vision.html#core-concepts">Core concepts</a></li>
+<li><a href="L1-vision.html#success">Success</a></li>
+<li><a href="L1-vision.html#direction">Direction</a></li>
+<li><a href="L1-vision.html#non-goals">Non-goals</a></li>
+</ul></li>
+<li class="tree-layer"><p class="layer-label"><a href="L2-architecture.html">L2 Architecture</a></p>
+<ul class="tree-headings">
+<li><a href="L2-architecture.html#tech-stack">Tech stack</a></li>
+<li><a href="L2-architecture.html#project-structure">Project structure</a></li>
+<li><a href="L2-architecture.html#subsystems">Subsystems</a></li>
+<li><a href="L2-architecture.html#data-flow">Data flow</a></li>
+<li><a href="L2-architecture.html#data-model">Data model</a></li>
+<li><a href="L2-architecture.html#key-decisions">Key decisions</a></li>
+</ul></li>
+<li class="tree-layer"><p class="layer-label"><a href="L3-modules.html">L3 Modules</a></p>
+<ul class="tree-headings">
+<li><a href="L3-modules.html#compiler">Compiler</a></li>
+<li><a href="L3-modules.html#virtual-machine">Virtual machine</a></li>
+<li><a href="L3-modules.html#calls-stack-and-errors">Calls, stack and errors</a></li>
+<li><a href="L3-modules.html#objects-tables-and-strings">Objects, tables and strings</a></li>
+<li><a href="L3-modules.html#garbage-collector">Garbage collector</a></li>
+<li><a href="L3-modules.html#c-api-and-auxiliary-library">C API and auxiliary library</a></li>
+<li><a href="L3-modules.html#standard-libraries">Standard libraries</a></li>
+<li><a href="L3-modules.html#bytecode-dump-and-load">Bytecode dump and load</a></li>
+<li><a href="L3-modules.html#stand-alone-interpreter">Stand-alone interpreter</a></li>
+<li><a href="L3-modules.html#test-suite">Test suite</a></li>
+<li><a href="L3-modules.html#reference-manual-sources">Reference manual sources</a></li>
+</ul></li>
+<li class="tree-layer"><p class="layer-label"><a href="L4-operations.html" aria-current="page">L4 Operations</a></p>
+<ul class="tree-headings">
+<li><a href="L4-operations.html#build">Build</a></li>
+<li><a href="L4-operations.html#run">Run</a></li>
+<li><a href="L4-operations.html#testing">Testing</a></li>
+<li><a href="L4-operations.html#debugging">Debugging</a></li>
+<li><a href="L4-operations.html#change-recipes">Change recipes</a></li>
+<li><a href="L4-operations.html#release">Release</a></li>
+</ul></li>
+</ul>
+</details>
+</nav>
+<main id="pv-main" class="content content-paper">
+<article class="doc">
+<h1 id="l4-operations">L4 Operations</h1>
+<h2 id="build">Build</h2>
+<p>The developer's makefile builds <code>liblua.a</code> and the <code>lua</code> program with gcc.</p>
+<p>Run <code>make</code> in the repository root. Settings are at the top of <code>makefile</code>: <code>CC</code>, <code>CFLAGS</code>, <code>MYCFLAGS</code> (default <code>-std=c99 -DLUA_USE_LINUX</code> plus a long list of warnings), <code>MYLDFLAGS</code> (<code>-Wl,-E</code>) and <code>MYLIBS</code> (<code>-ldl</code>). Targets: <code>all</code> (default), <code>o</code>, <code>a</code>, <code>clean</code>, <code>depend</code> and <code>echo</code>. For another platform, change <code>LUA_USE_LINUX</code> to the matching macro; <code>luaconf.h</code> explains them. <code>make all</code> also does <code>touch all</code>, which updates the modification time of the test script of the same name. Unverified: no build was run for these docs.</p>
+<p>Single-file build:</p>
+<pre><code class="language-sh">gcc -O2 -std=c99 -o lua onelua.c -lm
+</code></pre>
+<h2 id="run">Run</h2>
+<p>The built program is <code>./lua</code>; it reads a script, runs <code>-e</code> strings, or starts a REPL.</p>
+<pre><code class="language-sh">./lua script.lua
+./lua -e &quot;print(_VERSION)&quot;
+./lua -i
+</code></pre>
+<p>Options are listed in <code>lua.c</code> (<code>-e</code>, <code>-i</code>, <code>-l</code>, <code>-v</code>, <code>-E</code>, <code>-W</code>). <code>LUA_INIT_5_5</code> or <code>LUA_INIT</code> runs before the script unless <code>-E</code> is given.</p>
+<h2 id="testing">Testing</h2>
+<p>The suite runs from <code>testes/</code> with the freshly built <code>lua</code>; this snapshot has no CI configuration.</p>
+<p>The script <code>all</code> in the root does the full run: it builds with <code>make -s -j</code>, builds the C libraries in <code>testes/libs</code>, sets a small C stack (<code>ulimit -S -s 1100</code>) and runs <code>../lua -W all.lua</code> from <code>testes/</code>. It prints &quot;final OK&quot; on success. To run one file, start <code>../lua -W name.lua</code> in <code>testes/</code>. The scripts expect <code>Lua 5.5</code> in <code>_VERSION</code>; with another version <code>all.lua</code> exits with status 0 without running tests, and <code>all</code> still prints &quot;final OK&quot;.</p>
+<p>For the C-side tests, build with the <code>TESTS</code> line in the makefile enabled (<code>-DLUA_USER_H='&quot;ltests.h&quot;'</code>) so that <code>ltests.c</code> is compiled in. A plain build skips the tests that need the global <code>T</code> (announced and warned about, but the run still ends &quot;final OK&quot;). Options such as <code>-DHARDSTACKTESTS</code>, <code>-DHARDMEMTESTS</code> and <code>-DEMERGENCYGCTESTS</code> are listed in the makefile comments. Unverified: not run here.</p>
+<h2 id="debugging">Debugging</h2>
+<p>Start with the debug test build and the debug library.</p>
+<ul>
+<li>Build with <code>TESTS</code> set (see Testing): <code>LUAI_ASSERT</code> turns on the internal assertions (<code>lua_assert</code>).</li>
+<li>Add <code>-DLUA_USE_APICHECK</code> to check C API arguments (<code>api_check</code> in <code>lapi.h</code>); it uses <code>assert</code>, so <code>NDEBUG</code> disables it, and a default build checks nothing.</li>
+<li>The makefile comments mention sanitizers (<code>-fsanitize=undefined</code>, <code>-fsanitize=address</code>) for undefined behaviour.</li>
+<li>In <code>ltests.c</code>, the test library offers heap and state checks (<code>T</code> functions) for the test scripts.</li>
+<li>For Lua-side problems use the <code>debug</code> library (<code>debug.traceback</code>, hooks).</li>
+</ul>
+<h2 id="change-recipes">Change recipes</h2>
+<p>These are the changes people make most often, with what silently breaks if you miss a file.</p>
+<ul>
+<li>Add or change an opcode: <code>lopcodes.h</code> (enum, format), <code>lopcodes.c</code> (mode table, same order), <code>lopnames.h</code>, <code>ljumptab.h</code>, <code>lvm.c</code> (and <code>luaV_finishOp</code> if it can yield), <code>lcode.c</code>, <code>ldebug.c</code>; for an operator also <code>lcode.h</code>, <code>lparser.c</code>, <code>ltm.h</code> and <code>lua.h</code>. Grep <code>ORDER</code> first; then <code>LUAC_FORMAT</code> in <code>lundump.h</code> if the binary format changes (<code>LUAC_VERSION</code> follows the Lua version). Run <code>testes/code.lua</code> and <code>testes/db.lua</code>.</li>
+<li>Add a library function: add it to the <code>luaL_Reg</code> array in the library file; document it in <code>manual/manual.of</code>. A new library also needs <code>lualib.h</code> and <code>linit.c</code>.</li>
+<li>Add a metamethod: <code>ltm.h</code> (enum), <code>ltm.c</code> (names), and the places that call it; the first entries up to <code>TM_EQ</code> are cached in <code>Table.flags</code>, so their order matters.</li>
+<li>Add a source file: add it to <code>makefile</code> (<code>CORE_O</code>, <code>LIB_O</code>, and the dependency list at the end), and to <code>onelua.c</code>.</li>
+<li>Change a build-time limit or type: <code>luaconf.h</code>, then rebuild everything and every C library.</li>
+</ul>
+<h2 id="release">Release</h2>
+<p>Releases are not made from this repository.</p>
+<p>The README says to download official releases from lua.org. This tree has no packaging or install target; <code>testes/packtests</code> only builds a tarball of the test suite.</p>
+
+</article>
+</main>
+</div>
+</body>
+</html>
