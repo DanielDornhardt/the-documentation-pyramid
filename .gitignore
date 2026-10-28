@@ -1,1 +1,8 @@
 .DS_Store
+
+# local working folders, never part of the published repository
+/lab/
+/.orca/
+/test-outputs/
+/reference-dev-crew/
+/tmp/
