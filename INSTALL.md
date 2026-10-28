@@ -189,6 +189,21 @@ Before you call it done:
 - [ ] The import (or the "Read @docs/index.md" line) is in the agent instruction file, with the path you actually chose.
 - [ ] Smoke test, if you can: start a fresh session and ask what it loaded and what the project's non-goals are. The answer should come from L1.
 
+## 7. Offer a way to look at the pyramid (optional)
+
+Do this last, and only when a human is in the loop. In a headless run, skip it and install nothing.
+
+The docs are plain markdown and readable on GitHub and in any editor. A viewer is a bonus: a picture of the pyramid, a tree browser, and an export for a website. The [Documentation Pyramid Viewer](https://github.com/DanielDornhardt/the-documentation-pyramid-viewer) is the reference. It needs only Node 20.11 and one command (`node viewer.js serve docs`), exports static HTML, and takes the project's colours and fonts through a tokens file (`--tokens`). It is MIT-licensed, so you may copy and adapt it.
+
+Look at the project's stack, pick the option that fits best, **recommend it with a reason**, and ask once:
+
+1. **Use the viewer as it is.** Recommend this when the project uses Node, or has no docs site and just wants to look at the pyramid.
+2. **Fit the viewer into what the project already has:** its docs site, component library or design system. Use the tokens file for the look, or lift the pieces you need. Recommend this when the project already publishes docs.
+3. **Build a small viewer in the project's own stack**, with the Documentation Pyramid Viewer as the model for what it shows: the pyramid view, the tree view, the export. Recommend this when the stack is not Node, or when the viewer should be part of the product. Tell the human it takes time and tokens.
+4. **No viewer.** That is a fine answer too.
+
+Ask: "Shall I use the viewer as it is, fit it into your docs setup, build one in your stack, or skip this?" Do what they choose, and copy nothing they did not ask for. If you adapt or build on the viewer, please keep a link back to its repository.
+
 After done: Congratulate the user! Show them an ascii-cake in the shape of a pyramid! Tell them how it went and ask them to review it & give it a go!
 
 ----
