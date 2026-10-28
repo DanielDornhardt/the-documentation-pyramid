@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L4 Operations - Documentation pyramid</title>
+<link rel="stylesheet" href="skins/pv-base.css">
+<link rel="stylesheet" href="skins/light.css">
+</head>
+<body class="view-pyramid" data-skin="light">
+<a class="skip-link" href="#pv-main">Skip to content</a>
+<header class="site-header">
+<nav aria-label="Site" class="site-nav">
+<a class="site-name" href="index.html">Documentation pyramid</a>
+<a class="view-switch" href="_tree/L4-operations.html">Tree view</a>
+</nav>
+<nav class="skin-switch" aria-label="Skin">
+<a href="L4-operations.html" aria-current="true">Light</a>
+<a href="../metal/L4-operations.html">Metal</a>
+</nav>
+</header>
+<div class="layout">
+<main id="pv-main" class="content content-paper">
+<article class="doc">
+<nav class="page-toc" aria-label="On this page">
+<p class="toc-label">On this page</p>
+<ul>
+<li class="toc-level-2"><a href="#git-workflow">Git workflow</a></li>
+<li class="toc-level-2"><a href="#setup">Setup</a></li>
+<li class="toc-level-2"><a href="#testing">Testing</a></li>
+<li class="toc-level-2"><a href="#debugging">Debugging</a></li>
+<li class="toc-level-2"><a href="#change-recipes">Change recipes</a></li>
+<li class="toc-level-2"><a href="#deployment">Deployment</a></li>
+</ul>
+</nav>
+<h1 id="l4-operations">L4 Operations</h1>
+<h2 id="git-workflow">Git workflow</h2>
+<p>The repository's own rules are a short commit-message rule and an optional set of git hooks.</p>
+<p>Pull requests follow the 50/72 rule: subject under 50 characters, blank line, body wrapped at 72 (<code>Contributing.md</code>). The DevTeam's optional setup (<code>perl DEVEL/nhgitset.pl</code>) installs hooks and the <code>nhadd</code> and <code>nhcommit</code> aliases that expand <code>$NHDT-...$</code> header lines; nothing breaks if you skip them (<code>DEVEL/Developer.txt</code>). The hooks and <code>nhsub</code> are described in <code>DEVEL/hooksdir/</code> and <code>git_recipes.txt</code>. The public repositories are on GitHub and SourceForge (<code>README</code>). Source files carry <code>$NHDT-Date$</code> style header lines; do not hand-edit them.</p>
+<h2 id="setup">Setup</h2>
+<p>A tty build needs a C compiler, make and, on Unix, a hints file; Lua is vendored.</p>
+<p>The Unix route (<code>sys/unix/NewInstall.unx</code>):</p>
+<pre><code>cd sys/unix
+sh setup.sh hints/linux.501      # or hints/macOS.501, hints/bsd.501
+cd ../..
+make all
+make install
+</code></pre>
+<p><code>setup.sh</code> writes <code>Makefile</code>, <code>dat/Makefile</code>, <code>doc/Makefile</code>, <code>src/Makefile</code> and <code>util/Makefile</code>. After a failed build, <code>make spotless</code> removes generated files. <code>make install</code> deletes and recreates the playground directory, so save the <code>record</code>, <code>logfile</code> and <code>sysconf</code> files first.</p>
+<p>Interfaces are chosen on the make line: <code>make WANT_WIN_TTY=1 WANT_WIN_CURSES=1 WANT_WIN_X11=1 all</code> (<code>sys/unix/README.hints</code>). Windows: <code>sys/windows/build-vs.txt</code>, <code>build-msys2.txt</code>, <code>build-nmake.txt</code>. Other platforms: <code>Porting</code>, <code>Cross-compiling</code>, <code>sys/*/Install.*</code>. <code>submodules/</code> is empty until the PDCurses submodules are fetched.</p>
+<h2 id="testing">Testing</h2>
+<p>There is no unit-test suite; CI only builds, and the Lua tests run by hand in wizard mode.</p>
+<ul>
+<li>CI (<code>azure-pipelines.yml</code>): Visual Studio and MinGW builds, Linux full and minimal builds, a macOS build, an MS-DOS cross-build, and the Guidebook. It builds; it does not run the game or the Lua tests (from reading the file, not from a CI run).</li>
+<li>Lua tests (<code>test/README.md</code>): build without DLB, install, copy <code>test/*.lua</code> into the playground, start in wizard mode and run <code>#wizloadlua</code> on a file. The tests check level scripting (<code>test_des.lua</code>, <code>test_sel.lua</code>), objects, shops and wishes.</li>
+<li>Not covered by anything: combat and monster behaviour, save compatibility, the window ports' drawing.</li>
+<li><code>sys/libnh/test/</code> has tests for the library build.</li>
+</ul>
+<h2 id="debugging">Debugging</h2>
+<p>Wizard mode and a few build flags are the main tools.</p>
+<ul>
+<li>Wizard mode: start with <code>-D</code>, allowed only for users in the <code>WIZARDS</code> line of <code>sysconf</code> (<code>doc/nethack.txt</code>, <code>sys/unix/sysconf</code>). Explore mode is <code>-X</code>.</li>
+<li>Wizard commands are in <code>src/wizcmds.c</code>; <code>sanity_check()</code> runs each turn when the wizard-only <code>sanity_check</code> option is set (it checks monsters, worn slots, vision blocking and level connectivity), and the debug fuzzer (<code>#debugfuzzer</code>, <code>iflags.debug_fuzzer</code>) drives the game with random input; commands that exit or block are flagged <code>NOFUZZERCMD</code>. Whether the fuzzer runs in CI is unverified.</li>
+<li><code>impossible()</code> reports internal inconsistencies without ending the game; <code>panic()</code> ends it. The <code>recover</code> utility rebuilds a game from level files after a crash (needs <code>INSURANCE</code>, <code>include/config.h</code>).</li>
+<li>From Lua: <code>nh.debug_flags</code> can turn off monster generation and hunger (<code>doc/lua.adoc</code>).</li>
+<li>Unverified: crash report and panic trace options (<code>NOCRASHREPORT</code>, <code>NOPANICTRACE</code> appear in the CI file and <code>util</code> makefile).</li>
+</ul>
+<h2 id="change-recipes">Change recipes</h2>
+<p>Most changes touch a table plus one or two other places; the list below says which.</p>
+<ul>
+<li>Add a monster species: entry in <code>include/monsters.h</code> (keep its class contiguous, fill in <code>difficulty</code> by hand, keep the dragon order); tile art in <code>win/share/monsters.txt</code> (unverified that a missing tile fails the build); mention in <code>dat/data.base</code> if it has lore; fixes note in <code>doc/fixes5-0-1.txt</code>.</li>
+<li>Add an object kind: entry in <code>include/objects.h</code> (kinds are grouped by class; the position is the <code>otyp</code>, so insertion shifts later kinds and changes the meaning of old saves); check <code>obj_shuffle_range</code> in <code>src/o_init.c</code> if it has a shuffled appearance; tile art in <code>win/share/objects.txt</code>.</li>
+<li>Add a command: row in <code>extcmdlist[]</code> in <code>src/cmd.c</code> and the handler. Decide the flags (<code>IFBURIED</code>, <code>NOFUZZERCMD</code>, <code>AUTOCOMPLETE</code>, <code>CMD_M_PREFIX</code>, <code>WIZMODECMD</code>) and return <code>ECMD_TIME</code> when it takes time. The row's description feeds <code>#?</code>; whether <code>dat/hh</code> and <code>dat/cmdhelp</code> also need a line is unverified. Update <code>doc/Guidebook.mn</code>.</li>
+<li>Add an option: entry in <code>include/optlist.h</code>, a variable in <code>flags</code> (saved; may need <code>EDITLEVEL</code> raised) or <code>iflags</code>, an <code>optfn_&lt;name&gt;()</code> in <code>src/options.c</code> unless it is a plain boolean, the short help, <code>dat/opthelp</code> and the Guidebooks. Check that its abbreviation does not shadow an existing option. Steps in <code>doc/options.txt</code>.</li>
+<li>Add a special level: a Lua file in <code>dat/</code> and an entry in <code>dat/dungeon.lua</code>; if C code must recognise it, an entry in <code>level_map[]</code> in <code>src/dungeon.c</code>; add the file to <code>SPEC_LEVS</code> in <code>sys/unix/Makefile.top</code> or it is not installed. A level may be flipped at random unless it sets <code>noflip</code>.</li>
+<li>Add a source file: list it in <code>sys/unix/Makefile.src</code> (<code>HACKCSRC</code>, the object list and the dependency lines) and the other platform build files (<code>sys/windows/</code>, Xcode project); a file listed in only one build breaks the others. Also add it to <code>Files</code>.</li>
+<li>Add a window port: implement <code>struct window_procs</code> per <code>doc/window.txt</code>, give it a <code>wp_</code> id in <code>include/winprocs.h</code>, and register it in <code>winchoices[]</code> in <code>src/windows.c</code>.</li>
+<li>Add a saved global: put it in an <code>sv*</code> group in <code>include/decl.h</code> and add a matching write and read in <code>src/save.c</code> and <code>src/restore.c</code>; the group alone saves nothing. Raise <code>EDITLEVEL</code> in <code>include/patchlevel.h</code> if saved data changes shape.</li>
+<li>Add a sound library or effect: see the Sound module; a library touches the enum, the registry, <code>src/mdlib.c</code> and the build files.</li>
+<li>Add a field to <code>struct monst</code> or <code>struct obj</code>: if it holds a timer, add it to <code>mon_catchup_elapsed_time()</code>; if it must not be copied on a split, add it to <code>splitobj</code>; optional structures follow the recipes in <code>include/mextra.h</code> and <code>include/obj.h</code>.</li>
+<li>Record every player-visible fix in <code>doc/fixes5-0-1.txt</code>.</li>
+</ul>
+<p>Unverified: this list was derived from reading the Makefiles and headers, not from making the changes.</p>
+<h2 id="deployment">Deployment</h2>
+<p>Releases are source distributions made by the DevTeam; the repository has no release scripts.</p>
+<p><code>sys/unix/Makefile.top</code> has targets for building a distribution tree (<code>package</code>, <code>distrib</code>, <code>manpages</code>). Version numbers live in <code>include/patchlevel.h</code> and <code>DEVEL/VERSION</code>. Unverified: the DevTeam's actual release procedure is not documented in the repository.</p>
+
+</article>
+</main>
+</div>
+</body>
+</html>

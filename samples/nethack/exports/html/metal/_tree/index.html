@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L1 Vision - Documentation pyramid</title>
+<link rel="stylesheet" href="../skins/pv-base.css">
+<link rel="stylesheet" href="../skins/metal.css">
+</head>
+<body class="view-tree" data-skin="metal">
+<a class="skip-link" href="#pv-main">Skip to content</a>
+<header class="site-header">
+<nav aria-label="Site" class="site-nav">
+<a class="site-name" href="index.html">Documentation pyramid</a>
+<a class="view-switch" href="../index.html">Pyramid view</a>
+</nav>
+<nav class="skin-switch" aria-label="Skin">
+<a href="../../light/_tree/index.html">Light</a>
+<a href="index.html" aria-current="true">Metal</a>
+</nav>
+</header>
+<div class="layout">
+<nav class="tree" aria-label="Document index">
+<details class="tree-toggle">
+<summary>Document index</summary>
+<ul class="tree-layers">
+<li class="tree-layer"><p class="layer-label"><a href="L1-vision.html" aria-current="page">L1 Vision</a></p>
+<ul class="tree-headings">
+<li><a href="L1-vision.html#what-is-nethack">What is NetHack?</a></li>
+<li><a href="L1-vision.html#who-is-it-for">Who is it for?</a></li>
+<li><a href="L1-vision.html#core-concepts">Core concepts</a></li>
+<li><a href="L1-vision.html#success">Success</a></li>
+<li><a href="L1-vision.html#direction">Direction</a></li>
+<li><a href="L1-vision.html#non-goals">Non-goals</a></li>
+</ul></li>
+<li class="tree-layer"><p class="layer-label"><a href="L2-architecture.html">L2 Architecture</a></p>
+<ul class="tree-headings">
+<li><a href="L2-architecture.html#tech-stack">Tech stack</a></li>
+<li><a href="L2-architecture.html#project-structure">Project structure</a></li>
+<li><a href="L2-architecture.html#subsystems">Subsystems</a></li>
+<li><a href="L2-architecture.html#data-flow">Data flow</a></li>
+<li><a href="L2-architecture.html#data-model">Data model</a></li>
+<li><a href="L2-architecture.html#recurring-patterns">Recurring patterns</a></li>
+<li><a href="L2-architecture.html#state-and-persistence">State and persistence</a></li>
+<li><a href="L2-architecture.html#configuration-layers">Configuration layers</a></li>
+<li><a href="L2-architecture.html#extension-points">Extension points</a></li>
+<li><a href="L2-architecture.html#trust-and-safety-boundaries">Trust and safety boundaries</a></li>
+<li><a href="L2-architecture.html#outside-interfaces">Outside interfaces</a></li>
+</ul></li>
+<li class="tree-layer"><p class="layer-label"><a href="L3-modules.html">L3 Modules</a></p>
+<ul class="tree-headings">
+<li><a href="L3-modules.html#game-loop-and-startup">Game loop and startup</a></li>
+<li><a href="L3-modules.html#global-state">Global state</a></li>
+<li><a href="L3-modules.html#commands-and-options">Commands and options</a></li>
+<li><a href="L3-modules.html#hero-and-actions">Hero and actions</a></li>
+<li><a href="L3-modules.html#level-generation-and-dungeon">Level generation and dungeon</a></li>
+<li><a href="L3-modules.html#lua-integration">Lua integration</a></li>
+<li><a href="L3-modules.html#monsters">Monsters</a></li>
+<li><a href="L3-modules.html#objects">Objects</a></li>
+<li><a href="L3-modules.html#display-and-vision">Display and vision</a></li>
+<li><a href="L3-modules.html#window-ports">Window ports</a></li>
+<li><a href="L3-modules.html#save-and-restore">Save and restore</a></li>
+<li><a href="L3-modules.html#platform-layers-and-build">Platform layers and build</a></li>
+<li><a href="L3-modules.html#sound">Sound</a></li>
+</ul></li>
+<li class="tree-layer"><p class="layer-label"><a href="L4-operations.html">L4 Operations</a></p>
+<ul class="tree-headings">
+<li><a href="L4-operations.html#git-workflow">Git workflow</a></li>
+<li><a href="L4-operations.html#setup">Setup</a></li>
+<li><a href="L4-operations.html#testing">Testing</a></li>
+<li><a href="L4-operations.html#debugging">Debugging</a></li>
+<li><a href="L4-operations.html#change-recipes">Change recipes</a></li>
+<li><a href="L4-operations.html#deployment">Deployment</a></li>
+</ul></li>
+</ul>
+</details>
+</nav>
+<main id="pv-main" class="content content-paper">
+<article class="doc">
+<h1 id="l1-vision">L1 Vision</h1>
+<h2 id="what-is-nethack">What is NetHack?</h2>
+<p>NetHack is a single-player dungeon exploration game, written in C, whose source is this repository.</p>
+<p>The source is the 5.0.1 work-in-progress line of NetHack 5.0 (<code>README</code>). It is not a release: the README tells players to use 5.0.0 when stability matters. Some file headers and documents still say 3.7, the earlier name of this line (for example <code>DEVEL/Developer.txt</code>). The game descends from Rogue and Hack and from NetHack 3.6. One C99 code base builds the game for many operating systems and several user interfaces. It is free to redistribute under the NetHack General Public License (<code>dat/license</code>).</p>
+<h2 id="who-is-it-for">Who is it for?</h2>
+<p>Developers and agents who change the game code, its build or its ports; not players.</p>
+<p>Typical readers: someone fixing a bug in monster behaviour, someone adding an item or a level, someone porting to a new platform or window system. Players read <code>doc/Guidebook.txt</code>, which this documentation does not replace.</p>
+<h2 id="core-concepts">Core concepts</h2>
+<p>Five ideas explain the rest: hero and dungeon, movement points, window ports, Lua, platform layers.</p>
+<ul>
+<li>The hero and the dungeon: one hero, a set of generated or scripted levels, and the monsters and objects on them.</li>
+<li>Turns by movement points: the hero and each monster earn movement points per turn and act when they have enough.</li>
+<li>Window port: the game core never draws; it calls a table of functions that a user interface supplies.</li>
+<li>Lua scripts: special levels, the dungeon layout, themed rooms and quest text are Lua files in <code>dat/</code>, run by the game.</li>
+<li>Platform layer: <code>sys/</code> holds the operating-system code; <code>src/</code> stays portable.</li>
+</ul>
+<h2 id="success">Success</h2>
+<p>The project works when the same source builds and plays correctly on every supported platform.</p>
+<p>Supported means: Linux, macOS and Windows build natively; MS-DOS and AmigaOS are cross-compiled; OpenVMS has had some success (<code>README</code>). Release stability is judged by the NetHack DevTeam, not by an automated test suite (see the Testing section in L4).</p>
+<h2 id="direction">Direction</h2>
+<p>The line is heading to a 5.0.1 release with bug fixes for 5.0.0.</p>
+<p><code>doc/fixes5-0-1.txt</code> lists the fixes as they are committed. Cross-compiling, Lua-based content and a pluggable save format are recent architecture work (<code>README</code>, <code>Cross-compiling</code>).</p>
+<h2 id="non-goals">Non-goals</h2>
+<p>The project deliberately does not offer support for free-lanced patches or hints on how to play.</p>
+<ul>
+<li>No hints for playing the game and no release dates (<code>README</code>).</li>
+<li>No support for unofficial patches applied to this code (<code>README</code>).</li>
+<li>Variants are separate projects; <code>DEVEL/Developer.txt</code> tells variant authors to check their own documentation.</li>
+<li>No binary save or bones files in bug reports (<code>README</code>).</li>
+</ul>
+
+</article>
+</main>
+</div>
+</body>
+</html>

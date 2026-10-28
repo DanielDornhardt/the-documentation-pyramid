@@ -11,15 +11,25 @@ Two example documentation pyramids, so you can see what the format looks like on
 node viewer.js serve samples/lua --skin metal      # in a clone of the viewer repository
 ```
 
-## HTML versions
+## Exports
 
-[`html/`](html) holds static exports of both samples, in the light and the metal skin, each with the pyramid view and the tree view (`lua-light`, `lua-metal`, `nethack-light`, `nethack-metal`). Each folder opens from its `index.html`.
+Each sample has an `exports/` folder with ready-made output of the viewer, so you can look at a pyramid without installing anything:
 
-GitHub shows an HTML file in a repository as source text, not as a page. To look at an export, download the repository (or just that folder) and open `index.html` in a browser; it needs no server. Regenerate them after a change with the viewer:
+| Folder or file | What it is |
+| -------------- | ---------- |
+| `exports/html/` | The pyramid and tree views as static pages, in the light and the metal skin (`light/`, `metal/`), with a skin switcher in every page. Open `exports/html/index.html`. |
+| `exports/<name>-docs.md` | All layers in one Markdown file with a table of contents. Its links use plain heading names, so it works in GitHub's viewer and in editor previews. |
+
+**Looking at the HTML.** GitHub shows an HTML file in a repository as source text. Download the repository (or the folder) and open `index.html` in a browser; it needs no server. Once GitHub Pages is switched on for this repository, the same folders are also web pages, for example `samples/nethack/exports/html/metal/index.html`.
+
+**Regenerate** them with the [viewer](https://github.com/DanielDornhardt/the-documentation-pyramid-viewer) after a change:
 
 ```
-node viewer.js export samples/nethack samples/html/nethack-metal --view both --skin metal
+node viewer.js export samples/nethack samples/nethack/exports/html --view both --skins light,metal
+node viewer.js markdown samples/nethack samples/nethack/exports/nethack-docs.md --toc --anchors headings --force
 ```
+
+The viewer ignores the `exports/` folder, so these files never feed back into the pyramid.
 
 ## How they were made
 

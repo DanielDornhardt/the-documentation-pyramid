@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L1 Vision - Documentation pyramid</title>
+<link rel="stylesheet" href="skins/pv-base.css">
+<link rel="stylesheet" href="skins/metal.css">
+</head>
+<body class="view-pyramid" data-skin="metal">
+<a class="skip-link" href="#pv-main">Skip to content</a>
+<header class="site-header">
+<nav aria-label="Site" class="site-nav">
+<a class="site-name" href="index.html">Documentation pyramid</a>
+<a class="view-switch" href="_tree/L1-vision.html">Tree view</a>
+</nav>
+<nav class="skin-switch" aria-label="Skin">
+<a href="../light/L1-vision.html">Light</a>
+<a href="L1-vision.html" aria-current="true">Metal</a>
+</nav>
+</header>
+<div class="layout">
+<main id="pv-main" class="content content-paper">
+<article class="doc">
+<nav class="page-toc" aria-label="On this page">
+<p class="toc-label">On this page</p>
+<ul>
+<li class="toc-level-2"><a href="#what-is-nethack">What is NetHack?</a></li>
+<li class="toc-level-2"><a href="#who-is-it-for">Who is it for?</a></li>
+<li class="toc-level-2"><a href="#core-concepts">Core concepts</a></li>
+<li class="toc-level-2"><a href="#success">Success</a></li>
+<li class="toc-level-2"><a href="#direction">Direction</a></li>
+<li class="toc-level-2"><a href="#non-goals">Non-goals</a></li>
+</ul>
+</nav>
+<h1 id="l1-vision">L1 Vision</h1>
+<h2 id="what-is-nethack">What is NetHack?</h2>
+<p>NetHack is a single-player dungeon exploration game, written in C, whose source is this repository.</p>
+<p>The source is the 5.0.1 work-in-progress line of NetHack 5.0 (<code>README</code>). It is not a release: the README tells players to use 5.0.0 when stability matters. Some file headers and documents still say 3.7, the earlier name of this line (for example <code>DEVEL/Developer.txt</code>). The game descends from Rogue and Hack and from NetHack 3.6. One C99 code base builds the game for many operating systems and several user interfaces. It is free to redistribute under the NetHack General Public License (<code>dat/license</code>).</p>
+<h2 id="who-is-it-for">Who is it for?</h2>
+<p>Developers and agents who change the game code, its build or its ports; not players.</p>
+<p>Typical readers: someone fixing a bug in monster behaviour, someone adding an item or a level, someone porting to a new platform or window system. Players read <code>doc/Guidebook.txt</code>, which this documentation does not replace.</p>
+<h2 id="core-concepts">Core concepts</h2>
+<p>Five ideas explain the rest: hero and dungeon, movement points, window ports, Lua, platform layers.</p>
+<ul>
+<li>The hero and the dungeon: one hero, a set of generated or scripted levels, and the monsters and objects on them.</li>
+<li>Turns by movement points: the hero and each monster earn movement points per turn and act when they have enough.</li>
+<li>Window port: the game core never draws; it calls a table of functions that a user interface supplies.</li>
+<li>Lua scripts: special levels, the dungeon layout, themed rooms and quest text are Lua files in <code>dat/</code>, run by the game.</li>
+<li>Platform layer: <code>sys/</code> holds the operating-system code; <code>src/</code> stays portable.</li>
+</ul>
+<h2 id="success">Success</h2>
+<p>The project works when the same source builds and plays correctly on every supported platform.</p>
+<p>Supported means: Linux, macOS and Windows build natively; MS-DOS and AmigaOS are cross-compiled; OpenVMS has had some success (<code>README</code>). Release stability is judged by the NetHack DevTeam, not by an automated test suite (see the Testing section in L4).</p>
+<h2 id="direction">Direction</h2>
+<p>The line is heading to a 5.0.1 release with bug fixes for 5.0.0.</p>
+<p><code>doc/fixes5-0-1.txt</code> lists the fixes as they are committed. Cross-compiling, Lua-based content and a pluggable save format are recent architecture work (<code>README</code>, <code>Cross-compiling</code>).</p>
+<h2 id="non-goals">Non-goals</h2>
+<p>The project deliberately does not offer support for free-lanced patches or hints on how to play.</p>
+<ul>
+<li>No hints for playing the game and no release dates (<code>README</code>).</li>
+<li>No support for unofficial patches applied to this code (<code>README</code>).</li>
+<li>Variants are separate projects; <code>DEVEL/Developer.txt</code> tells variant authors to check their own documentation.</li>
+<li>No binary save or bones files in bug reports (<code>README</code>).</li>
+</ul>
+
+</article>
+</main>
+</div>
+</body>
+</html>
