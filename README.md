@@ -298,3 +298,11 @@ If you get something with good results, please share and we can link it up or in
     - adversarial reviewer for checking doc updates have happened after a story has been implemented
 - Support / guidelines for a multi-project overarching structure
 - ...
+
+## Licence and credits
+
+MIT, see [LICENSE](LICENSE). The sample pyramids in `samples/` describe Lua (MIT) and NetHack (NetHack General Public License); they hold descriptions, short quoted comments and diagrams, no copied source files. See [samples/README.md](samples/README.md).
+
+If you use the documentation pyramid in your own project, your own docs, an article or your own shopfront material, please link back to this repository. This is a request, not a condition of the licence. A line like this is plenty: "Built with the Documentation Pyramid (https://github.com/DanielDornhardt/the-documentation-pyramid)".
+
+Made by [Daniel Dornhardt](https://dornhardt.com). The viewer lives in [the-documentation-pyramid-viewer](https://github.com/DanielDornhardt/the-documentation-pyramid-viewer).
