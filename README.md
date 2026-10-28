@@ -272,6 +272,7 @@ The routing table in `index.md` is generated: `tools/refresh-pyramid.js` (one fi
 3. Import `docs/index.md` from your `AGENTS.md` / `CLAUDE.md`.
 4. Add "read before / update after" steps to your planning and story workflow.
 5. Fill it from the code and from your existing docs. Greenfield? Start small, it fills up as you go.
+6. Decide whether you'd like to have a fancy viewer for your Documentation Pyramid. If so, pull from or point your agent at [the viewer](https://github.com/DanielDornhardt/the-documentation-pyramid-viewer) and let 'er rip.
 
 The full, step-by-step instructions (written for agents, fine for humans too) are in **[INSTALL.md](INSTALL.md)**.
 
