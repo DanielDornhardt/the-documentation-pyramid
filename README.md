@@ -12,20 +12,20 @@ The goal is to provide a place and just enough structure for a project's technic
 
 The documentation you always wished you had for your software systems 😄
 
-The documentation pyramid grows and improves with your codebase:
+The Documentation Pyramid grows and improves with your codebase:
 
 ![A documentation pyramid growing as bricks are added](images/pyramid-growth.gif)
 
 And provides a touchstone to iterate on and document the design of your app together with your agents.
 
-> **The story behind the pyramid:** why layers, why bricks, and what happened when agents started writing the docs. Read the article at [dornhardt.com/writing/the-documentation-pyramid](https://dornhardt.com/writing/the-documentation-pyramid).
+> **EVEN MORE TO READ about the pyramid:** Everything from this Readme again, and much more! :D Read the article at [dornhardt.com/writing/the-documentation-pyramid](https://dornhardt.com/writing/the-documentation-pyramid).
 
 **Contents**
 
 - [What this is meant to help with](#what-this-is-meant-to-help-with)
 - [Behold, the documentation pyramid](#behold-the-documentation-pyramid)
 - [Wavelet Architecture](#wavelet-architecture)
-- [Installation style & Mix and Match for your project(s)](#installation-style--mix-and-match-for-your-projects)
+- [Installation style & Mix and match for your project(s)](#installation-style--mix-and-match-for-your-projects)
 - [Documentation viewer](#documentation-viewer)
 - [Advantages of the documentation pyramid](#advantages-of-the-documentation-pyramid)
 - [How this helps us find what we need](#how-this-helps-us-find-what-we-need)
@@ -90,7 +90,7 @@ We're talking _technical documentation_ for a software project.
 
 >Egyptian pyramid seal of approval:
 >
-> ![img.png](img.png)
+> ![Egyptian pyramid seal of approval](images/img.png)
 >
 > "I am Egyptian and I approve this pyramid scheme."
 >
@@ -110,7 +110,7 @@ Docs follow a wavelet model — progressive refinement like image compression.
 Each layer is one or more files, containing one or more individual "documents". Documents are the individual chapters of documentation in our Pyramid documentation structure.
 
 > [!NOTE]
-> We start each layer as a single markdown file so it's easier to read for humans to read instead of having to browse a bunch of individual tiny files. Once individual pieces of the documentation grow big enough to warrant their own file (> 100 lines) they move to the Layers' folder as a single markdown file.
+> We start each layer as a single markdown file so it's easier for humans to read instead of having to browse a bunch of individual tiny files. Once individual pieces of the documentation grow big enough to warrant their own file (> 100 lines) they move to the layer's folder as a single markdown file.
 
 A document that outgrows about 100 lines moves into its own file in the layer folder (`L3-modules/<name>.md`).
 
@@ -126,22 +126,22 @@ See what works for you and change it, adapt it to your workflows as you see fit.
 
 So our install instructions are almost all prose, with one or two additional helper tools and scripts for your agents to import this into your own project and make it your own.
 
-For example, I have customized this for different projects. In one project, I have all my story files in here, too - an additional layer below the ADRs and actually i find them very useful as a simple place for agents and me to look at them again as a history of things that happened.
+For example, I have customized this for different projects. In one project, I have all my story files in here, too - an additional layer below the ADRs and actually I find them very useful as a simple place for agents and me to look at them again as a history of things that happened.
 
 ## Documentation viewer
 
-[pyramid-viewer](https://github.com/DanielDornhardt/the-documentation-pyramid-viewer) is a small, dependency-free viewer for a pyramid. It shows your documents in two variants:
+The [Documentation Pyramid Viewer](https://github.com/DanielDornhardt/the-documentation-pyramid-viewer) is a small, dependency-free viewer for a pyramid. It shows your documents in two variants:
 
 - A pyramid view: the layers as a picture of bricks (for the kicks!),
 - As more traditional tree-style browser.
 
 And it can also export them as HTML and markdown.
-A light and a dark style are included - apply your own projects' components and style for taste!
+A light and a dark style are included - apply your own project's components and style for taste!
 
 
 <img src="images/viewer-pyramid-metal.png" alt="The Lua sample pyramid in the viewer, metal skin" width="335"> <img src="images/viewer-pyramid-light.png" alt="A sample pyramid in the viewer, light skin" width="346">
 
-Two finished examples are in [`samples/`](samples/README.md) (I've ran an [included brownfield analysis step](./skills/code-module-deep-dive/SKILL.md)  on the Lua interpreter and a recent NetHack commit (best game ever?!)), ready to open in the viewer.  
+Two finished examples are in [`samples/`](samples/README.md) (I've run an [included brownfield analysis step](./skills/code-module-deep-dive/SKILL.md)  on the Lua interpreter and a recent NetHack commit (best game ever?!)), ready to open in the viewer.  
 
 They were written in a single session from one snapshot of each project; a pyramid that grows with your project should end up richer.
 
@@ -167,9 +167,9 @@ The planner, or the agent itself, decides which parts of the documentation, in w
 > **Choose at least one document from each layer from Layer 1 to Layer 3** before working with the code.
 > Choose as many additional documents from L1 - L4 as you deem useful for the task at hand.
 
-This way, the agents will 
+This way, the agents will:
 
-- always pick the Layer 1 vision, which teaches it things like - the project name, a short description, and the general goals of the application.
+- always pick the Layer 1 vision, which teaches them things like - the project name, a short description, and the general goals of the application.
 - choose one or more documents from each layer below.
 
 Each layer down the pyramid reveals additional details and practical scripts necessary to work effectively on the project.
@@ -185,7 +185,7 @@ The product as a whole. What is being built.
 
 WE BELIEVE in the autonomy of both man and agent to know WHAT and WHY they are doing what they are doing. It just helps everybody to be on the same team and work for the same goals.
 
-Compare eg. Toyotas' philosophy: Every worker is responsible for the quality and success of each product and the company as a whole.
+Compare eg. Toyota's philosophy: Every worker is responsible for the quality and success of each product and the company as a whole.
 
 
 ### Layer 2 - the architecture
@@ -217,7 +217,7 @@ And finally, once we want to get our hands dirty: Here are the additional resour
 
 -> This helps in keeping the quality and the output consistent while documenting important processes for the team.
 
-(Ever had your e2e agent find yet ANOTHER great way to launch the project and a browser window to check the apps' output? 😂)
+(Ever had your e2e agent find yet ANOTHER great way to launch the project and a browser window to check the app's output? 😂)
 
 Think about things like: Working with git and the upstream repository; Running the test suite; setting up the dev environment; cleanup tasks; provisioning servers; etc etc.
 
@@ -283,7 +283,7 @@ The full, step-by-step instructions (written for agents, fine for humans too) ar
 
 A: No.
 
-![Pyramid Layer Cake](pyramid-final-4.jpg)
+![Pyramid Layer Cake](images/pyramid-final-4.jpg)
 
 ## Possible next steps
 
@@ -291,8 +291,8 @@ None of these are big, and they can probably be vibecoded extremely quickly. Go 
 
 If you get something with good results, please share and we can link it up or integrate it with this repo.
 
-- [x] Pyramid browser & viewer in multiple versions / languages (a first viewer exists: [pyramid-viewer](https://github.com/DanielDornhardt/the-documentation-pyramid-viewer))
-- [x] Document renderer - turn your pyramid into a fully fledged document (also [pyramid-viewer](https://github.com/DanielDornhardt/the-documentation-pyramid-viewer))
+- [x] Pyramid browser & viewer in multiple versions / languages (a first viewer exists: [Documentation Pyramid Viewer](https://github.com/DanielDornhardt/the-documentation-pyramid-viewer))
+- [x] Document renderer - turn your pyramid into a fully fledged document (also [Documentation Pyramid Viewer](https://github.com/DanielDornhardt/the-documentation-pyramid-viewer))
 - [x] auto-index-generation scripts (done for the routing table, see `tools/`)
 - [ ] Skills:
     - [x] more detailed tech writing skills / a tech writer

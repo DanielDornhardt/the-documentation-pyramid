@@ -17,7 +17,7 @@
 
 ## {Module}
 
-{What this module is and holds, in one sentence under 100 characters. The index table copies this sentence. Then say where it lives and what is special about it.}
+{What this module is and holds, in one sentence under 100 characters}. The index table copies this sentence. Then say where it lives and what is special about it.
 
 {Optional: the idea behind it and why it is built that way IF there's a useful story to tell.}
 

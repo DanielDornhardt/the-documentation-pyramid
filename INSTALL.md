@@ -72,7 +72,7 @@ If the answer is no, do nothing. If the owner says how or when decisions should 
 
 ## 3. Find the best ways to integrate the pyramid for this team
 
-### 3.1 Make the pyramids' `index.md` file known to the agents
+### 3.1 Make the pyramid's `index.md` file known to the agents
 
 Put it into the `AGENTS.md` / `CLAUDE.md` / `WHATEVER.md` file your harness uses (if you don't have one yet, now's the time!). I'd recommend importing it, because it's so valuable it shouldn't be optional. This works in Claude Code:
 

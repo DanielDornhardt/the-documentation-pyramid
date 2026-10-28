@@ -66,7 +66,7 @@ Every module has one row: its name, where it lives (a file, or a file with a sec
 
 | Module | Where | What |
 | --- | --- | --- |
-| {Module} | `L3-modules.md#module` (line 18) | {What this module is and holds, in one sentence under 100 characters. |
+| {Module} | `L3-modules.md#module` (line 18) | {What this module is and holds, in one sentence under 100 characters}. |
 
 <!-- pyramid:end L3-modules -->
 
