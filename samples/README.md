@@ -20,7 +20,7 @@ Each sample has an `exports/` folder with ready-made output of the viewer, so yo
 | `exports/html/` | The pyramid and tree views as static pages, in the light and the metal skin (`light/`, `metal/`), with a skin switcher in every page. Open `exports/html/index.html`. |
 | `exports/<name>-docs.md` | All layers in one Markdown file with a table of contents. Its links use plain heading names, so it works in GitHub's viewer and in editor previews. |
 
-**Looking at the HTML.** GitHub shows an HTML file in a repository as source text. Download the repository (or the folder) and open `index.html` in a browser; it needs no server. Once GitHub Pages is switched on for this repository, the same folders are also web pages, for example `samples/nethack/exports/html/metal/index.html`.
+**Looking at the HTML.** GitHub shows an HTML file in a repository as source text. Download the repository (or the folder) and open `index.html` in a browser; it needs no server.
 
 **Regenerate** them with the [viewer](https://github.com/DanielDornhardt/the-documentation-pyramid-viewer) after a change:
 
@@ -30,6 +30,10 @@ node viewer.js markdown samples/nethack samples/nethack/exports/nethack-docs.md 
 ```
 
 The viewer ignores the `exports/` folder, so these files never feed back into the pyramid.
+
+## Licence
+
+The sample documentation is under this repository's MIT licence. The projects it describes have their own licences: Lua is MIT, and NetHack uses the NetHack General Public License. The samples contain descriptions, short quoted comments and ASCII diagrams, no copied source files.
 
 ## How they were made
 
